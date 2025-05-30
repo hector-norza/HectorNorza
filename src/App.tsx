@@ -2,7 +2,7 @@ import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import About from './components/About'
 import Resume from './components/Resume'
-// import Contact from './components/Contact'
+import Contact from './components/Contact'
 
 function App() {
   return (
@@ -12,7 +12,7 @@ function App() {
         <Hero />
         <About />
         <Resume />
-        {/* <Contact /> */}
+        <Contact />
       </main>
     </div>
   )

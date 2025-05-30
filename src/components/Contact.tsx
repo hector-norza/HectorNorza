@@ -32,7 +32,8 @@ export default function Contact() {
       );
       const mailtoLink = `mailto:norza.hector@outlook.com?subject=${subject}&body=${body}`;
       
-      window.location.href = mailtoLink;
+      // Open mailto in a new window instead of redirecting current page
+      window.open(mailtoLink, '_self');
       
       setSubmitStatus('success');
       setFormData({ name: '', email: '', subject: '', message: '' });
