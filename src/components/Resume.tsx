@@ -13,13 +13,15 @@ const experiences = [
     title: "Product Manager II",
     company: "Microsoft Azure",
     period: "2023 - Present",
-    location: "Remote",
+    location: "Redmond, WA",
     description: [
-      "Lead community-focused product initiatives for Azure Developer Experience, serving millions of developers worldwide",
-      "Host Azure Developer SDK Community Standup, building engagement with global developer community",
-      "Drive product strategy and roadmap for developer tools and SDK experiences across multiple Azure services",
-      "Collaborate with engineering teams to deliver developer-focused features that improve Azure adoption",
-      "Champion Responsible AI practices and community guidelines in product development lifecycle"
+      "Led the development and launch of the Azure AI Search SDK, aligning product strategy with customer needs and business objectives to drive adoption across key scenarios",
+      "Drove cross-functional execution by partnering closely with engineering, design, and marketing teams to deliver a high-quality, developer-friendly SDK experience",
+      "Prioritized features and roadmap decisions based on customer feedback, usage telemetry, and competitive insights—resulting in increased satisfaction and engagement",
+      "Hosted the Azure Developer SDK Community Standup on YouTube and Twitch, increasing transparency and developer trust while boosting community engagement",
+      "Championed key compliance initiatives—including accessibility, privacy, and security—across Azure Developer tools such as TypeSpec, Azure SDKs, and supporting engineering systems, ensuring alignment with Microsoft’s trust and responsibility standards",
+      "Advised Microsoft’s Nonprofit division on AI usage policy, helping shape ethical and responsible AI practices tailored to mission-driven organizations.",
+      "Participated in the NFL Cares and Microsoft LEAP program, focusing on community engagement and product management skills development"
     ],
     technologies: ["Azure SDK", "Developer Experience", "Community Management", "Product Strategy", "Responsible AI"]
   },
@@ -27,14 +29,15 @@ const experiences = [
     title: "Product Manager",
     company: "Microsoft Azure",
     period: "2021 - 2023",
-    location: "Remote",
+    location: "Redmond, WA",
     description: [
-      "Conducted user research and implemented community feedback loops to drive product success and ensure developer needs were central to development.",
-      "Managed Azure SDK product development and community engagement initiatives",
-      "Built strategic partnerships with developer advocacy teams to enhance SDK adoption",
-      "Created and executed go-to-market strategies for new Azure SDK releases",
-      "Developed comprehensive feedback loops with developer community to inform product decisions",
-      "Led cross-functional teams to deliver SDK improvements that increased developer satisfaction scores"
+      "Led the development and launch of JavaScript and TypeScript Azure SDKs, enhancing developer experience and accelerating adoption of Azure AI Search across key customer segments",
+      "Owned end-to-end product strategy for the Azure AI Search SDK, aligning roadmap priorities with customer needs, telemetry insights, and business goals",
+      "Drove critical compliance initiatives—including accessibility, privacy, and security—across Azure Developer tools such as TypeSpec, SDKs, and engineering systems, ensuring adherence to Microsoft’s Responsible AI principles",
+      "Conducted in-depth market and user research to inform product direction and proactively identify emerging developer trends and pain points",
+      "Collaborated cross-functionally with engineering, design, and marketing teams to deliver scalable, high-quality SDKs that met both technical and business requirements",
+      "Hosted the Azure Developer SDK Community Standup on YouTube and Twitch, increasing transparency and strengthening engagement with the global developer community",
+      "Delivered product updates and shared best practices, supporting developers worldwide with practical guidance and insights to build confidently on Azure—including authoring the official Azure SDK Monthly release blog",
     ],
     technologies: ["Azure Platform", "SDK Development", "Developer Advocacy", "Community Building", "Product Analytics"]
   },
