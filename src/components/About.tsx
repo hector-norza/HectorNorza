@@ -1,27 +1,51 @@
 import { motion } from 'framer-motion';
-import { CodeBracketIcon, ServerIcon, CommandLineIcon, RocketLaunchIcon } from '@heroicons/react/24/outline';
+import { ChartBarIcon, UsersIcon, ClipboardDocumentCheckIcon, RocketLaunchIcon } from '@heroicons/react/24/outline';
 
-// Define skills with icons and descriptions
+// Define Product Manager skills with icons and descriptions
 const skills = [
   {
-    category: "Frontend",
-    icon: <CodeBracketIcon className="w-8 h-8 text-primary" />,
-    items: ["React", "TypeScript", "Next.js", "Tailwind CSS", "Redux", "Framer Motion"]
+    category: "Azure & Developer Tools",
+    icon: <ChartBarIcon className="w-8 h-8 text-primary" />,
+    items: [
+      "Azure Platform & SDK",
+      "Developer Experience",
+      "API Design",
+      "SDK Strategy",
+      "Cloud Solutions"
+    ]
   },
   {
-    category: "Backend",
-    icon: <ServerIcon className="w-8 h-8 text-primary" />,
-    items: ["Node.js", "Express", "Python", "Django", "PostgreSQL", "MongoDB"]
+    category: "Community & Advocacy",
+    icon: <UsersIcon className="w-8 h-8 text-primary" />,
+    items: [
+      "Community Building",
+      "Developer Advocacy",
+      "Public Speaking",
+      "Content Creation",
+      "Global Community Engagement"
+    ]
   },
   {
-    category: "DevOps & Tools",
-    icon: <CommandLineIcon className="w-8 h-8 text-primary" />,
-    items: ["Git", "Docker", "AWS", "CI/CD Pipelines", "Jest", "Webpack"]
+    category: "Product Management",
+    icon: <ClipboardDocumentCheckIcon className="w-8 h-8 text-primary" />,
+    items: [
+      "Product Strategy",
+      "Cross-functional Leadership",
+      "Go-to-Market Strategy",
+      "Stakeholder Management",
+      "User Research"
+    ]
   },
   {
-    category: "Other Skills",
+    category: "Technical & AI",
     icon: <RocketLaunchIcon className="w-8 h-8 text-primary" />,
-    items: ["UI/UX Design", "RESTful APIs", "GraphQL", "Agile/Scrum", "Problem Solving", "Team Leadership"]
+    items: [
+      "Responsible AI",
+      "JavaScript & React",
+      "Full-Stack Development",
+      "Technical Writing",
+      "Mentoring & Teaching"
+    ]
   }
 ];
 
@@ -48,15 +72,15 @@ export default function About() {
               
               <div className="space-y-6 text-lg text-gray-600">
                 <p>
-                  I'm a <span className="font-semibold text-gray-900">Product Manager</span> with a passion for building products that empower people and foster thriving communities.
-                  My journey began in tech, but I discovered my true calling in connecting user needs with business goals and bringing people together around shared missions.
+                  I'm a <span className="font-semibold text-gray-900">Product Manager II at Microsoft Azure</span>, where I lead community-focused product initiatives that serve millions of developers worldwide.
+                  My passion lies in creating exceptional developer experiences and building vibrant tech communities.
                 </p>
                 <p>
-                  I specialize in data-driven product strategy and have a proven track record of launching features that drive engagement and growth.
-                  What sets me apart is my deep understanding of community dynamics and how to build products that foster connection and collaboration.
+                  As the host of the <span className="font-semibold text-gray-900">Azure Developer SDK Community Standup</span>, I engage with our global developer community, gathering feedback and driving product improvements.
+                  My journey from teaching full-stack development at Code Fellows to leading product strategy at Microsoft has given me a unique perspective on both the technical and human sides of software development.
                 </p>
                 <p>
-                  When I'm not planning product roadmaps or analyzing user feedback, you'll find me organizing community events, mentoring aspiring product managers, or exploring new ways technology can create meaningful impact.
+                  I specialize in developer advocacy, community building, and Responsible AI practices. I believe great products are built when we truly understand and serve our users' needs.
                 </p>
               </div>
               

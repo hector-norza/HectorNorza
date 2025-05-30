@@ -5,157 +5,160 @@ import {
   AcademicCapIcon,
   TrophyIcon,
   ChartBarIcon,
-  CalendarIcon,
-  UserGroupIcon
+  CalendarIcon
 } from '@heroicons/react/24/outline';
 
 const experiences = [
   {
-    title: "Senior Product Manager",
-    company: "TechFlow Solutions",
-    period: "2022 - Present",
+    title: "Product Manager II",
+    company: "Microsoft Azure",
+    period: "2023 - Present",
     location: "Remote",
     description: [
-      "Led product strategy for B2B SaaS platform serving 50K+ users, increasing user engagement by 45%",
-      "Built and managed community of 10K+ power users, resulting in 30% increase in feature adoption",
-      "Collaborated with engineering, design, and marketing teams to deliver 15+ major features on time",
-      "Implemented data-driven decision making processes, reducing time-to-market by 25%"
+      "Lead community-focused product initiatives for Azure Developer Experience, serving millions of developers worldwide",
+      "Host Azure Developer SDK Community Standup, building engagement with global developer community",
+      "Drive product strategy and roadmap for developer tools and SDK experiences across multiple Azure services",
+      "Collaborate with engineering teams to deliver developer-focused features that improve Azure adoption",
+      "Champion Responsible AI practices and community guidelines in product development lifecycle"
     ],
-    technologies: ["Product Analytics", "A/B Testing", "Roadmap Planning", "Community Management", "User Research"]
+    technologies: ["Azure SDK", "Developer Experience", "Community Management", "Product Strategy", "Responsible AI"]
   },
   {
     title: "Product Manager",
-    company: "Digital Innovations Inc",
-    period: "2021 - 2022",
-    location: "San Francisco, CA",
+    company: "Microsoft Azure",
+    period: "2021 - 2023",
+    location: "Remote",
     description: [
-      "Managed end-to-end product lifecycle for mobile app with 100K+ downloads",
-      "Established user feedback loops and community forums, improving user satisfaction by 40%",
-      "Worked closely with UX team to redesign onboarding flow, reducing churn by 35%",
-      "Launched referral program that drove 25% of new user acquisitions"
+      "Managed Azure SDK product development and community engagement initiatives",
+      "Built strategic partnerships with developer advocacy teams to enhance SDK adoption",
+      "Created and executed go-to-market strategies for new Azure SDK releases",
+      "Developed comprehensive feedback loops with developer community to inform product decisions",
+      "Led cross-functional teams to deliver SDK improvements that increased developer satisfaction scores"
     ],
-    technologies: ["Mobile Analytics", "User Journey Mapping", "Community Building", "Growth Metrics"]
+    technologies: ["Azure Platform", "SDK Development", "Developer Advocacy", "Community Building", "Product Analytics"]
   },
   {
-    title: "Associate Product Manager",
-    company: "StartupHub",
+    title: "Senior Software Engineer",
+    company: "Stova (formerly Aventri)",
     period: "2020 - 2021",
     location: "Austin, TX",
     description: [
-      "Supported product initiatives for early-stage startup in the creator economy space",
-      "Organized and managed creator community events, building network of 5K+ content creators",
-      "Conducted user interviews and market research to inform product decisions",
-      "Assisted in launching MVP that gained 10K users in first 3 months"
+      "Developed full-stack solutions for event management platform serving enterprise clients",
+      "Built responsive web applications using React, Node.js, and modern JavaScript frameworks",
+      "Collaborated with product and design teams to implement user-focused features",
+      "Mentored junior developers and contributed to technical architecture decisions"
     ],
-    technologies: ["Market Research", "User Interviews", "Event Management", "Creator Economy"]
+    technologies: ["React", "Node.js", "JavaScript", "Full-Stack Development", "Event Management Systems"]
   },
   {
-    title: "Community Manager",
-    company: "TechCommunity Platform",
-    period: "2019 - 2020",
+    title: "Freelance Full-Stack Developer",
+    company: "Independent Contractor",
+    period: "2018 - 2020",
     location: "Austin, TX",
     description: [
-      "Built and scaled online community from 0 to 15K members in 18 months",
-      "Created content strategy and engagement programs that increased daily active users by 60%",
-      "Managed community events, hackathons, and meetups with 500+ attendees",
-      "Developed community guidelines and moderation processes"
+      "Delivered custom web applications for small businesses and startups",
+      "Specialized in React, JavaScript, and modern web development technologies",
+      "Provided technical consulting and mentorship to development teams",
+      "Built responsive, user-friendly applications focused on business growth"
     ],
-    technologies: ["Community Platforms", "Content Strategy", "Event Planning", "Social Media"]
+    technologies: ["React", "JavaScript", "Web Development", "Client Consulting", "Business Applications"]
+  },
+  {
+    title: "Instructor",
+    company: "Code Fellows",
+    period: "2017 - 2018",
+    location: "Seattle, WA",
+    description: [
+      "Taught full-stack JavaScript development bootcamp to career-transitioning students",
+      "Developed curriculum for modern web development technologies and best practices",
+      "Mentored students through intensive coding programs and career transitions",
+      "Created engaging learning experiences that prepared students for software development careers"
+    ],
+    technologies: ["JavaScript", "Teaching", "Curriculum Development", "Mentoring", "Full-Stack Development"]
   }
 ];
 
 const education = [
   {
-    degree: "Master of Business Administration (MBA)",
-    school: "University of Texas at Austin - McCombs School of Business",
-    period: "2017 - 2019",
-    gpa: "3.8/4.0",
+    degree: "Software Development Certificate",
+    school: "Code Fellows",
+    period: "2017",
+    gpa: "Completed with Excellence",
     achievements: [
-      "Product Management Specialization",
-      "Technology Venture Capital Fellow",
-      "Graduate Business Student Association President"
-    ]
-  },
-  {
-    degree: "Bachelor of Science in Computer Science",
-    school: "University of Texas at Austin",
-    period: "2013 - 2017",
-    gpa: "3.7/4.0",
-    achievements: [
-      "Magna Cum Laude",
-      "Entrepreneurship Minor",
-      "Tech Student Organization Leader"
+      "Full-Stack JavaScript Development",
+      "Modern Web Development Best Practices",
+      "Intensive 20-week Bootcamp Program"
     ]
   }
 ];
 
 const certifications = [
   {
-    name: "Certified Product Manager (CPM)",
-    issuer: "Product Management Institute",
-    date: "2023",
+    name: "Microsoft Azure Fundamentals",
+    issuer: "Microsoft",
+    date: "2021",
+    icon: "☁️"
+  },
+  {
+    name: "Product Management Certificate",
+    issuer: "Product School",
+    date: "2021",
     icon: "🎯"
   },
   {
-    name: "Google Analytics Certified",
-    issuer: "Google",
+    name: "Responsible AI Professional",
+    issuer: "Microsoft",
     date: "2023",
-    icon: "📊"
+    icon: "🤖"
   },
   {
-    name: "Scrum Product Owner Certification",
-    issuer: "Scrum Alliance",
+    name: "Community Leadership Certification",
+    issuer: "Community Roundtable",
     date: "2022",
-    icon: "🏃‍♂️"
-  },
-  {
-    name: "Community Management Professional",
-    issuer: "Community Management Institute",
-    date: "2021",
     icon: "👥"
   }
 ];
 
 const achievements = [
   {
-    name: "Product Launch Excellence Award",
-    description: "Recognized for launching 3 successful products that exceeded KPI targets by 40%",
+    name: "Azure Developer Community Leader",
+    description: "Host of Azure Developer SDK Community Standup, engaging with global developer community",
     year: "2023",
-    impact: "Generated $2M in additional revenue"
+    impact: "Weekly engagement with thousands of Azure developers"
   },
   {
-    name: "Community Builder of the Year",
-    description: "Built one of the fastest-growing tech communities in Austin",
+    name: "Product Innovation Excellence",
+    description: "Led community-focused product initiatives that improved Azure developer experience",
     year: "2022",
-    impact: "15K+ active community members"
+    impact: "Enhanced SDK adoption and developer satisfaction"
   },
   {
-    name: "Innovation Champion",
-    description: "Led cross-functional team to develop breakthrough feature",
+    name: "Technical Educator & Mentor",
+    description: "Successfully transitioned from teaching at Code Fellows to Microsoft Product Management",
     year: "2021",
-    impact: "45% increase in user engagement"
+    impact: "Mentored 100+ students in software development careers"
   }
 ];
 
 const skills = [
-  "Product Strategy",
-  "Roadmap Planning",
-  "User Research & Interviews",
-  "A/B Testing & Experimentation",
-  "Product Analytics",
-  "Go-to-Market Strategy",
-  "Agile & Scrum",
-  "Cross-functional Leadership",
+  "Product Management",
+  "Azure Platform & SDK",
+  "Developer Experience",
   "Community Building",
+  "Developer Advocacy",
+  "Responsible AI",
+  "Product Strategy",
+  "Cross-functional Leadership",
   "Stakeholder Management",
-  "Feature Prioritization",
-  "Customer Journey Mapping",
-  "Market Research",
-  "Growth Metrics",
-  "Community Engagement",
-  "MVP Launches",
-  "User Feedback Loops",
-  "Public Speaking & Workshops"
+  "JavaScript & React",
+  "Full-Stack Development",
+  "Technical Writing",
+  "Public Speaking",
+  "Mentoring & Teaching",
+  "Go-to-Market Strategy",
+  "User Research",
+  "Agile Development",
+  "Content Creation"
 ];
 
 export default function Resume() {
@@ -180,7 +183,7 @@ export default function Resume() {
             </h2>
             <div className="w-20 h-1.5 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto mb-6"></div>
             <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-8">
-              My journey as a Product Manager passionate about building products that bring communities together.
+              My journey from software development educator to Microsoft Azure Product Manager, focused on building exceptional developer experiences and vibrant communities.
             </p>
             <motion.a
               href="/resume.pdf"
@@ -388,20 +391,20 @@ export default function Resume() {
               <h4 className="font-semibold text-gray-900 mb-4 text-center">Impact Summary</h4>
               <div className="grid grid-cols-2 gap-4 text-center">
                 <div>
-                  <div className="text-2xl font-bold text-primary">5+</div>
-                  <div className="text-xs text-gray-600">Years PM Experience</div>
+                  <div className="text-2xl font-bold text-primary">7+</div>
+                  <div className="text-xs text-gray-600">Years Experience</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-primary">25+</div>
-                  <div className="text-xs text-gray-600">Products Launched</div>
+                  <div className="text-2xl font-bold text-primary">3+</div>
+                  <div className="text-xs text-gray-600">Years at Microsoft</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-primary">50K+</div>
-                  <div className="text-xs text-gray-600">Users Impacted</div>
+                  <div className="text-2xl font-bold text-primary">100+</div>
+                  <div className="text-xs text-gray-600">Students Mentored</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-primary">15K+</div>
-                  <div className="text-xs text-gray-600">Community Members</div>
+                  <div className="text-2xl font-bold text-primary">Global</div>
+                  <div className="text-xs text-gray-600">Azure Community</div>
                 </div>
               </div>
             </motion.div>
@@ -409,9 +412,9 @@ export default function Resume() {
         </div>
 
         {/* Skills Section */}
-        <div className="mt-10">
-          <h3 className="text-xl font-bold mb-4 text-gray-900">Skills & Expertise</h3>
-          <div className="flex flex-wrap gap-3">
+        <div className="mt-16">
+          <h3 className="text-2xl font-bold mb-6 text-gray-900 text-center">Skills & Expertise</h3>
+          <div className="flex flex-wrap justify-center gap-3">
             {skills.map((skill, i) => (
               <span
                 key={i}
@@ -422,7 +425,7 @@ export default function Resume() {
             ))}
           </div>
         </div>
-      </div>
+      </div> {/* <-- This is the end of your max-w-7xl container */}
     </section>
   );
 }

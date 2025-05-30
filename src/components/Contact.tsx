@@ -21,8 +21,8 @@ export default function Contact() {
             </h2>
             <div className="w-20 h-1.5 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto mb-6"></div>
             <p className="text-lg md:text-xl leading-8 text-gray-600">
-              I'm always interested in hearing about new projects and opportunities.
-              Whether you have a question or just want to say hi, feel free to reach out!
+              I'm always excited to connect with fellow developers, product professionals, and community builders.
+              Whether you want to discuss Azure development, product management, or community initiatives, let's chat!
             </p>
           </motion.div>
         </div>
@@ -109,10 +109,10 @@ export default function Contact() {
                 transition={{ duration: 0.5, delay: 0.6 }}
                 viewport={{ once: true }}
               >
-                <h4 className="text-lg font-semibold text-gray-900 mb-3">Let's build something amazing together!</h4>
+                <h4 className="text-lg font-semibold text-gray-900 mb-3">Let's connect and collaborate!</h4>
                 <p className="text-gray-600">
-                  Whether you need a full-stack developer for your project or just want to connect,
-                  I'm open to discussing opportunities and collaborations.
+                  Whether you're interested in Azure development, product management insights, or community building strategies,
+                  I'm always open to meaningful conversations and new opportunities.
                 </p>
               </motion.div>
             </div>
@@ -125,8 +125,8 @@ export default function Contact() {
                 'Ljc5IDQgNCA0IDQtMS43OSA0LTR6bTMyIDBjMC0yLjIxLTEuNzktNC00LTRzLTQgMS43OS00IDQgMS43OSA0IDQgNCA0LTEuNzkgNC00eiI+PC9wYXRoPjwvZz48L2c+PC9zdmc+')] opacity-40"></div>
               <div className="absolute inset-0 flex items-center justify-center p-8">
                 <div className="text-white text-center">
-                  <h3 className="text-2xl font-bold mb-4">Ready to start a project?</h3>
-                  <p className="mb-6 opacity-90">Let's collaborate and bring your ideas to life!</p>
+                  <h3 className="text-2xl font-bold mb-4">Ready to connect?</h3>
+                  <p className="mb-6 opacity-90">Let's discuss Azure development, product management, or community building!</p>
                   <a 
                     href="mailto:norza.hector@outlook.com"
                     className="inline-block px-6 py-3 bg-white text-primary font-medium rounded-lg hover:bg-gray-100 transition-colors shadow-lg"

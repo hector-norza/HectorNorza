@@ -24,8 +24,8 @@ export default function Hero() {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.7, delay: 0.3 }}
             >
-              Product Manager & Community Builder passionate about launching impactful products and growing thriving user communities.<br />
-              I connect business goals with user needs, lead cross-functional teams, and create spaces where people belong.
+              Product Manager II at Microsoft Azure, specializing in developer experience and community building.<br />
+              Host of Azure Developer SDK Community Standup, passionate about creating exceptional developer tools and fostering vibrant tech communities.
             </motion.p>
             <motion.div 
               className="flex flex-wrap items-center justify-center gap-x-6 gap-y-4"
