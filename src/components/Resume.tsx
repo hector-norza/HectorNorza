@@ -138,16 +138,24 @@ const achievements = [
 ];
 
 const skills = [
-  "Product Management",
-  "User Research",
-  "Data Analysis",
-  "Agile Methodologies",
+  "Product Strategy",
+  "Roadmap Planning",
+  "User Research & Interviews",
+  "A/B Testing & Experimentation",
+  "Product Analytics",
+  "Go-to-Market Strategy",
+  "Agile & Scrum",
+  "Cross-functional Leadership",
   "Community Building",
-  "Growth Hacking",
+  "Stakeholder Management",
+  "Feature Prioritization",
+  "Customer Journey Mapping",
   "Market Research",
-  "Event Planning",
-  "Content Strategy",
-  "Social Media Management"
+  "Growth Metrics",
+  "Community Engagement",
+  "MVP Launches",
+  "User Feedback Loops",
+  "Public Speaking & Workshops"
 ];
 
 export default function Resume() {
