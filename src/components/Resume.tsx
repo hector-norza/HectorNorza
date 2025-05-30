@@ -206,7 +206,7 @@ export default function Resume() {
             </h2>
             <div className="w-20 h-1.5 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto mb-6"></div>
             <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
-              From community building to product management, I now leverage product strategy and execution to drive deeper engagement and build stronger, more scalable communities.
+              Driven by a passion for community building, I transitioned into product management, a role that now provides strategic tools to cultivate and scale even more vibrant and robust communities.
             </p>
           </motion.div>
         </div>
