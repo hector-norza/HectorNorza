@@ -48,19 +48,15 @@ export default function About() {
               
               <div className="space-y-6 text-lg text-gray-600">
                 <p>
-                  I'm a <span className="font-semibold text-gray-900">Full Stack Developer</span> with a passion for creating elegant solutions to complex problems. 
-                  With expertise in modern web technologies and a keen eye for design, I build applications 
-                  that are not just functional but also provide an exceptional user experience.
+                  I'm a <span className="font-semibold text-gray-900">Product Manager</span> with a passion for building products that empower people and foster thriving communities.
+                  My journey began in tech, but I discovered my true calling in connecting user needs with business goals and bringing people together around shared missions.
                 </p>
                 <p>
-                  My journey in software development began with a curiosity about how things work,
-                  which evolved into a career building robust and scalable applications.
-                  I'm constantly learning and exploring new technologies to stay at the forefront
-                  of web development.
+                  I specialize in data-driven product strategy and have a proven track record of launching features that drive engagement and growth.
+                  What sets me apart is my deep understanding of community dynamics and how to build products that foster connection and collaboration.
                 </p>
                 <p>
-                  When I'm not coding, you'll find me exploring new hiking trails, experimenting with photography, 
-                  or diving into tech books and online courses to expand my knowledge.
+                  When I'm not planning product roadmaps or analyzing user feedback, you'll find me organizing community events, mentoring aspiring product managers, or exploring new ways technology can create meaningful impact.
                 </p>
               </div>
               
