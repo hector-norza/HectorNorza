@@ -24,7 +24,7 @@ export default function Hero() {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.7, delay: 0.3 }}
             >
-              Product Manager II at Microsoft Azure, specializing in developer experience and community building.<br />
+              Product Manager at Microsoft Azure, specializing in developer experience and community building.<br />
               Host of Azure Developer SDK Community Standup, passionate about creating exceptional developer tools and fostering vibrant tech communities.
             </motion.p>
             <motion.div 
