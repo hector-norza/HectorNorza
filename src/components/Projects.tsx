@@ -29,50 +29,59 @@ const projects = [
 
 export default function Projects() {
   return (
-    <section id="projects" className="relative bg-gray-50">
-      <div className="section-container">
+    <section id="projects" className="relative py-24">
+      {/* Background decorations */}
+      <div className="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-gray-50 to-white -z-10"></div>
+      <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-gray-50 to-white -z-10"></div>
+      <div className="absolute left-0 w-1/3 h-full bg-primary/5 -z-10 skew-x-12 -translate-x-1/2"></div>
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
-          <div className="text-center mb-16">
+          <div className="text-center mb-20">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
               viewport={{ once: true }}
             >
-              <h2 className="heading-secondary mb-4">Featured Projects</h2>
-              <p className="text-lg leading-8 text-gray-600">
+              <h2 className="text-3xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary inline-block">
+                Featured Projects
+              </h2>
+              <div className="w-20 h-1.5 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto mb-6"></div>
+              <p className="text-lg md:text-xl leading-8 text-gray-600 max-w-3xl mx-auto">
                 Here are some of my recent projects that showcase my skills and experience.
               </p>
             </motion.div>
           </div>
 
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
             {projects.map((project, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="bg-white rounded-lg shadow-lg overflow-hidden"
+                className="bg-white rounded-2xl shadow-xl overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
               >
-                <div className="aspect-w-16 aspect-h-9">
+                <div className="relative">
                   <img
                     src={project.image}
                     alt={project.title}
-                    className="object-cover w-full h-48"
+                    className="object-cover w-full h-56"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
                 </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                <div className="p-8">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-3">
                     {project.title}
                   </h3>
-                  <p className="text-gray-600 mb-4">{project.description}</p>
-                  <div className="flex flex-wrap gap-2 mb-4">
+                  <p className="text-gray-600 mb-6 line-clamp-3">{project.description}</p>
+                  <div className="flex flex-wrap gap-2 mb-6">
                     {project.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary"
+                        className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary"
                       >
                         {tag}
                       </span>
@@ -83,17 +92,17 @@ export default function Projects() {
                       href={project.liveUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-primary hover:text-secondary transition-colors"
+                      className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-secondary transition-colors duration-300 text-sm font-medium"
                     >
-                      Live Demo →
+                      Live Demo
                     </a>
                     <a
                       href={project.githubUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-primary hover:text-secondary transition-colors"
+                      className="px-4 py-2 border border-gray-300 rounded-lg hover:border-primary hover:text-primary transition-colors duration-300 text-sm font-medium"
                     >
-                      GitHub →
+                      View Code
                     </a>
                   </div>
                 </div>
