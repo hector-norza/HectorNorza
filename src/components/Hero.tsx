@@ -34,10 +34,10 @@ export default function Hero() {
               transition={{ duration: 0.5, delay: 0.6 }}
             >
               <a 
-                href="#projects" 
+                href="#resume" 
                 className="inline-flex items-center px-8 py-4 border border-transparent text-base font-medium rounded-xl shadow-lg text-white bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300 transform hover:-translate-y-1"
               >
-                View My Work
+                View My Resume
               </a>
               <a
                 href="#contact"
