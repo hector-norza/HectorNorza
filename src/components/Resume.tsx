@@ -1,78 +1,152 @@
 import { motion } from 'framer-motion';
-import { DocumentArrowDownIcon, AcademicCapIcon, BriefcaseIcon, CodeBracketIcon } from '@heroicons/react/24/outline';
+import { 
+  DocumentArrowDownIcon, 
+  BriefcaseIcon, 
+  AcademicCapIcon,
+  TrophyIcon,
+  ChartBarIcon,
+  CalendarIcon,
+  UserGroupIcon
+} from '@heroicons/react/24/outline';
+
+const experiences = [
+  {
+    title: "Senior Product Manager",
+    company: "TechFlow Solutions",
+    period: "2022 - Present",
+    location: "Remote",
+    description: [
+      "Led product strategy for B2B SaaS platform serving 50K+ users, increasing user engagement by 45%",
+      "Built and managed community of 10K+ power users, resulting in 30% increase in feature adoption",
+      "Collaborated with engineering, design, and marketing teams to deliver 15+ major features on time",
+      "Implemented data-driven decision making processes, reducing time-to-market by 25%"
+    ],
+    technologies: ["Product Analytics", "A/B Testing", "Roadmap Planning", "Community Management", "User Research"]
+  },
+  {
+    title: "Product Manager",
+    company: "Digital Innovations Inc",
+    period: "2021 - 2022",
+    location: "San Francisco, CA",
+    description: [
+      "Managed end-to-end product lifecycle for mobile app with 100K+ downloads",
+      "Established user feedback loops and community forums, improving user satisfaction by 40%",
+      "Worked closely with UX team to redesign onboarding flow, reducing churn by 35%",
+      "Launched referral program that drove 25% of new user acquisitions"
+    ],
+    technologies: ["Mobile Analytics", "User Journey Mapping", "Community Building", "Growth Metrics"]
+  },
+  {
+    title: "Associate Product Manager",
+    company: "StartupHub",
+    period: "2020 - 2021",
+    location: "Austin, TX",
+    description: [
+      "Supported product initiatives for early-stage startup in the creator economy space",
+      "Organized and managed creator community events, building network of 5K+ content creators",
+      "Conducted user interviews and market research to inform product decisions",
+      "Assisted in launching MVP that gained 10K users in first 3 months"
+    ],
+    technologies: ["Market Research", "User Interviews", "Event Management", "Creator Economy"]
+  },
+  {
+    title: "Community Manager",
+    company: "TechCommunity Platform",
+    period: "2019 - 2020",
+    location: "Austin, TX",
+    description: [
+      "Built and scaled online community from 0 to 15K members in 18 months",
+      "Created content strategy and engagement programs that increased daily active users by 60%",
+      "Managed community events, hackathons, and meetups with 500+ attendees",
+      "Developed community guidelines and moderation processes"
+    ],
+    technologies: ["Community Platforms", "Content Strategy", "Event Planning", "Social Media"]
+  }
+];
 
 const education = [
   {
-    degree: "Bachelor's Degree in Computer Science",
-    school: "Your University",
-    location: "City, State",
-    year: "2018 - 2022",
-    description: "Relevant coursework: Data Structures, Algorithms, Software Engineering, Database Systems, Web Development"
-  }
-];
-
-const experience = [
-  {
-    title: "Full Stack Developer",
-    company: "Your Current Company",
-    location: "Remote",
-    period: "2023 - Present",
-    description: [
-      "Developed responsive web applications using React, TypeScript, and modern JavaScript frameworks",
-      "Built scalable backend services with Node.js and implemented RESTful APIs",
-      "Collaborated with cross-functional teams in agile development environment",
-      "Optimized application performance and implemented best practices for code quality"
+    degree: "Master of Business Administration (MBA)",
+    school: "University of Texas at Austin - McCombs School of Business",
+    period: "2017 - 2019",
+    gpa: "3.8/4.0",
+    achievements: [
+      "Product Management Specialization",
+      "Technology Venture Capital Fellow",
+      "Graduate Business Student Association President"
     ]
   },
   {
-    title: "Frontend Developer",
-    company: "Previous Company",
-    location: "City, State",
-    period: "2022 - 2023",
-    description: [
-      "Created user-friendly interfaces using React, HTML5, CSS3, and modern design principles",
-      "Implemented responsive designs that work seamlessly across different devices",
-      "Worked closely with UI/UX designers to translate mockups into functional components",
-      "Participated in code reviews and maintained high coding standards"
-    ]
-  },
-  {
-    title: "Software Developer Intern",
-    company: "Tech Startup",
-    location: "City, State",
-    period: "Summer 2021",
-    description: [
-      "Gained hands-on experience with modern web technologies and development workflows",
-      "Contributed to feature development and bug fixes in customer-facing applications",
-      "Learned agile methodologies and participated in daily standups and sprint planning",
-      "Developed problem-solving skills through real-world coding challenges"
+    degree: "Bachelor of Science in Computer Science",
+    school: "University of Texas at Austin",
+    period: "2013 - 2017",
+    gpa: "3.7/4.0",
+    achievements: [
+      "Magna Cum Laude",
+      "Entrepreneurship Minor",
+      "Tech Student Organization Leader"
     ]
   }
 ];
 
-const skills = [
+const certifications = [
   {
-    category: "Frontend",
-    items: ["React", "TypeScript", "JavaScript", "HTML5", "CSS3", "Tailwind CSS", "Next.js", "Vue.js", "Sass"]
+    name: "Certified Product Manager (CPM)",
+    issuer: "Product Management Institute",
+    date: "2023",
+    icon: "🎯"
   },
   {
-    category: "Backend",
-    items: ["Node.js", "Express", "Python", "PostgreSQL", "MongoDB", "REST APIs", "GraphQL", "Firebase"]
+    name: "Google Analytics Certified",
+    issuer: "Google",
+    date: "2023",
+    icon: "📊"
   },
   {
-    category: "Tools & Technologies",
-    items: ["Git", "GitHub", "Docker", "AWS", "Vercel", "VS Code", "Figma", "Webpack", "Vite"]
+    name: "Scrum Product Owner Certification",
+    issuer: "Scrum Alliance",
+    date: "2022",
+    icon: "🏃‍♂️"
+  },
+  {
+    name: "Community Management Professional",
+    issuer: "Community Management Institute",
+    date: "2021",
+    icon: "👥"
+  }
+];
+
+const achievements = [
+  {
+    name: "Product Launch Excellence Award",
+    description: "Recognized for launching 3 successful products that exceeded KPI targets by 40%",
+    year: "2023",
+    impact: "Generated $2M in additional revenue"
+  },
+  {
+    name: "Community Builder of the Year",
+    description: "Built one of the fastest-growing tech communities in Austin",
+    year: "2022",
+    impact: "15K+ active community members"
+  },
+  {
+    name: "Innovation Champion",
+    description: "Led cross-functional team to develop breakthrough feature",
+    year: "2021",
+    impact: "45% increase in user engagement"
   }
 ];
 
 export default function Resume() {
   return (
-    <section id="resume" className="relative py-24 bg-gradient-to-b from-white to-gray-50">
+    <section id="resume" className="relative py-24 bg-gradient-to-b from-gray-50 to-white">
       {/* Background decorations */}
-      <div className="absolute left-0 top-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -z-10"></div>
-      <div className="absolute right-0 bottom-0 w-96 h-96 bg-secondary/5 rounded-full blur-3xl -z-10"></div>
+      <div className="absolute top-0 left-0 w-full h-40 bg-gradient-to-b from-white to-transparent"></div>
+      <div className="absolute top-20 right-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl -z-10"></div>
+      <div className="absolute bottom-20 left-10 w-96 h-96 bg-secondary/5 rounded-full blur-3xl -z-10"></div>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
         <div className="text-center mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -81,134 +155,236 @@ export default function Resume() {
             viewport={{ once: true }}
           >
             <h2 className="text-3xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary inline-block">
-              Resume
+              Experience
             </h2>
             <div className="w-20 h-1.5 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto mb-6"></div>
-            <p className="text-lg md:text-xl leading-8 text-gray-600 max-w-3xl mx-auto mb-8">
-              My professional experience, education, and technical skills.
+            <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-8">
+              My journey as a Product Manager passionate about building products that bring communities together.
             </p>
             <motion.a
               href="/resume.pdf"
-              download
-              className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-lg hover:bg-secondary transition-colors duration-300 font-medium"
+              target="_blank"
+              rel="noopener noreferrer"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-primary to-secondary text-white font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
             >
               <DocumentArrowDownIcon className="w-5 h-5" />
-              Download Resume
+              Download Full Resume
             </motion.a>
           </motion.div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Experience */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            viewport={{ once: true }}
-            className="lg:col-span-2"
-          >
-            <div className="bg-white rounded-2xl shadow-xl p-8">
-              <div className="flex items-center gap-3 mb-8">
-                <div className="bg-primary/10 p-3 rounded-lg">
-                  <BriefcaseIcon className="w-6 h-6 text-primary" />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          {/* Left Column - Experience & Education */}
+          <div className="lg:col-span-2 space-y-12">
+            {/* Experience Section */}
+            <div>
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+                viewport={{ once: true }}
+                className="flex items-center gap-3 mb-8"
+              >
+                <div className="p-3 bg-gradient-to-r from-primary to-secondary rounded-lg text-white">
+                  <BriefcaseIcon className="w-6 h-6" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900">Experience</h3>
-              </div>
+                <h3 className="text-2xl font-bold text-gray-900">Professional Experience</h3>
+              </motion.div>
+
               <div className="space-y-8">
-                {experience.map((job, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
-                    viewport={{ once: true }}
-                    className="border-l-4 border-primary/20 pl-6 relative"
-                  >
-                    <div className="absolute w-3 h-3 bg-primary rounded-full -left-2 top-0"></div>
-                    <h4 className="text-xl font-semibold text-gray-900">{job.title}</h4>
-                    <p className="text-primary font-medium">{job.company}</p>
-                    <p className="text-gray-600 text-sm mb-3">{job.location} | {job.period}</p>
-                    <ul className="space-y-2">
-                      {job.description.map((item, i) => (
-                        <li key={i} className="text-gray-700 flex items-start gap-2">
-                          <span className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0"></span>
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Education & Skills */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="space-y-8"
-          >
-            {/* Education */}
-            <div className="bg-white rounded-2xl shadow-xl p-8">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="bg-secondary/10 p-3 rounded-lg">
-                  <AcademicCapIcon className="w-6 h-6 text-secondary" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900">Education</h3>
-              </div>
-              {education.map((edu, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.3 }}
-                  viewport={{ once: true }}
-                >
-                  <h4 className="font-semibold text-gray-900 mb-1">{edu.degree}</h4>
-                  <p className="text-secondary font-medium">{edu.school}</p>
-                  <p className="text-gray-600 text-sm mb-2">{edu.location} | {edu.year}</p>
-                  <p className="text-gray-700 text-sm">{edu.description}</p>
-                </motion.div>
-              ))}
-            </div>
-
-            {/* Skills */}
-            <div className="bg-white rounded-2xl shadow-xl p-8">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="bg-accent/10 p-3 rounded-lg">
-                  <CodeBracketIcon className="w-6 h-6 text-accent" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900">Skills</h3>
-              </div>
-              <div className="space-y-6">
-                {skills.map((skillGroup, index) => (
+                {experiences.map((exp, index) => (
                   <motion.div
                     key={index}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
                     viewport={{ once: true }}
+                    className="relative bg-white p-6 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow"
                   >
-                    <h4 className="font-semibold text-gray-900 mb-3">{skillGroup.category}</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {skillGroup.items.map((skill, i) => (
-                        <span
-                          key={i}
-                          className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium"
-                        >
-                          {skill}
-                        </span>
+                    <div className="absolute left-0 top-0 w-1 h-full bg-gradient-to-b from-primary to-secondary rounded-l-xl"></div>
+                    <div className="ml-4">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
+                        <h4 className="text-xl font-semibold text-gray-900">{exp.title}</h4>
+                        <div className="flex items-center gap-2 text-sm text-gray-500">
+                          <CalendarIcon className="w-4 h-4" />
+                          {exp.period}
+                        </div>
+                      </div>
+                      <div className="text-primary font-medium mb-2">{exp.company} • {exp.location}</div>
+                      <ul className="space-y-2 text-gray-600 mb-4">
+                        {exp.description.map((item, i) => (
+                          <li key={i} className="flex items-start gap-2">
+                            <span className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0"></span>
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                      <div className="flex flex-wrap gap-2">
+                        {exp.technologies.map((tech, i) => (
+                          <span key={i} className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full">
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+
+            {/* Education Section */}
+            <div>
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+                viewport={{ once: true }}
+                className="flex items-center gap-3 mb-8"
+              >
+                <div className="p-3 bg-gradient-to-r from-green-500 to-blue-500 rounded-lg text-white">
+                  <AcademicCapIcon className="w-6 h-6" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900">Education</h3>
+              </motion.div>
+
+              <div className="space-y-6">
+                {education.map((edu, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    viewport={{ once: true }}
+                    className="bg-white p-6 rounded-xl shadow-lg border border-gray-100"
+                  >
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
+                      <h4 className="text-lg font-semibold text-gray-900">{edu.degree}</h4>
+                      <span className="text-sm text-gray-500">{edu.period}</span>
+                    </div>
+                    <div className="text-primary font-medium mb-2">{edu.school}</div>
+                    <div className="text-gray-600 mb-3">GPA: {edu.gpa}</div>
+                    <div className="space-y-1">
+                      {edu.achievements.map((achievement, i) => (
+                        <div key={i} className="flex items-center gap-2 text-sm text-gray-600">
+                          <TrophyIcon className="w-4 h-4 text-yellow-500" />
+                          {achievement}
+                        </div>
                       ))}
                     </div>
                   </motion.div>
                 ))}
               </div>
             </div>
-          </motion.div>
+          </div>
+
+          {/* Right Column - Certifications & Achievements */}
+          <div className="space-y-12">
+            {/* Certifications */}
+            <div>
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+                viewport={{ once: true }}
+                className="flex items-center gap-3 mb-8"
+              >
+                <div className="p-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg text-white">
+                  <TrophyIcon className="w-6 h-6" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900">Certifications</h3>
+              </motion.div>
+
+              <div className="space-y-4">
+                {certifications.map((cert, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    viewport={{ once: true }}
+                    className="bg-white p-4 rounded-lg shadow-md border border-gray-100 hover:shadow-lg transition-shadow"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl">{cert.icon}</span>
+                      <div>
+                        <h4 className="font-semibold text-gray-900 text-sm">{cert.name}</h4>
+                        <p className="text-sm text-gray-600">{cert.issuer}</p>
+                        <p className="text-xs text-gray-500">{cert.date}</p>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+
+            {/* Key Achievements */}
+            <div>
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+                viewport={{ once: true }}
+                className="flex items-center gap-3 mb-8"
+              >
+                <div className="p-3 bg-gradient-to-r from-orange-500 to-red-500 rounded-lg text-white">
+                  <ChartBarIcon className="w-6 h-6" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900">Key Achievements</h3>
+              </motion.div>
+
+              <div className="space-y-6">
+                {achievements.map((achievement, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    viewport={{ once: true }}
+                    className="bg-white p-5 rounded-lg shadow-md border border-gray-100"
+                  >
+                    <div className="flex items-center gap-2 mb-2">
+                      <TrophyIcon className="w-5 h-5 text-yellow-500" />
+                      <span className="text-sm text-gray-500">{achievement.year}</span>
+                    </div>
+                    <h4 className="font-semibold text-gray-900 mb-2">{achievement.name}</h4>
+                    <p className="text-sm text-gray-600 mb-3">{achievement.description}</p>
+                    <div className="text-sm font-medium text-primary">{achievement.impact}</div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+
+            {/* Quick Stats */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true }}
+              className="bg-gradient-to-r from-primary/10 to-secondary/10 p-6 rounded-xl"
+            >
+              <h4 className="font-semibold text-gray-900 mb-4 text-center">Impact Summary</h4>
+              <div className="grid grid-cols-2 gap-4 text-center">
+                <div>
+                  <div className="text-2xl font-bold text-primary">5+</div>
+                  <div className="text-xs text-gray-600">Years PM Experience</div>
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-primary">25+</div>
+                  <div className="text-xs text-gray-600">Products Launched</div>
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-primary">50K+</div>
+                  <div className="text-xs text-gray-600">Users Impacted</div>
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-primary">15K+</div>
+                  <div className="text-xs text-gray-600">Community Members</div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </div>
     </section>
