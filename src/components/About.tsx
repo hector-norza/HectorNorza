@@ -72,14 +72,17 @@ export default function About() {
               
               <div className="space-y-6 text-lg text-gray-600">
                 <p>
-                  I'm a <span className="font-semibold text-gray-900">Product Manager at Microsoft Azure SDKs</span>, where I lead community-focused product initiatives that serve millions of developers worldwide.
-                  My passion lies in creating exceptional developer experiences and building vibrant tech communities.
+                  I'm <span className="font-semibold text-gray-900">Hector Norzagaray</span> — a product manager with a deep passion for building communities and creating tools that bring people together.
                 </p>
                 <p>
-                  As the host of the <span className="font-semibold text-gray-900">Azure Developer SDK Community Standup</span>, I engage with our global developer community, gathering feedback and driving product improvements.
-                  From teaching full-stack development at Code Fellows to leading product strategy at Microsoft, I've gained a unique perspective on both the technical and human sides of software development.                </p>
+                  My journey into tech didn't start with a business plan or a roadmap — it started with people. For years, I've been involved in organizing, growing, and supporting grassroots communities. In doing so, I saw firsthand how technology could either strengthen or isolate — and I knew I wanted to be part of building the kind that strengthens. That's what led me to product management.
+                </p>
                 <p>
-                  I specialize in developer advocacy, community building, and Responsible AI practices—ensuring that technology is built ethically and with developers' needs in mind                </p>
+                  As a PM, I bring a community-first mindset to every product I touch. I'm driven by questions like: How will this feature empower the people using it? How can we design for inclusion, trust, and real connection? My approach blends strategic thinking, clear communication, and user empathy to align cross-functional teams and deliver meaningful solutions.
+                </p>
+                <p>
+                  Whether I'm leading discovery sessions, defining product vision, or collaborating with engineers and designers, my goal is always the same: to build tools that bridge gaps — between people, between ideas, and between communities and the impact they seek to make.
+                </p>
               </div>
               
               <motion.div 
