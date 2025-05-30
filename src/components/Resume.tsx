@@ -137,6 +137,19 @@ const achievements = [
   }
 ];
 
+const skills = [
+  "Product Management",
+  "User Research",
+  "Data Analysis",
+  "Agile Methodologies",
+  "Community Building",
+  "Growth Hacking",
+  "Market Research",
+  "Event Planning",
+  "Content Strategy",
+  "Social Media Management"
+];
+
 export default function Resume() {
   return (
     <section id="resume" className="relative py-24 bg-gradient-to-b from-gray-50 to-white">
@@ -384,6 +397,21 @@ export default function Resume() {
                 </div>
               </div>
             </motion.div>
+          </div>
+        </div>
+
+        {/* Skills Section */}
+        <div className="mt-10">
+          <h3 className="text-xl font-bold mb-4 text-gray-900">Skills & Expertise</h3>
+          <div className="flex flex-wrap gap-3">
+            {skills.map((skill, i) => (
+              <span
+                key={i}
+                className="px-4 py-2 bg-primary/10 text-primary font-medium rounded-full text-sm"
+              >
+                {skill}
+              </span>
+            ))}
           </div>
         </div>
       </div>
