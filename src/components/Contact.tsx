@@ -279,7 +279,7 @@ export default function Contact() {
               >
                 <h4 className="text-lg font-semibold text-gray-900 mb-3">Let's connect and collaborate!</h4>
                 <p className="text-gray-600">
-                  Whether you're interested in Azure development, product management insights, or community building strategies,
+                  Whether you're interested in cloud development, product management insights, or community building strategies,
                   I'm always open to meaningful conversations and new opportunities.
                 </p>
               </motion.div>

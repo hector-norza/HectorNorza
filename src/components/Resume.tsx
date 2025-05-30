@@ -29,6 +29,7 @@ const experiences = [
     period: "2021 - 2023",
     location: "Remote",
     description: [
+      "Conducted user research and implemented community feedback loops to drive product success and ensure developer needs were central to development.",
       "Managed Azure SDK product development and community engagement initiatives",
       "Built strategic partnerships with developer advocacy teams to enhance SDK adoption",
       "Created and executed go-to-market strategies for new Azure SDK releases",
@@ -38,15 +39,13 @@ const experiences = [
     technologies: ["Azure Platform", "SDK Development", "Developer Advocacy", "Community Building", "Product Analytics"]
   },
   {
-    title: "Senior Software Engineer",
-    company: "Stova (formerly Aventri)",
+    title: "Technical Project Manager",
+    company: "Stova (formerly Eventcore)",
     period: "2020 - 2021",
-    location: "Austin, TX",
+    location: "Seattle, WA",
     description: [
-      "Developed full-stack solutions for event management platform serving enterprise clients",
-      "Built responsive web applications using React, Node.js, and modern JavaScript frameworks",
-      "Collaborated with product and design teams to implement user-focused features",
-      "Mentored junior developers and contributed to technical architecture decisions"
+      " Delivered 4+ web applications for global events, managing agile workflows and aligning diverse stakeholder expectations, a key skill for community program management",
+      " Launched a sales tool as both PM and UX/UI designer, improving sales efficiency and enhancing user satisfaction through a user-centric design approach.",
     ],
     technologies: ["React", "Node.js", "JavaScript", "Full-Stack Development", "Event Management Systems"]
   },
@@ -54,25 +53,22 @@ const experiences = [
     title: "Freelance Full-Stack Developer",
     company: "Independent Contractor",
     period: "2018 - 2020",
-    location: "Austin, TX",
+    location: "Seattle, WAÍ",
     description: [
-      "Delivered custom web applications for small businesses and startups",
-      "Specialized in React, JavaScript, and modern web development technologies",
-      "Provided technical consulting and mentorship to development teams",
-      "Built responsive, user-friendly applications focused on business growth"
+      "Led end-to-end development of a full-stack application (React, Node.js), demonstrating hands-on expertise in the developer lifecycle crucial for engaging technical communities.",
+      "Conducted user research and implemented community feedback loops to drive product success and ensure developer needs were central to development."
     ],
     technologies: ["React", "JavaScript", "Web Development", "Client Consulting", "Business Applications"]
   },
   {
-    title: "Instructor",
+    title: "Teaching Assistant & Instructor",
     company: "Code Fellows",
-    period: "2017 - 2018",
+    period: "2018 - 2019",
     location: "Seattle, WA",
     description: [
-      "Taught full-stack JavaScript development bootcamp to career-transitioning students",
-      "Developed curriculum for modern web development technologies and best practices",
       "Mentored students through intensive coding programs and career transitions",
-      "Created engaging learning experiences that prepared students for software development careers"
+      "Created engaging learning experiences that prepared students for software development careers",
+      "Developed curriculum for modern web development technologies and best practices",
     ],
     technologies: ["JavaScript", "Teaching", "Curriculum Development", "Mentoring", "Full-Stack Development"]
   }
@@ -89,10 +85,17 @@ const education = [
       "Modern Web Development Best Practices",
       "Intensive 20-week Bootcamp Program"
     ]
-  }
+  },
+  
 ];
 
 const certifications = [
+   {
+    name: "Microsoft Nonprofit Advisor AI Usage Policy",
+    issuer: "Microsoft",
+    date: "2024",
+    icon: "☁️"
+  },
   {
     name: "Microsoft Azure Fundamentals",
     issuer: "Microsoft",
@@ -120,13 +123,31 @@ const certifications = [
 ];
 
 const achievements = [
-  {
-    name: "Azure Developer Community Leader",
-    description: "Host of Azure Developer SDK Community Standup, engaging with global developer community",
-    year: "2023",
-    impact: "Weekly engagement with thousands of Azure developers"
+   {
+    name: "Azure Developer SDK Standup Host",
+    description: "Owned and scaled this weekly live show on YouTube and Twitch, building transparency, trust, and a direct feedback channel with global developer audiences. Innovated program segments to increase engagement and address community needs",
+    year: "2022 - Current",
+    impact: "Monthly engagement with Azure developers"
   },
   {
+    name: "Azure SDK Monthly Release Blog Author",
+    description: " Authored and published monthly technical blog posts detailing the latest Azure SDK releases, ensuring the developer community remained informed of new features, improvements, and best practices",
+    year: "2022 - Current",
+    impact: "Weekly engagement with of Azure developer Community"
+  },
+  {
+    name: "NFL Cares and Microsoft LEAP Program",
+    description: "Participated in the NFL Cares and Microsoft LEAP program, focusing on community engagement and product management skills development",
+    year: "2023-2024",
+    impact: "Mentored underrepresented communities in tech, enhancing product management skills and community engagement strategies"
+  },
+  {
+    name: "Aspire Leadership Council",
+    description: "Mentored early-career professionals and led inclusion initiatives, fostering a supportive community within Microsoft",
+    year: "2022-Current",
+    impact: "Strengthened community ties and promoted diversity in tech leadership"
+  },
+  { 
     name: "Product Innovation Excellence",
     description: "Led community-focused product initiatives that improved Azure developer experience",
     year: "2022",
@@ -393,7 +414,7 @@ export default function Resume() {
                 <div>
                   <div className="text-2xl font-bold text-primary">7+</div>
                   <div className="text-xs text-gray-600">Years Experience</div>
-                </div>
+                </div>Microsoft Nonprofit Advisor AI Usage Policy
                 <div>
                   <div className="text-2xl font-bold text-primary">3+</div>
                   <div className="text-xs text-gray-600">Years at Microsoft</div>

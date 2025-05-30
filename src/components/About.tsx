@@ -77,11 +77,9 @@ export default function About() {
                 </p>
                 <p>
                   As the host of the <span className="font-semibold text-gray-900">Azure Developer SDK Community Standup</span>, I engage with our global developer community, gathering feedback and driving product improvements.
-                  My journey from teaching full-stack development at Code Fellows to leading product strategy at Microsoft has given me a unique perspective on both the technical and human sides of software development.
-                </p>
+                  From teaching full-stack development at Code Fellows to leading product strategy at Microsoft, I've gained a unique perspective on both the technical and human sides of software development.                </p>
                 <p>
-                  I specialize in developer advocacy, community building, and Responsible AI practices. I believe great products are built when we truly understand and serve our users' needs.
-                </p>
+                  I specialize in developer advocacy, community building, and Responsible AI practices—ensuring that technology is built ethically and with developers' needs in mind                </p>
               </div>
               
               <motion.div 
@@ -95,7 +93,7 @@ export default function About() {
                   href="#contact" 
                   className="inline-flex items-center px-6 py-3 border border-primary text-base font-medium rounded-lg shadow-sm text-primary hover:bg-primary hover:text-white transition-all duration-300"
                 >
-                  Let's Connect
+                  Connect with Me
                 </a>
               </motion.div>
             </motion.div>
