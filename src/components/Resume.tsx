@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import { 
-  DocumentArrowDownIcon, 
   BriefcaseIcon, 
   AcademicCapIcon,
   TrophyIcon,
@@ -206,20 +205,9 @@ export default function Resume() {
               Experience
             </h2>
             <div className="w-20 h-1.5 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto mb-6"></div>
-            <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-8">
+            <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
               My journey from software development educator to Microsoft Azure Product Manager, focused on building exceptional developer experiences and vibrant communities.
             </p>
-            <motion.a
-              href="/resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-primary to-secondary text-white font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
-            >
-              <DocumentArrowDownIcon className="w-5 h-5" />
-              Download Full Resume
-            </motion.a>
           </motion.div>
         </div>
 
