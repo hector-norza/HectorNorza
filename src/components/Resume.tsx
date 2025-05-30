@@ -206,7 +206,7 @@ export default function Resume() {
             </h2>
             <div className="w-20 h-1.5 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto mb-6"></div>
             <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
-              My journey from software development educator to Microsoft Azure Product Manager, focused on building exceptional developer experiences and vibrant communities.
+              From community building to product management, I now leverage product strategy and execution to drive deeper engagement and build stronger, more scalable communities.
             </p>
           </motion.div>
         </div>
@@ -405,7 +405,7 @@ export default function Resume() {
                 <div>
                   <div className="text-2xl font-bold text-primary">7+</div>
                   <div className="text-xs text-gray-600">Years Experience</div>
-                </div>Microsoft Nonprofit Advisor AI Usage Policy
+                </div>
                 <div>
                   <div className="text-2xl font-bold text-primary">3+</div>
                   <div className="text-xs text-gray-600">Years at Microsoft</div>
