@@ -16,7 +16,7 @@ export default function Hero() {
             transition={{ duration: 0.7, ease: "easeOut" }}
           >
             <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold text-gray-900 mb-8 leading-tight">
-              Hi, I&apos;m <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Hector Norza</span>
+              Hi, I&apos;m <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Hector Norzagaray</span>
             </h1>
             <motion.p 
               className="text-xl md:text-2xl leading-8 text-gray-600 mb-12"
