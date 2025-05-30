@@ -1,7 +1,48 @@
 import { motion } from 'framer-motion';
-import { EnvelopeIcon, GlobeAltIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
+import { EnvelopeIcon, GlobeAltIcon, ArrowTopRightOnSquareIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline';
+import { useState } from 'react';
 
 export default function Contact() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    try {
+      // Create mailto link with form data
+      const subject = encodeURIComponent(formData.subject || 'Contact from Portfolio');
+      const body = encodeURIComponent(
+        `Hi Hector,\n\n${formData.message}\n\nBest regards,\n${formData.name}\n${formData.email}`
+      );
+      const mailtoLink = `mailto:norza.hector@outlook.com?subject=${subject}&body=${body}`;
+      
+      window.location.href = mailtoLink;
+      
+      setSubmitStatus('success');
+      setFormData({ name: '', email: '', subject: '', message: '' });
+    } catch {
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <section id="contact" className="relative py-24 overflow-hidden bg-gradient-to-b from-white to-gray-50">
       {/* Background decorations */}
@@ -22,7 +63,7 @@ export default function Contact() {
             <div className="w-20 h-1.5 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto mb-6"></div>
             <p className="text-lg md:text-xl leading-8 text-gray-600">
               I'm always excited to connect with fellow developers, product professionals, and community builders.
-              Whether you want to discuss Azure development, product management, or community initiatives, let's chat!
+              Whether you want to discuss cloud development, product management, or community initiatives, let's chat!
             </p>
           </motion.div>
         </div>
@@ -36,9 +77,139 @@ export default function Contact() {
         >
           <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary to-secondary"></div>
           <div className="grid grid-cols-1 md:grid-cols-2">
-            {/* Left column - Info */}
+            {/* Left column - Contact Form */}
+            <div className="p-8 md:p-12">
+              <h3 className="text-2xl font-bold text-gray-900 mb-8">Send me a message</h3>
+              
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.1 }}
+                  viewport={{ once: true }}
+                >
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                    Name *
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+                    placeholder="Your full name"
+                  />
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  viewport={{ once: true }}
+                >
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                    Email *
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+                    placeholder="your.email@example.com"
+                  />
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                  viewport={{ once: true }}
+                >
+                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
+                    Subject
+                  </label>
+                  <input
+                    type="text"
+                    id="subject"
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+                    placeholder="What would you like to discuss?"
+                  />
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.4 }}
+                  viewport={{ once: true }}
+                >
+                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+                    Message *
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    required
+                    rows={5}
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors resize-none"
+                    placeholder="Tell me about your project, question, or just say hello!"
+                  />
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.5 }}
+                  viewport={{ once: true }}
+                >
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white font-medium rounded-lg hover:from-secondary hover:to-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <PaperAirplaneIcon className="w-5 h-5" />
+                    {isSubmitting ? 'Opening email client...' : 'Send Message'}
+                  </button>
+                </motion.div>
+
+                {submitStatus === 'success' && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="p-4 bg-green-50 border border-green-200 rounded-lg"
+                  >
+                    <p className="text-green-800 text-sm">
+                      Your email client should open with the message ready to send!
+                    </p>
+                  </motion.div>
+                )}
+
+                {submitStatus === 'error' && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="p-4 bg-red-50 border border-red-200 rounded-lg"
+                  >
+                    <p className="text-red-800 text-sm">
+                      Something went wrong. Please try again or contact me directly.
+                    </p>
+                  </motion.div>
+                )}
+              </form>
+            </div>
+            
+            {/* Right column - Contact Info */}
             <div className="p-8 md:p-12 bg-gray-50">
-              <h3 className="text-2xl font-bold text-gray-900 mb-8">Connect With Me</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-8">Let's Connect</h3>
               
               <div className="space-y-8">
                 <motion.div 
@@ -53,12 +224,9 @@ export default function Contact() {
                   </div>
                   <div>
                     <h4 className="text-lg font-semibold text-gray-900">Email</h4>
-                    <a
-                      href="mailto:norza.hector@outlook.com"
-                      className="text-primary hover:text-secondary transition-colors"
-                    >
-                      norza.hector@outlook.com
-                    </a>
+                    <p className="text-gray-600">
+                      Use the form to get in touch, or reach out directly for urgent matters.
+                    </p>
                   </div>
                 </motion.div>
                 
@@ -115,26 +283,6 @@ export default function Contact() {
                   I'm always open to meaningful conversations and new opportunities.
                 </p>
               </motion.div>
-            </div>
-            
-            {/* Right column - Background image */}
-            <div className="hidden md:block relative">
-              <div className="absolute inset-0 bg-gradient-to-tr from-primary/70 to-secondary/70"></div>
-              <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iLjEiPjxwYXRoIGQ9Ik0zNiAzNGMwLTIuMjEtMS43OS00LTQtNHMtNCAxLjc5LTQgNCAx'+
-                'Ljc5IDQgNCA0IDQtMS43OSA0LTR6bS0xNi0xNGMwLTIuMjEtMS43OS00LTQtNHMtNCAxLjc5LTQgNCAx'+
-                'Ljc5IDQgNCA0IDQtMS43OSA0LTR6bTMyIDBjMC0yLjIxLTEuNzktNC00LTRzLTQgMS43OS00IDQgMS43OSA0IDQgNCA0LTEuNzkgNC00eiI+PC9wYXRoPjwvZz48L2c+PC9zdmc+')] opacity-40"></div>
-              <div className="absolute inset-0 flex items-center justify-center p-8">
-                <div className="text-white text-center">
-                  <h3 className="text-2xl font-bold mb-4">Ready to connect?</h3>
-                  <p className="mb-6 opacity-90">Let's discuss Azure development, product management, or community building!</p>
-                  <a 
-                    href="mailto:norza.hector@outlook.com"
-                    className="inline-block px-6 py-3 bg-white text-primary font-medium rounded-lg hover:bg-gray-100 transition-colors shadow-lg"
-                  >
-                    Send an Email
-                  </a>
-                </div>
-              </div>
             </div>
           </div>
         </motion.div>

@@ -72,7 +72,7 @@ export default function About() {
               
               <div className="space-y-6 text-lg text-gray-600">
                 <p>
-                  I'm a <span className="font-semibold text-gray-900">Product Manager II at Microsoft Azure</span>, where I lead community-focused product initiatives that serve millions of developers worldwide.
+                  I'm a <span className="font-semibold text-gray-900">Product Manager at Microsoft Azure SDKs</span>, where I lead community-focused product initiatives that serve millions of developers worldwide.
                   My passion lies in creating exceptional developer experiences and building vibrant tech communities.
                 </p>
                 <p>
