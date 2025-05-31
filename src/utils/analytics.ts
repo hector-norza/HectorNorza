@@ -1,32 +1,53 @@
 // Google Analytics 4 configuration
 declare global {
   interface Window {
-    gtag: (command: string, targetId: string, config?: Record<string, any>) => void;
+    gtag: (...args: any[]) => void;
     dataLayer: Record<string, any>[];
   }
 }
 
-export const GA_MEASUREMENT_ID = 'GA_MEASUREMENT_ID'; // Replace with your actual GA4 Measurement ID
+export const GA_MEASUREMENT_ID = 'G-VPC78XB0H1'; // Replace with your actual GA4 Measurement ID
 
 // Initialize Google Analytics
 export const initGA = () => {
-  // Create script tags for GA4
-  const script1 = document.createElement('script');
-  script1.async = true;
-  script1.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
-  document.head.appendChild(script1);
+  // Only initialize if we have a valid measurement ID and we're in the browser
+  if (typeof window === 'undefined' || !GA_MEASUREMENT_ID || GA_MEASUREMENT_ID === 'GA_MEASUREMENT_ID') {
+    console.log('Google Analytics not initialized: Invalid or placeholder measurement ID');
+    return;
+  }
 
-  const script2 = document.createElement('script');
-  script2.innerHTML = `
+  try {
+    // Initialize dataLayer
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', '${GA_MEASUREMENT_ID}', {
-      page_title: document.title,
-      page_location: window.location.href,
-    });
-  `;
-  document.head.appendChild(script2);
+    
+    // Create gtag function
+    window.gtag = function(...args: any[]) {
+      window.dataLayer.push(args);
+    };
+    
+    // Set initial timestamp
+    window.gtag('js', new Date().toISOString());
+    
+    // Create and load the GA script asynchronously
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+    script.onload = () => {
+      // Configure GA after script loads
+      window.gtag('config', GA_MEASUREMENT_ID, {
+        page_title: document.title,
+        page_location: window.location.href,
+      });
+      console.log('Google Analytics initialized successfully');
+    };
+    script.onerror = () => {
+      console.warn('Failed to load Google Analytics');
+    };
+    
+    document.head.appendChild(script);
+  } catch (error) {
+    console.error('Error initializing Google Analytics:', error);
+  }
 };
 
 // Track page views
