@@ -41,9 +41,17 @@ jobs:
           find ./dist -name "*.css" -type f -exec chmod 644 {} \;
           find ./dist -name "*.html" -type f -exec chmod 644 {} \;
           
-          # List files to verify
-          echo "Built files:"
+          # List files to verify what's being deployed
+          echo "=== Built files in dist/ ==="
+          ls -la ./dist/
+          echo "=== Assets directory ==="
           ls -la ./dist/assets/
+          echo "=== Content of dist/index.html (first 10 lines) ==="
+          head -10 ./dist/index.html
+          echo "=== Checking for root index.html ==="
+          ls -la index.html
+          echo "=== Content of root index.html (last 5 lines) ==="
+          tail -5 index.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
