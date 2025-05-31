@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Dialog } from '@headlessui/react';
-import { Bars3Icon, XMarkIcon, LanguageIcon } from '@heroicons/react/24/outline';
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 
 const navigation = [
@@ -14,6 +14,18 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [languageDropdownOpen, setLanguageDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Get current language from Google Translate cookie
+  const getCurrentLanguage = () => {
+    const cookies = document.cookie.split(';');
+    const googtransCookie = cookies.find(cookie => cookie.trim().startsWith('googtrans='));
+    if (googtransCookie) {
+      const value = googtransCookie.split('=')[1];
+      const langCode = value.split('/')[2];
+      return langCode || 'en';
+    }
+    return 'en';
+  };
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -31,10 +43,39 @@ export default function Navbar() {
 
   // Helper function to handle translation
   const handleTranslation = (langCode: string) => {
-    const currentUrl = window.location.href;
-    const translateUrl = `https://translate.google.com/translate?sl=en&tl=${langCode}&u=${encodeURIComponent(currentUrl)}`;
-    window.open(translateUrl, '_blank');
+    if (langCode === 'en') {
+      // Return to English by removing the translation cookie
+      document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      window.location.reload();
+    } else {
+      // Set the Google Translate cookie to trigger translation
+      const setCookie = (name: string, value: string, days: number) => {
+        const expires = new Date();
+        expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+        document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+      };
+      
+      // Set the Google Translate cookie
+      setCookie('googtrans', `/en/${langCode}`, 7);
+      
+      // Reload the page to apply translation
+      window.location.reload();
+    }
+    
     setLanguageDropdownOpen(false);
+  };
+
+  const currentLang = getCurrentLanguage();
+  const getLanguageDisplay = (langCode: string) => {
+    const languages: Record<string, { flag: string; name: string }> = {
+      'en': { flag: '🇺🇸', name: 'English' },
+      'es': { flag: '🇪🇸', name: 'Español' },
+      'fr': { flag: '🇫🇷', name: 'Français' },
+      'pt': { flag: '🇵🇹', name: 'Português' },
+      'de': { flag: '🇩🇪', name: 'Deutsch' },
+      'it': { flag: '🇮🇹', name: 'Italiano' }
+    };
+    return languages[langCode] || languages['en'];
   };
 
   return (
@@ -106,8 +147,8 @@ export default function Navbar() {
               onClick={() => setLanguageDropdownOpen(!languageDropdownOpen)}
               className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary border border-gray-200 rounded-lg hover:border-primary transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20"
             >
-              <LanguageIcon className="h-4 w-4" />
-              <span>Language</span>
+              <span className="text-lg">{getLanguageDisplay(currentLang).flag}</span>
+              <span>{getLanguageDisplay(currentLang).name}</span>
               <svg className={`h-3 w-3 ml-1 transition-transform duration-200 ${languageDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
@@ -119,39 +160,76 @@ export default function Navbar() {
             }`}>
               <div className="py-2">
                 <button
+                  onClick={() => handleTranslation('en')}
+                  className={`flex items-center gap-3 w-full px-4 py-2 text-sm transition-colors ${
+                    currentLang === 'en' 
+                      ? 'text-primary bg-primary/10' 
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-primary'
+                  }`}
+                >
+                  <span className="text-lg">🇺🇸</span>
+                  <span>English</span>
+                  {currentLang === 'en' && <span className="ml-auto text-xs text-primary">✓</span>}
+                </button>
+                <button
                   onClick={() => handleTranslation('es')}
-                  className="flex items-center gap-3 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors"
+                  className={`flex items-center gap-3 w-full px-4 py-2 text-sm transition-colors ${
+                    currentLang === 'es' 
+                      ? 'text-primary bg-primary/10' 
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-primary'
+                  }`}
                 >
                   <span className="text-lg">🇪🇸</span>
                   <span>Español</span>
+                  {currentLang === 'es' && <span className="ml-auto text-xs text-primary">✓</span>}
                 </button>
                 <button
                   onClick={() => handleTranslation('fr')}
-                  className="flex items-center gap-3 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors"
+                  className={`flex items-center gap-3 w-full px-4 py-2 text-sm transition-colors ${
+                    currentLang === 'fr' 
+                      ? 'text-primary bg-primary/10' 
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-primary'
+                  }`}
                 >
                   <span className="text-lg">🇫🇷</span>
                   <span>Français</span>
+                  {currentLang === 'fr' && <span className="ml-auto text-xs text-primary">✓</span>}
                 </button>
                 <button
                   onClick={() => handleTranslation('pt')}
-                  className="flex items-center gap-3 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors"
+                  className={`flex items-center gap-3 w-full px-4 py-2 text-sm transition-colors ${
+                    currentLang === 'pt' 
+                      ? 'text-primary bg-primary/10' 
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-primary'
+                  }`}
                 >
                   <span className="text-lg">🇵🇹</span>
                   <span>Português</span>
+                  {currentLang === 'pt' && <span className="ml-auto text-xs text-primary">✓</span>}
                 </button>
                 <button
                   onClick={() => handleTranslation('de')}
-                  className="flex items-center gap-3 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors"
+                  className={`flex items-center gap-3 w-full px-4 py-2 text-sm transition-colors ${
+                    currentLang === 'de' 
+                      ? 'text-primary bg-primary/10' 
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-primary'
+                  }`}
                 >
                   <span className="text-lg">🇩🇪</span>
                   <span>Deutsch</span>
+                  {currentLang === 'de' && <span className="ml-auto text-xs text-primary">✓</span>}
                 </button>
                 <button
                   onClick={() => handleTranslation('it')}
-                  className="flex items-center gap-3 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors"
+                  className={`flex items-center gap-3 w-full px-4 py-2 text-sm transition-colors ${
+                    currentLang === 'it' 
+                      ? 'text-primary bg-primary/10' 
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-primary'
+                  }`}
                 >
                   <span className="text-lg">🇮🇹</span>
                   <span>Italiano</span>
+                  {currentLang === 'it' && <span className="ml-auto text-xs text-primary">✓</span>}
                 </button>
               </div>
             </div>
@@ -208,53 +286,93 @@ export default function Navbar() {
                   <div className="flex flex-col gap-2">
                     <button
                       onClick={() => {
+                        handleTranslation('en');
+                        setMobileMenuOpen(false);
+                      }}
+                      className={`flex items-center gap-3 px-3 py-2 text-sm transition-colors rounded-lg ${
+                        currentLang === 'en' 
+                          ? 'text-primary bg-primary/10' 
+                          : 'text-gray-700 hover:text-primary hover:bg-gray-50'
+                      }`}
+                    >
+                      <span className="text-lg">🇺🇸</span>
+                      <span>English</span>
+                      {currentLang === 'en' && <span className="ml-auto text-xs text-primary">✓</span>}
+                    </button>
+                    <button
+                      onClick={() => {
                         handleTranslation('es');
                         setMobileMenuOpen(false);
                       }}
-                      className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 hover:text-primary hover:bg-gray-50 rounded-lg transition-colors"
+                      className={`flex items-center gap-3 px-3 py-2 text-sm transition-colors rounded-lg ${
+                        currentLang === 'es' 
+                          ? 'text-primary bg-primary/10' 
+                          : 'text-gray-700 hover:text-primary hover:bg-gray-50'
+                      }`}
                     >
                       <span className="text-lg">🇪🇸</span>
                       <span>Español</span>
+                      {currentLang === 'es' && <span className="ml-auto text-xs text-primary">✓</span>}
                     </button>
                     <button
                       onClick={() => {
                         handleTranslation('fr');
                         setMobileMenuOpen(false);
                       }}
-                      className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 hover:text-primary hover:bg-gray-50 rounded-lg transition-colors"
+                      className={`flex items-center gap-3 px-3 py-2 text-sm transition-colors rounded-lg ${
+                        currentLang === 'fr' 
+                          ? 'text-primary bg-primary/10' 
+                          : 'text-gray-700 hover:text-primary hover:bg-gray-50'
+                      }`}
                     >
                       <span className="text-lg">🇫🇷</span>
                       <span>Français</span>
+                      {currentLang === 'fr' && <span className="ml-auto text-xs text-primary">✓</span>}
                     </button>
                     <button
                       onClick={() => {
                         handleTranslation('pt');
                         setMobileMenuOpen(false);
                       }}
-                      className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 hover:text-primary hover:bg-gray-50 rounded-lg transition-colors"
+                      className={`flex items-center gap-3 px-3 py-2 text-sm transition-colors rounded-lg ${
+                        currentLang === 'pt' 
+                          ? 'text-primary bg-primary/10' 
+                          : 'text-gray-700 hover:text-primary hover:bg-gray-50'
+                      }`}
                     >
                       <span className="text-lg">🇵🇹</span>
                       <span>Português</span>
+                      {currentLang === 'pt' && <span className="ml-auto text-xs text-primary">✓</span>}
                     </button>
                     <button
                       onClick={() => {
                         handleTranslation('de');
                         setMobileMenuOpen(false);
                       }}
-                      className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 hover:text-primary hover:bg-gray-50 rounded-lg transition-colors"
+                      className={`flex items-center gap-3 px-3 py-2 text-sm transition-colors rounded-lg ${
+                        currentLang === 'de' 
+                          ? 'text-primary bg-primary/10' 
+                          : 'text-gray-700 hover:text-primary hover:bg-gray-50'
+                      }`}
                     >
                       <span className="text-lg">🇩🇪</span>
                       <span>Deutsch</span>
+                      {currentLang === 'de' && <span className="ml-auto text-xs text-primary">✓</span>}
                     </button>
                     <button
                       onClick={() => {
                         handleTranslation('it');
                         setMobileMenuOpen(false);
                       }}
-                      className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 hover:text-primary hover:bg-gray-50 rounded-lg transition-colors"
+                      className={`flex items-center gap-3 px-3 py-2 text-sm transition-colors rounded-lg ${
+                        currentLang === 'it' 
+                          ? 'text-primary bg-primary/10' 
+                          : 'text-gray-700 hover:text-primary hover:bg-gray-50'
+                      }`}
                     >
                       <span className="text-lg">🇮🇹</span>
                       <span>Italiano</span>
+                      {currentLang === 'it' && <span className="ml-auto text-xs text-primary">✓</span>}
                     </button>
                   </div>
                   
