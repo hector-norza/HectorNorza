@@ -1,9 +1,8 @@
-name: Deploy to GitHub Pages
+name: Deploy React App to GitHub Pages
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   workflow_dispatch:
 
 permissions:
@@ -16,8 +15,11 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -31,43 +33,28 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Build
+      - name: Build React App
         run: npm run build
 
-      - name: Fix file permissions and MIME types
+      - name: Verify Build Output
         run: |
-          # Ensure all JS files have proper extensions
-          find ./dist -name "*.js" -type f -exec chmod 644 {} \;
-          find ./dist -name "*.css" -type f -exec chmod 644 {} \;
-          find ./dist -name "*.html" -type f -exec chmod 644 {} \;
-          
-          # List files to verify what's being deployed
-          echo "=== Built files in dist/ ==="
+          echo "=== Verifying build output ==="
           ls -la ./dist/
+          echo "=== Checking index.html content ==="
+          head -20 ./dist/index.html
           echo "=== Assets directory ==="
-          ls -la ./dist/assets/
-          echo "=== Content of dist/index.html (first 10 lines) ==="
-          head -10 ./dist/index.html
-          echo "=== Checking for root index.html ==="
-          ls -la index.html
-          echo "=== Content of root index.html (last 5 lines) ==="
-          tail -5 index.html
-
+          ls -la ./dist/assets/ || echo "No assets directory found"
+          echo "=== Ensuring .nojekyll exists ==="
+          ls -la ./dist/.nojekyll || echo "No .nojekyll found"
+          
       - name: Setup Pages
         uses: actions/configure-pages@v4
-
+        
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: './dist'
 
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
