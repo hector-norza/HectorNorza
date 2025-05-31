@@ -6,9 +6,7 @@ import {
   ClockIcon, 
   TagIcon,
   FolderIcon,
-  ArrowRightIcon,
-  RssIcon,
-  EnvelopeIcon
+  ArrowRightIcon
 } from '@heroicons/react/24/outline';
 import { BlogService } from '../utils/blog';
 import type { BlogPostMeta } from '../types/blog';
@@ -78,31 +76,6 @@ export default function BlogList() {
             <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-8">
               Exploring product management, community building, and the intersection of technology and human connection.
             </p>
-            
-            {/* RSS Subscription */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              {/* Email Subscription via Blogtrottr */}
-              <a
-                href="https://blogtrottr.com/?subscribe=https://hectornorza.com/rss.xml"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
-              >
-                <EnvelopeIcon className="w-5 h-5" />
-                Subscribe via Email
-              </a>
-              
-              {/* RSS Feed */}
-              <a
-                href="/rss.xml"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white font-medium rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
-              >
-                <RssIcon className="w-5 h-5" />
-                Subscribe to RSS Feed
-              </a>
-            </div>
           </motion.div>
         </div>
 
