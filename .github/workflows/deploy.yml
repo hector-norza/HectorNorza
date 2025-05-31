@@ -46,6 +46,11 @@ jobs:
           ls -la ./dist/assets/ || echo "No assets directory found"
           echo "=== Ensuring .nojekyll exists ==="
           ls -la ./dist/.nojekyll || echo "No .nojekyll found"
+          echo "=== Removing any conflicting root files from dist ==="
+          rm -f ./dist/README.md
+          rm -f ./dist/LICENSE
+          echo "=== Final dist contents ==="
+          ls -la ./dist/
           
       - name: Setup Pages
         uses: actions/configure-pages@v4
