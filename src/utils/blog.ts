@@ -2,6 +2,19 @@ import { marked } from 'marked';
 import matter from 'gray-matter';
 import { format } from 'date-fns';
 import type { BlogPost, BlogPostMeta } from '../types/blog';
+import { Buffer } from 'buffer';
+
+// Type declaration for Buffer on window
+declare global {
+  interface Window {
+    Buffer: typeof Buffer;
+  }
+}
+
+// Ensure Buffer is available globally for gray-matter
+if (typeof window !== 'undefined' && !window.Buffer) {
+  window.Buffer = Buffer;
+}
 
 // Configure marked for better security and formatting
 marked.setOptions({

@@ -7,6 +7,12 @@ export default defineConfig({
   base: '/',
   define: {
     global: 'globalThis',
+    'process.env': {},
+  },
+  resolve: {
+    alias: {
+      buffer: 'buffer',
+    },
   },
   build: {
     outDir: 'dist',
