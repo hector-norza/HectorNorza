@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 
 export default function Hero() {
   return (
-    <div className="relative isolate overflow-hidden min-h-screen flex items-center">
+    <section className="relative isolate overflow-hidden min-h-screen flex items-center">
       {/* Background gradient and pattern */}
       <div className="absolute inset-0 bg-gradient-to-b from-white via-primary/5 to-white -z-10"></div>
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMwMDAiIGZpbGwtb3BhY2l0eT0iLjAyIj48cGF0aCBkPSJNMzYgMzRjMC0yLjIxLTEuNzktNC00LTRzLTQgMS43OS00IDQgMS43OSA0IDQgNCA0LTEuNzkgNC00ek0yMCAyMGMwLTIuMjEtMS43OS00LTQtNHMtNCAxLjc5LTQgNCAx'+
@@ -53,6 +53,6 @@ export default function Hero() {
       {/* Decorative elements */}
       <div className="absolute top-1/4 right-[10%] w-64 h-64 bg-secondary/10 rounded-full blur-3xl -z-10"></div>
       <div className="absolute bottom-1/4 left-[15%] w-96 h-96 bg-primary/10 rounded-full blur-3xl -z-10"></div>
-    </div>
+    </section>
   );
 }
