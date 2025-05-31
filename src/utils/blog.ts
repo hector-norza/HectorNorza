@@ -24,19 +24,27 @@ export class BlogService {
   // Load and parse a markdown file
   private static async loadMarkdownFile(filename: string): Promise<BlogPost | null> {
     try {
+      console.log(`🔍 Loading markdown file: ${filename}`);
       const response = await fetch(`/blog/${filename}`);
+      console.log(`🌐 Fetch response status: ${response.status} ${response.statusText}`);
+      console.log(`🌐 Fetch URL: /blog/${filename}`);
+      
       if (!response.ok) {
-        console.warn(`Failed to load blog post: ${filename}`);
+        console.warn(`❌ Failed to load blog post: ${filename} (${response.status})`);
         return null;
       }
       
       const markdownContent = await response.text();
+      console.log(`📄 Content loaded for ${filename}, length: ${markdownContent.length}`);
+      
       const { data: frontmatter, content } = matter(markdownContent);
+      console.log(`📋 Frontmatter parsed:`, frontmatter);
+      console.log(`📝 Published field:`, frontmatter.published, typeof frontmatter.published);
       
       // Calculate reading time
       const readTime = this.calculateReadingTime(content);
       
-      return {
+      const post = {
         slug: frontmatter.slug || filename.replace('.md', ''),
         title: frontmatter.title || 'Untitled',
         excerpt: frontmatter.excerpt || '',
@@ -48,23 +56,46 @@ export class BlogService {
         author: frontmatter.author || 'Héctor Norzagaray',
         published: frontmatter.published !== false // Default to true unless explicitly false
       };
+      
+      console.log(`✅ Post parsed successfully:`, {
+        title: post.title,
+        slug: post.slug,
+        published: post.published,
+        category: post.category
+      });
+      return post;
     } catch (error) {
-      console.error(`Error loading blog post ${filename}:`, error);
+      console.error(`❌ Error loading blog post ${filename}:`, error);
       return null;
     }
   }
 
   // Get all published blog posts
   static async getAllPosts(): Promise<BlogPostMeta[]> {
-    const filenames = await this.getBlogFiles();
-    const posts = await Promise.all(
-      filenames.map(filename => this.loadMarkdownFile(filename))
-    );
-    
-    return posts
-      .filter((post): post is BlogPost => post !== null && post.published)
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-      .map(post => ({
+    try {
+      console.log('🔄 getAllPosts called');
+      const filenames = await this.getBlogFiles();
+      console.log('📁 Blog files found:', filenames);
+      
+      if (filenames.length === 0) {
+        console.log('📝 No blog files found');
+        return [];
+      }
+      
+      const posts = await Promise.all(
+        filenames.map(filename => this.loadMarkdownFile(filename))
+      );
+      
+      const validPosts = posts
+        .filter((post): post is BlogPost => {
+          console.log('🔍 Checking post:', post ? { title: post.title, published: post.published } : 'null');
+          return post !== null && post.published;
+        })
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      
+      console.log('✅ Valid posts found:', validPosts.length);
+      
+      return validPosts.map(post => ({
         slug: post.slug,
         title: post.title,
         excerpt: post.excerpt,
@@ -75,20 +106,32 @@ export class BlogService {
         author: post.author,
         published: post.published
       }));
+    } catch (error) {
+      console.error('❌ Error in getAllPosts:', error);
+      return [];
+    }
   }
 
   // Get a specific blog post by slug
   static async getPostBySlug(slug: string): Promise<BlogPost | null> {
-    const filenames = await this.getBlogFiles();
-    
-    for (const filename of filenames) {
-      const post = await this.loadMarkdownFile(filename);
-      if (post && post.slug === slug && post.published) {
-        return post;
+    try {
+      console.log(`🔍 getPostBySlug called with slug: ${slug}`);
+      const filenames = await this.getBlogFiles();
+      
+      for (const filename of filenames) {
+        const post = await this.loadMarkdownFile(filename);
+        if (post && post.slug === slug && post.published) {
+          console.log(`✅ Found post for slug ${slug}:`, post.title);
+          return post;
+        }
       }
+      
+      console.log(`❌ No post found for slug: ${slug}`);
+      return null;
+    } catch (error) {
+      console.error(`❌ Error in getPostBySlug for ${slug}:`, error);
+      return null;
     }
-    
-    return null;
   }
 
   // Get posts by category
@@ -109,9 +152,16 @@ export class BlogService {
 
   // Get unique categories
   static async getCategories(): Promise<string[]> {
-    const posts = await this.getAllPosts();
-    const categories = [...new Set(posts.map(post => post.category))];
-    return categories.sort();
+    try {
+      console.log('🔄 getCategories called');
+      const posts = await this.getAllPosts();
+      const categories = [...new Set(posts.map(post => post.category))];
+      console.log('📂 Categories found:', categories);
+      return categories.sort();
+    } catch (error) {
+      console.error('❌ Error in getCategories:', error);
+      return [];
+    }
   }
 
   // Get unique tags

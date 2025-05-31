@@ -21,14 +21,17 @@ export default function BlogList() {
   useEffect(() => {
     const loadBlogData = async () => {
       try {
+        console.log('🔄 Loading blog data...');
         const [allPosts, allCategories] = await Promise.all([
           BlogService.getAllPosts(),
           BlogService.getCategories()
         ]);
+        console.log('📝 Posts loaded:', allPosts);
+        console.log('📂 Categories loaded:', allCategories);
         setPosts(allPosts);
         setCategories(allCategories);
       } catch (error) {
-        console.error('Error loading blog posts:', error);
+        console.error('❌ Error loading blog posts:', error);
       } finally {
         setLoading(false);
       }

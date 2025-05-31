@@ -55,6 +55,18 @@
     <footer>
       <!-- You can add copyright or contact info here in the future -->
     </footer>
+    
+    <!-- Buffer polyfill for browser compatibility -->
+    <script>
+      if (typeof global === 'undefined') {
+        window.global = window;
+      }
+    </script>
+    <script type="module">
+      import { Buffer } from 'buffer';
+      window.Buffer = Buffer;
+    </script>
+    
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
