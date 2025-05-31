@@ -34,6 +34,17 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Fix file permissions and MIME types
+        run: |
+          # Ensure all JS files have proper extensions
+          find ./dist -name "*.js" -type f -exec chmod 644 {} \;
+          find ./dist -name "*.css" -type f -exec chmod 644 {} \;
+          find ./dist -name "*.html" -type f -exec chmod 644 {} \;
+          
+          # List files to verify
+          echo "Built files:"
+          ls -la ./dist/assets/
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 

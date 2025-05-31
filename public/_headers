@@ -1,0 +1,17 @@
+# Force correct MIME types for JavaScript modules
+/assets/*.js
+  Content-Type: application/javascript
+
+# Force correct MIME types for CSS
+/assets/*.css
+  Content-Type: text/css
+
+# Force correct MIME types for common file types
+*.js
+  Content-Type: application/javascript
+
+*.mjs
+  Content-Type: application/javascript
+
+*.css
+  Content-Type: text/css
