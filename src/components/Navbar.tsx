@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Dialog } from '@headlessui/react';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Bars3Icon, XMarkIcon, LanguageIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 
 const navigation = [
@@ -52,6 +52,18 @@ export default function Navbar() {
             )
           ))}
         </div>
+        <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:items-center lg:gap-x-4">
+          {/* Google Translate Widget */}
+          <div id="google_translate_element" className="text-sm"></div>
+          
+          {/* Manual Language Selector (for future use) */}
+          <div className="relative group">
+            <button className="flex items-center gap-1 text-sm font-semibold text-gray-900 hover:text-primary transition-colors">
+              <LanguageIcon className="h-4 w-4" />
+              <span>ES</span>
+            </button>
+          </div>
+        </div>
       </nav>
       <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
         <div className="fixed inset-0 z-50" />
@@ -93,6 +105,12 @@ export default function Navbar() {
                     </a>
                   )
                 ))}
+              </div>
+              <div className="py-6">
+                <div className="-mx-3 block rounded-lg px-3 py-2">
+                  <div className="text-base font-semibold leading-7 text-gray-900 mb-2">Language / Idioma</div>
+                  <div id="google_translate_element_mobile" className="text-sm"></div>
+                </div>
               </div>
             </div>
           </div>
