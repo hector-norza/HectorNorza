@@ -15,6 +15,7 @@ export class BlogService {
     // This is a simple approach - in production you might want to use a build-time process
     // For now, we'll maintain a list of known blog posts
     return [
+      'my-first-blog-post.md',
       // Add your blog post files here when you create them
       // Example: 'my-first-blog-post.md',
     ];

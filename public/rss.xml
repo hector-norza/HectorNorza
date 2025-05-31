@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Héctor Norzagaray&#039;s Blog</title>
+    <description>Insights on product management, community building, and technology for good</description>
+    <link>https://hectornorza.com</link>
+    <atom:link href="https://hectornorza.com/rss.xml" rel="self" type="application/rss+xml"/>
+    <language>en-us</language>
+    <managingEditor>hector@hectornorza.com (Héctor Norzagaray)</managingEditor>
+    <webMaster>hector@hectornorza.com (Héctor Norzagaray)</webMaster>
+    <lastBuildDate>Sat, 31 May 2025 00:00:00 GMT</lastBuildDate>
+    <pubDate>Sat, 31 May 2025 00:00:00 GMT</pubDate>
+    <ttl>60</ttl>
+    <image>
+      <url>https://hectornorza.com/favicon-32x32.png</url>
+      <title>Héctor Norzagaray&#039;s Blog</title>
+      <link>https://hectornorza.com</link>
+      <width>32</width>
+      <height>32</height>
+    </image>
+
+    <item>
+      <title>Hola World</title>
+      <description>In my first blog post, I share my journey from grassroots community building to becoming a product manager passionate about tech that fosters human connections.</description>
+      <link>https://hectornorza.com/blog/hola-world</link>
+      <guid isPermaLink="true">https://hectornorza.com/blog/hola-world</guid>
+      <pubDate>Sat, 31 May 2025 00:00:00 GMT</pubDate>
+      <author>hector@hectornorza.com (Héctor Norzagaray)</author>
+      <category>Community Reach</category>
+      <category>Technology for Good</category>
+      <category>Product Management</category>
+      <category>Community Engagement</category>
+      <category>Human-Centered Design</category>
+    </item>
+  </channel>
+</rss>

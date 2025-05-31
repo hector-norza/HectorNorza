@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && npm run build:rss",
     "build:sitemap": "node scripts/generate-sitemap.js",
+    "build:rss": "node scripts/generate-rss.js",
     "lint": "eslint .",
     "preview": "vite preview",
     "new-blog": "node scripts/new-blog-post.js"
