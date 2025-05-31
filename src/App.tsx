@@ -5,6 +5,8 @@ import About from './components/About'
 import Resume from './components/Resume'
 import Contact from './components/Contact'
 import Privacy from './components/Privacy'
+import Blog from './pages/Blog'
+import BlogPost from './components/BlogPost'
 import SkipLink from './components/SkipLink'
 import PrivacyBanner from './components/PrivacyBanner'
 import AccessibilityToolbar from './components/AccessibilityToolbar'
@@ -38,6 +40,8 @@ function App() {
         
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/privacy" element={<Privacy />} />
         </Routes>
         
@@ -48,6 +52,8 @@ function App() {
             </p>
             <p className="text-gray-400 text-sm mt-2">
               <Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+              {" • "}
+              <Link to="/blog" className="hover:text-white transition-colors">Blog</Link>
             </p>
           </div>
         </footer>

@@ -1,6 +1,53 @@
 # 🌐 hectornorza.com
 
-Welcome to the repository for [hectornorza.com](https://www.hectornorza.com/) — my personal website and digital portfolio.
+Welcome to the## 🚀 What You'll Find on the Site
+
+- 🧠 **Product Think---
+
+## 📝 Blog Structure
+
+The blog system is built with a focus on simplicity, performance, and maintainability:
+
+### Content Management
+- **Markdown Files**: Blog posts are stored as `.md` files in `public/blog/`
+- **Frontmatter**: Each post includes metadata (title, date, category, tags, etc.)
+- **Static Generation**: Posts are parsed at runtime for optimal flexibility
+
+### Features
+- **Category Filtering**: Posts organized by Product Management, Career, Technology
+- **Tag System**: Multiple tags per post for better discoverability
+- **Reading Time**: Automatic calculation based on content length
+- **Responsive Design**: Optimized for all device sizes
+- **Accessibility**: Full keyboard navigation and screen reader support
+
+### Blog Architecture
+```
+src/
+├── components/
+│   ├── BlogList.tsx      # Main blog listing with filtering
+│   └── BlogPost.tsx      # Individual post view
+├── pages/
+│   └── Blog.tsx          # Blog homepage
+├── types/
+│   └── blog.ts           # TypeScript interfaces
+└── utils/
+    └── blog.ts           # Blog service layer
+```
+
+### Adding New Posts
+1. Create a new `.md` file in `public/blog/`
+2. Add frontmatter with required fields
+3. Write content in Markdown format
+4. The post will automatically appear in the blog listing
+
+---
+
+## 📬 Let's Connect** — How I approach discovery, strategy, and delivery
+- 💼 **Professional Experience** — From developer tools and open source to AI and community platforms
+- 📝 **Blog** — Insights on product management, community building, and responsible AI
+- 📚 **Case Studies** — Real-world examples of product impact
+- 🧰 **Skills & Tools** — Responsible AI, JavaScript, content strategy, and beyond
+- 🎙 **Speaking** — Topics I'm passionate about: ethical tech, developer communities, inclusive designtory for [hectornorza.com](https://www.hectornorza.com/) — my personal website and digital portfolio.
 
 I'm **Héctor Norzagaray**, a product manager with a deep passion for building communities and creating tools that bring people together. This site serves as my digital home — a space to share my work, ideas, and approach to building products that prioritize people and connection.
 
@@ -52,6 +99,8 @@ This site was built to be fast, accessible, and expressive — using a modern, d
 - **Styling**: Tailwind CSS (custom design system)
 - **Animations**: Framer Motion
 - **Icons**: Heroicons
+- **Blog**: Markdown-based with frontmatter support
+- **Content Management**: Static markdown files with gray-matter parsing
 - **Accessibility**: Semantic HTML, ARIA, keyboard nav, high-contrast mode
 - **Privacy**: GDPR-compliant analytics & user consent management
 - **Deployment**: GitHub Pages + custom domain
@@ -69,6 +118,12 @@ This site was built to be fast, accessible, and expressive — using a modern, d
 - 96% Privacy Score
 - GDPR consent panel with transparent data handling
 - No third-party tracking without opt-in
+
+### 📝 Blog System
+- Markdown-based content management
+- Category filtering and tag-based organization
+- Reading time estimation and responsive design
+- SEO-optimized individual post pages
 
 ### ⚡ Modern UX
 - Fast load time & responsive design

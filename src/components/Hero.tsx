@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 export default function Hero() {
   return (
@@ -39,6 +40,12 @@ export default function Hero() {
               >
                 View My Experience
               </a>
+              <Link
+                to="/blog"
+                className="inline-flex items-center px-8 py-4 border border-gray-300 text-base font-medium rounded-xl shadow-lg text-gray-900 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300 transform hover:-translate-y-1"
+              >
+                Read My Blog
+              </Link>
               <a
                 href="#contact"
                 className="text-base font-semibold leading-7 text-gray-900 hover:text-primary transition-colors group flex items-center"

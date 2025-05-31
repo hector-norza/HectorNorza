@@ -8,11 +8,15 @@
     "build": "tsc -b && vite build",
     "build:sitemap": "node scripts/generate-sitemap.js",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "new-blog": "node scripts/new-blog-post.js"
   },
   "dependencies": {
     "@types/react-router-dom": "^5.3.3",
+    "date-fns": "^4.1.0",
     "framer-motion": "^12.15.0",
+    "gray-matter": "^4.0.3",
+    "marked": "^15.0.12",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.6.1"

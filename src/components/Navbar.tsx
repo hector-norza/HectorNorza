@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { Dialog } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Link } from 'react-router-dom';
 
 const navigation = [
-  { name: 'About', href: '#about' },
-  { name: 'Experience', href: '#resume' },
-  { name: 'Contact', href: '#contact' },
+  { name: 'About', href: '#about', isExternal: false },
+  { name: 'Experience', href: '#resume', isExternal: false },
+  { name: 'Blog', href: '/blog', isExternal: true },
+  { name: 'Contact', href: '#contact', isExternal: false },
 ];
 
 export default function Navbar() {
@@ -31,13 +33,23 @@ export default function Navbar() {
         </div>
         <div className="hidden lg:flex lg:gap-x-12">
           {navigation.map((item) => (
-            <a
-              key={item.name}
-              href={item.href}
-              className="text-sm font-semibold leading-6 text-gray-900 hover:text-primary transition-colors"
-            >
-              {item.name}
-            </a>
+            item.isExternal ? (
+              <Link
+                key={item.name}
+                to={item.href}
+                className="text-sm font-semibold leading-6 text-gray-900 hover:text-primary transition-colors"
+              >
+                {item.name}
+              </Link>
+            ) : (
+              <a
+                key={item.name}
+                href={item.href}
+                className="text-sm font-semibold leading-6 text-gray-900 hover:text-primary transition-colors"
+              >
+                {item.name}
+              </a>
+            )
           ))}
         </div>
       </nav>
@@ -61,14 +73,25 @@ export default function Navbar() {
             <div className="-my-6 divide-y divide-gray-500/10">
               <div className="space-y-2 py-6">
                 {navigation.map((item) => (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {item.name}
-                  </a>
+                  item.isExternal ? (
+                    <Link
+                      key={item.name}
+                      to={item.href}
+                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {item.name}
+                    </Link>
+                  ) : (
+                    <a
+                      key={item.name}
+                      href={item.href}
+                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {item.name}
+                    </a>
+                  )
                 ))}
               </div>
             </div>
