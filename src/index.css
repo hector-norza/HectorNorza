@@ -32,3 +32,72 @@
     @apply inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-primary hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200;
   }
 }
+
+/* High Contrast Mode Styles */
+.high-contrast {
+  /* Enhanced contrast colors */
+  --tw-color-primary: #000000;
+  --tw-color-secondary: #000000;
+  --tw-color-gray-50: #ffffff;
+  --tw-color-gray-100: #f5f5f5;
+  --tw-color-gray-200: #e0e0e0;
+  --tw-color-gray-300: #d0d0d0;
+  --tw-color-gray-400: #a0a0a0;
+  --tw-color-gray-500: #808080;
+  --tw-color-gray-600: #404040;
+  --tw-color-gray-700: #202020;
+  --tw-color-gray-800: #101010;
+  --tw-color-gray-900: #000000;
+}
+
+.high-contrast body {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+.high-contrast .bg-gray-50 {
+  background-color: #ffffff !important;
+}
+
+.high-contrast .bg-gray-100 {
+  background-color: #f5f5f5 !important;
+}
+
+.high-contrast .bg-gray-900 {
+  background-color: #000000 !important;
+}
+
+.high-contrast .text-gray-600,
+.high-contrast .text-gray-700 {
+  color: #000000 !important;
+}
+
+.high-contrast .text-gray-300,
+.high-contrast .text-gray-400 {
+  color: #ffffff !important;
+}
+
+.high-contrast .border-gray-200,
+.high-contrast .border-gray-300 {
+  border-color: #000000 !important;
+}
+
+.high-contrast button,
+.high-contrast .btn-primary {
+  border: 2px solid #000000 !important;
+}
+
+.high-contrast .bg-primary {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+.high-contrast .text-primary {
+  color: #000000 !important;
+}
+
+/* Focus indicators for high contrast */
+.high-contrast :focus {
+  outline: 3px solid #000000 !important;
+  outline-offset: 2px !important;
+}

@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { EnvelopeIcon, GlobeAltIcon, ArrowTopRightOnSquareIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { trackFormSubmission, trackExternalLinkClick } from '../utils/analytics';
 
 export default function Contact() {
@@ -12,6 +12,45 @@ export default function Contact() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [errors, setErrors] = useState<{[key: string]: string}>({});
+
+  // Enhanced focus management for accessibility
+  useEffect(() => {
+    if (submitStatus === 'success' || submitStatus === 'error') {
+      // Announce the status change and focus the status message
+      const statusElement = document.getElementById('form-status');
+      if (statusElement) {
+        // Force screen reader to announce the change
+        statusElement.setAttribute('aria-live', 'assertive');
+        setTimeout(() => {
+          statusElement.setAttribute('aria-live', 'polite');
+        }, 1000);
+      }
+    }
+  }, [submitStatus]);
+
+  const validateField = (name: string, value: string): string => {
+    switch (name) {
+      case 'name': {
+        if (!value.trim()) return 'Name is required';
+        if (value.trim().length < 2) return 'Name must be at least 2 characters';
+        return '';
+      }
+      case 'email': {
+        if (!value.trim()) return 'Email is required';
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value)) return 'Please enter a valid email address';
+        return '';
+      }
+      case 'message': {
+        if (!value.trim()) return 'Message is required';
+        if (value.trim().length < 10) return 'Message must be at least 10 characters';
+        return '';
+      }
+      default:
+        return '';
+    }
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -19,11 +58,49 @@ export default function Contact() {
       ...prev,
       [name]: value
     }));
+    
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
+    }
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    
+    const error = validateField(name, value);
+    setErrors(prev => ({
+      ...prev,
+      [name]: error
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    
+    // Validate all fields
+    const newErrors: {[key: string]: string} = {};
+    Object.keys(formData).forEach(key => {
+      const error = validateField(key, formData[key as keyof typeof formData]);
+      if (error) newErrors[key] = error;
+    });
+    
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      setIsSubmitting(false);
+      // Focus first field with error for accessibility
+      const firstErrorField = Object.keys(newErrors)[0];
+      const errorElement = document.getElementById(firstErrorField);
+      if (errorElement) {
+        errorElement.focus();
+        errorElement.setAttribute('aria-invalid', 'true');
+      }
+      return;
+    }
     
     try {
       // Track form submission for analytics
@@ -41,6 +118,7 @@ export default function Contact() {
       
       setSubmitStatus('success');
       setFormData({ name: '', email: '', subject: '', message: '' });
+      setErrors({});
     } catch {
       setSubmitStatus('error');
     } finally {
@@ -84,107 +162,164 @@ export default function Contact() {
           <div className="grid grid-cols-1 md:grid-cols-2">
             {/* Left column - Contact Form */}
             <div className="p-8 md:p-12">
-              <h3 className="text-2xl font-bold text-gray-900 mb-8">Send me a message</h3>
-              
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.1 }}
-                  viewport={{ once: true }}
+              <form onSubmit={handleSubmit} className="space-y-6" noValidate aria-labelledby="contact-form-heading">
+                <h3 id="contact-form-heading" className="text-2xl font-bold text-gray-900 mb-8">Send me a message</h3>
+                
+                {/* Live region for form status announcements */}
+                <div 
+                  role="status" 
+                  aria-live="polite" 
+                  aria-atomic="true"
+                  className="sr-only"
+                  id="form-status"
                 >
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                    Name *
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    required
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
-                    placeholder="Your full name"
-                  />
-                </motion.div>
+                  {isSubmitting && "Preparing to send your message..."}
+                  {submitStatus === 'success' && "Message prepared successfully! Your email client should open."}
+                  {submitStatus === 'error' && "There was an error preparing your message. Please try again."}
+                </div>
 
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                  viewport={{ once: true }}
-                >
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                    Email *
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    required
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
-                    placeholder="your.email@example.com"
-                  />
-                </motion.div>
+                {/* Form instructions for screen readers */}
+                <div className="sr-only" id="form-instructions">
+                  This contact form has 4 fields. Name and message are required. 
+                  After submitting, your email client will open with a pre-filled message ready to send.
+                </div>
 
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.3 }}
-                  viewport={{ once: true }}
-                >
-                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
-                    Subject
-                  </label>
-                  <input
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
-                    placeholder="What would you like to discuss?"
-                  />
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.4 }}
-                  viewport={{ once: true }}
-                >
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-                    Message *
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    required
-                    rows={5}
-                    value={formData.message}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors resize-none"
-                    placeholder="Tell me about your project, question, or just say hello!"
-                  />
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.5 }}
-                  viewport={{ once: true }}
-                >
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white font-medium rounded-lg hover:from-secondary hover:to-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                <fieldset className="space-y-6" aria-describedby="form-instructions">
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.1 }}
+                    viewport={{ once: true }}
                   >
-                    <PaperAirplaneIcon className="w-5 h-5" />
-                    {isSubmitting ? 'Opening email client...' : 'Send Message'}
-                  </button>
-                </motion.div>
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                      Name *
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      required
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      onBlur={handleBlur}
+                      aria-invalid={errors.name ? 'true' : 'false'}
+                      aria-describedby={errors.name ? 'name-error' : undefined}
+                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors ${
+                        errors.name 
+                          ? 'border-red-300 bg-red-50' 
+                          : 'border-gray-300'
+                      }`}
+                      placeholder="Your full name"
+                    />
+                    {errors.name && (
+                      <p id="name-error" role="alert" className="mt-1 text-sm text-red-600">
+                        {errors.name}
+                      </p>
+                    )}
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                    viewport={{ once: true }}
+                  >
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                      Email *
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      required
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      onBlur={handleBlur}
+                      aria-invalid={errors.email ? 'true' : 'false'}
+                      aria-describedby={errors.email ? 'email-error' : undefined}
+                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors ${
+                        errors.email 
+                          ? 'border-red-300 bg-red-50' 
+                          : 'border-gray-300'
+                      }`}
+                      placeholder="your.email@example.com"
+                    />
+                    {errors.email && (
+                      <p id="email-error" role="alert" className="mt-1 text-sm text-red-600">
+                        {errors.email}
+                      </p>
+                    )}
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.3 }}
+                    viewport={{ once: true }}
+                  >
+                    <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
+                      Subject
+                    </label>
+                    <input
+                      type="text"
+                      id="subject"
+                      name="subject"
+                      value={formData.subject}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+                      placeholder="What would you like to discuss?"
+                    />
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.4 }}
+                    viewport={{ once: true }}
+                  >
+                    <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+                      Message *
+                    </label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      required
+                      rows={5}
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      onBlur={handleBlur}
+                      aria-invalid={errors.message ? 'true' : 'false'}
+                      aria-describedby={errors.message ? 'message-error' : undefined}
+                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors resize-none ${
+                        errors.message 
+                          ? 'border-red-300 bg-red-50' 
+                          : 'border-gray-300'
+                      }`}
+                      placeholder="Tell me about your project, question, or just say hello!"
+                    />
+                    {errors.message && (
+                      <p id="message-error" role="alert" className="mt-1 text-sm text-red-600">
+                        {errors.message}
+                      </p>
+                    )}
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.5 }}
+                    viewport={{ once: true }}
+                  >
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white font-medium rounded-lg hover:from-secondary hover:to-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <PaperAirplaneIcon className="w-5 h-5" />
+                      {isSubmitting ? 'Opening email client...' : 'Send Message'}
+                    </button>
+                  </motion.div>
+                </fieldset>
 
                 {submitStatus === 'success' && (
                   <motion.div
