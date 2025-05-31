@@ -1,54 +1,111 @@
-# React + TypeScript + Vite
+# 🌐 hectornorza.com
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to the repository for [hectornorza.com](https://www.hectornorza.com/) — my personal website and digital portfolio.
 
-Currently, two official plugins are available:
+I'm **Héctor Norzagaray**, a product manager with a deep passion for building communities and creating tools that bring people together. This site serves as my digital home — a space to share my work, ideas, and approach to building products that prioritize people and connection.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🎯 Purpose & Vision
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+In today's digital landscape, having a personal online presence is more than a nice-to-have — it's a way to shape your story, build your voice, and contribute meaningfully to your field.
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+As a product manager focused on community, I wanted to create a place where I could:
+- Reflect on my journey and professional growth
+- Share insights and experiences that might help others
+- Contribute to the broader conversation around **community-driven product development**
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+This site is part resume, part personal brand, and part manifesto — all aligned with my belief that **technology should bring people closer together**.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+## 💡 My Product Philosophy
+
+My journey into tech didn’t begin with a business plan — it began with people.
+
+For years, I’ve been involved in organizing, growing, and supporting grassroots communities. Through that work, I saw firsthand how tools can either isolate or empower — and I knew I wanted to help build the kind that empowers.
+
+As a PM, I bring a **community-first mindset** to everything I work on. I’m driven by questions like:
+- *How will this feature empower the people using it?*
+- *How can we design for inclusion, trust, and real connection?*
+- *How do we bridge gaps between people, ideas, and outcomes?*
+
+My work blends **strategic thinking, user empathy, and strong communication** to align teams and deliver thoughtful, human-centered solutions.
+
+---
+
+## 🚀 What You'll Find on the Site
+
+- 🧠 **Product Thinking** — How I approach discovery, strategy, and delivery
+- 💼 **Professional Experience** — From developer tools and open source to AI and community platforms
+- 📚 **Case Studies** — Real-world examples of product impact
+- 🧰 **Skills & Tools** — Responsible AI, JavaScript, content strategy, and beyond
+- 🎙 **Speaking** — Topics I’m passionate about: ethical tech, developer communities, inclusive design
+
+---
+
+## 🛠 Technical Stack
+
+This site was built to be fast, accessible, and expressive — using a modern, developer-friendly tech stack:
+
+- **Framework**: React 18 + TypeScript + Vite
+- **Styling**: Tailwind CSS (custom design system)
+- **Animations**: Framer Motion
+- **Icons**: Heroicons
+- **Accessibility**: Semantic HTML, ARIA, keyboard nav, high-contrast mode
+- **Privacy**: GDPR-compliant analytics & user consent management
+- **Deployment**: GitHub Pages + custom domain
+
+---
+
+## 🎨 Feature Highlights
+
+### ♿ Accessibility-First
+- 97% Accessibility Score
+- Font scaling (75%–150%) and high contrast mode
+- Full keyboard navigation & screen reader optimization
+
+### 🔐 Privacy-Conscious
+- 96% Privacy Score
+- GDPR consent panel with transparent data handling
+- No third-party tracking without opt-in
+
+### ⚡ Modern UX
+- Fast load time & responsive design
+- Micro-interactions via Framer Motion
+- SEO & performance optimized
+
+---
+
+## 🧪 Local Development
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/HectorNorzaPortfolio.git
+
+# Navigate into the project
+cd HectorNorzaPortfolio
+
+# Install dependencies
+npm install
+
+# Run the development server
+npm run dev
+
+# Build for production
+npm run build
+
+
+## 📬 Let’s Connect
+
+If you're working on products that strengthen communities, or just want to talk shop about building inclusive, human-centered tools — I’d love to connect.
+
+- 🌍 **Website**: [hectornorza.com](https://www.hectornorza.com/)
+- 📬 **Contact**: Reach out via the contact form on my site
+- 🎤 **Speaking & Collaboration**: Available for talks, panels, and consulting
+
+---
+
+## 📄 License
+
+This project is open source under the [MIT License](LICENSE).
