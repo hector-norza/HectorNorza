@@ -126,7 +126,19 @@ export default function BlogPost() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="prose prose-lg dark:prose-invert max-w-none"
+          className="prose prose-lg dark:prose-invert max-w-none
+                     text-gray-900 dark:text-gray-100
+                     [&>h1]:text-3xl [&>h1]:font-bold [&>h1]:text-gray-900 [&>h1]:dark:text-white [&>h1]:mb-6 [&>h1]:mt-8
+                     [&>h2]:text-2xl [&>h2]:font-semibold [&>h2]:text-gray-900 [&>h2]:dark:text-white [&>h2]:mb-4 [&>h2]:mt-6
+                     [&>h3]:text-xl [&>h3]:font-semibold [&>h3]:text-gray-900 [&>h3]:dark:text-white [&>h3]:mb-3 [&>h3]:mt-5
+                     [&>p]:text-gray-700 [&>p]:dark:text-gray-300 [&>p]:leading-relaxed [&>p]:mb-4
+                     [&>ul]:text-gray-700 [&>ul]:dark:text-gray-300 [&>ul]:mb-4 [&>ul]:list-disc [&>ul]:ml-6
+                     [&>ol]:text-gray-700 [&>ol]:dark:text-gray-300 [&>ol]:mb-4 [&>ol]:list-decimal [&>ol]:ml-6
+                     [&>li]:mb-2
+                     [&>blockquote]:border-l-4 [&>blockquote]:border-blue-500 [&>blockquote]:pl-4 [&>blockquote]:italic [&>blockquote]:text-gray-600 [&>blockquote]:dark:text-gray-400
+                     [&>code]:bg-gray-100 [&>code]:dark:bg-gray-800 [&>code]:px-1 [&>code]:py-0.5 [&>code]:rounded [&>code]:text-sm
+                     [&>pre]:bg-gray-100 [&>pre]:dark:bg-gray-800 [&>pre]:p-4 [&>pre]:rounded [&>pre]:overflow-x-auto [&>pre]:mb-4
+                     [&>a]:text-blue-600 [&>a]:dark:text-blue-400 [&>a]:hover:text-blue-500 [&>a]:dark:hover:text-blue-300 [&>a]:underline"
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
 
