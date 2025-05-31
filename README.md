@@ -77,25 +77,6 @@ This site was built to be fast, accessible, and expressive — using a modern, d
 
 ---
 
-## 🧪 Local Development
-
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/HectorNorzaPortfolio.git
-
-# Navigate into the project
-cd HectorNorzaPortfolio
-
-# Install dependencies
-npm install
-
-# Run the development server
-npm run dev
-
-# Build for production
-npm run build
-
-
 ## 📬 Let’s Connect
 
 If you're working on products that strengthen communities, or just want to talk shop about building inclusive, human-centered tools — I’d love to connect.
