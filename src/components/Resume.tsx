@@ -10,7 +10,7 @@ import {
 const experiences = [
   {
     title: "Product Manager II",
-    company: "Microsoft Azure",
+    company: "Microsoft",
     period: "2023 - Present",
     location: "Redmond, WA",
     description: [
@@ -26,7 +26,7 @@ const experiences = [
   },
   {
     title: "Product Manager",
-    company: "Microsoft Azure",
+    company: "Microsoft",
     period: "2021 - 2023",
     location: "Redmond, WA",
     description: [
