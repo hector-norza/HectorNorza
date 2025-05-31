@@ -55,7 +55,7 @@ const experiences = [
     title: "Freelance Full-Stack Developer",
     company: "Independent Contractor",
     period: "2018 - 2020",
-    location: "Seattle, WAÍ",
+    location: "Seattle, WA",
     description: [
       "Led end-to-end development of a full-stack application (React, Node.js), demonstrating hands-on expertise in the developer lifecycle crucial for engaging technical communities.",
       "Conducted user research and implemented community feedback loops to drive product success and ensure developer needs were central to development."
