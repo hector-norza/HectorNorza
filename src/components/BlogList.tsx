@@ -7,7 +7,8 @@ import {
   TagIcon,
   FolderIcon,
   ArrowRightIcon,
-  RssIcon
+  RssIcon,
+  EnvelopeIcon
 } from '@heroicons/react/24/outline';
 import { BlogService } from '../utils/blog';
 import type { BlogPostMeta } from '../types/blog';
@@ -79,7 +80,19 @@ export default function BlogList() {
             </p>
             
             {/* RSS Subscription */}
-            <div className="flex justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              {/* Email Subscription via Blogtrottr */}
+              <a
+                href="https://blogtrottr.com/?subscribe=https://hectornorza.com/rss.xml"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+              >
+                <EnvelopeIcon className="w-5 h-5" />
+                Subscribe via Email
+              </a>
+              
+              {/* RSS Feed */}
               <a
                 href="/rss.xml"
                 target="_blank"

@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import BlogList from '../components/BlogList';
-import { RssIcon } from '@heroicons/react/24/outline';
+import { RssIcon, EnvelopeIcon } from '@heroicons/react/24/outline';
 
 export default function Blog() {
   return (
@@ -35,13 +35,26 @@ export default function Blog() {
               products that bring people together.
             </motion.p>
             
-            {/* RSS Subscribe Button */}
+            {/* Subscribe Buttons */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className="flex justify-center"
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
             >
+              {/* Email Subscription via Blogtrottr */}
+              <a
+                href="https://blogtrottr.com/?subscribe=https://hectornorza.com/rss.xml"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+                aria-label="Subscribe to email notifications"
+              >
+                <EnvelopeIcon className="h-5 w-5" />
+                Subscribe via Email
+              </a>
+              
+              {/* RSS Feed */}
               <a
                 href="/rss.xml"
                 target="_blank"
