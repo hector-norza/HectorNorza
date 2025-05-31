@@ -30,7 +30,7 @@ export default function Contact() {
       const body = encodeURIComponent(
         `Hi Hector,\n\n${formData.message}\n\nBest regards,\n${formData.name}\n${formData.email}`
       );
-      const mailtoLink = `mailto:norza.hector@outlook.com?subject=${subject}&body=${body}`;
+      const mailtoLink = `mailto:hnorza@proton.me?subject=${subject}&body=${body}`;
       
       // Open mailto in a new window instead of redirecting current page
       window.open(mailtoLink, '_self');
