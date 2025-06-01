@@ -20,6 +20,13 @@ import ErrorBoundary from './components/ErrorBoundary';
 import PerformanceMonitor from './components/PerformanceMonitor';
 import type { PerformanceMetrics } from './components/PerformanceMonitor';
 
+// Declare gtag as a global function
+declare global {
+  interface Window {
+    gtag: (...args: unknown[]) => void;
+  }
+}
+
 // Lazy load blog components for code splitting
 const Blog = lazy(() => import('./pages/Blog'));
 const BlogPost = lazy(() => import('./components/BlogPost'));
@@ -36,18 +43,9 @@ const LoadingSpinner = () => (
   </div>
 );
 
+// Move HomePage inside RouterContent or remove the useLocation hook from it
 function HomePage() {
-  const { hash } = useLocation();
-
-  useEffect(() => {
-    if (hash) {
-      const element = document.querySelector(hash);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
-  }, [hash]);
-
+  // Remove the useLocation hook since it's handled in RouterContent
   return (
     <>
       <Hero />
@@ -64,17 +62,7 @@ function AppContent({
 }: {
   onPerformanceMetrics: (metrics: PerformanceMetrics) => void;
 }) {
-  const { isDarkMode } = useTheme(); // Now we can use the theme context
-  const location = useLocation();
-
-  useEffect(() => {
-    // Track page views on route changes
-    if (typeof gtag !== 'undefined') {
-      gtag('config', 'G-VPC78XB0H1', {
-        page_path: location.pathname,
-      });
-    }
-  }, [location]);
+  const { isDarkMode } = useTheme();
 
   return (
     <ErrorBoundary>
@@ -91,20 +79,40 @@ function AppContent({
         <PerformanceMonitor onMetricsCollected={onPerformanceMetrics} />
 
         <Router>
-          <Navbar />
-          <main id="main" className="flex-grow">
-            <Suspense fallback={<LoadingSpinner />}>
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/blog" element={<Blog />} />
-                <Route path="/blog/:slug" element={<BlogPost />} />
-              </Routes>
-            </Suspense>
-          </main>
-          <Footer /> {/* Add Footer here */}
+          <RouterContent />
         </Router>
       </div>
     </ErrorBoundary>
+  );
+}
+
+// New component that uses Router context
+function RouterContent() {
+  const location = useLocation();
+
+  useEffect(() => {
+    // Track page views on route changes
+    if (typeof window.gtag !== 'undefined') {
+      window.gtag('config', 'G-VPC78XB0H1', {
+        page_path: location.pathname,
+      });
+    }
+  }, [location]);
+
+  return (
+    <>
+      <Navbar />
+      <main id="main" className="flex-grow">
+        <Suspense fallback={<LoadingSpinner />}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
+          </Routes>
+        </Suspense>
+      </main>
+      <Footer />
+    </>
   );
 }
 
