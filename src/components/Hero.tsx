@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { useTheme } from '../contexts/ThemeContext'; // Fix the import line
+import { useTheme } from '../hooks/useTheme';
 
 export default function Hero() {
   const { isDarkMode } = useTheme();

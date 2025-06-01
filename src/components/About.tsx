@@ -84,7 +84,7 @@ export default function About() {
                 <p>
                   I'm{' '}
                   <span className="font-semibold text-gray-900 dark:text-white transition-colors duration-300">
-                    Hector Norzagaray
+                    Hector
                   </span>{' '}
                   — a product manager with a deep passion for building
                   communities and creating tools that bring people together,
