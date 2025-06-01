@@ -24,8 +24,8 @@ marked.setOptions({
 export async function loadBlogPosts(): Promise<BlogPost[]> {
   const blogFiles = [
     'my-first-blog-post.md',
-    'building-community-driven-products.md',
-    'future-of-responsible-ai.md',
+    // removed 'building-community-driven-products.md', -file doiesnt exist
+    // Removed 'future-of-responsible-ai.md' - file doesn't exist
   ];
 
   const posts = await Promise.all(
