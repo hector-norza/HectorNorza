@@ -6,7 +6,7 @@ const navigation = [
   { name: 'About', href: '/#about' },
   { name: 'Experience', href: '/#resume' },
   { name: 'Contact', href: '/#contact' },
-  { name: 'Blog', href: '/blog' },
+  { name: 'Blog', href: '/blog' }, // ✅ This navigates to separate blog page
 ];
 
 export default function Navbar() {
