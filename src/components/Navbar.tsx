@@ -49,32 +49,67 @@ export default function Navbar() {
   // Helper function to handle translation
   const handleTranslation = (langCode: string) => {
     if (langCode === 'en') {
-      // More comprehensive reset to English
-      // Clear all Google Translate cookies
-      const cookiesToClear = [
+      // Nuclear reset to English - this should work on deployed version
+
+      // 1. Clear ALL possible Google Translate cookies
+      const allCookieNames = [
         'googtrans',
         'googtrans-expire',
         'googtrans-session',
+        'googlewiz',
+        'goog-translate',
+        '__Secure-googtrans',
+        '__Host-googtrans',
       ];
-      cookiesToClear.forEach((cookieName) => {
-        document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.${window.location.hostname}`;
+
+      allCookieNames.forEach((cookieName) => {
+        // Clear for current domain
         document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+        // Clear for parent domain
+        document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.${window.location.hostname};`;
+        // Clear for root domain
+        document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${window.location.hostname};`;
       });
 
-      // Remove Google Translate elements
-      const gtElements = document.querySelectorAll(
-        '[id*="google_translate"], [class*="goog-te"], [class*="skiptranslate"]'
-      );
-      gtElements.forEach((el) => el.remove());
+      // 2. Clear localStorage and sessionStorage
+      try {
+        localStorage.removeItem('googtrans');
+        sessionStorage.removeItem('googtrans');
+        localStorage.clear();
+        sessionStorage.clear();
+      } catch (e) {
+        console.warn('Could not clear storage:', e);
+      }
 
-      // Remove Google Translate styles from body
-      document.body.className = document.body.className.replace(
-        /\s*translated-\w+/g,
-        ''
-      );
+      // 3. Remove ALL Google Translate elements and classes
+      const gtSelectors = [
+        '[id*="google_translate"]',
+        '[class*="goog-te"]',
+        '[class*="skiptranslate"]',
+        '.VIpgJd-ZVi9od-l4eHX-hSRGPd',
+        '.VIpgJd-ZVi9od-l4eHX',
+        '[jsname]',
+        '[data-gtm-form-interact-field-id]',
+      ];
 
-      // Reload the page to completely reset
-      window.location.reload();
+      gtSelectors.forEach((selector) => {
+        document.querySelectorAll(selector).forEach((el) => el.remove());
+      });
+
+      // 4. Reset body classes more aggressively
+      document.body.className = document.body.className
+        .replace(/\s*translated-\w+/g, '')
+        .replace(/\s*goog-\w+/g, '')
+        .replace(/\s*notranslate/g, '');
+
+      // 5. Reset any translation-related attributes
+      document.documentElement.removeAttribute('lang');
+      document.documentElement.setAttribute('lang', 'en');
+
+      // 6. Force complete page reload with cache bust
+      const url = new URL(window.location.href);
+      url.searchParams.set('_t', Date.now().toString());
+      window.location.href = url.toString();
     } else {
       // Set the Google Translate cookie
       const setCookie = (name: string, value: string, days: number) => {
