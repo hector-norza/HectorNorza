@@ -252,6 +252,82 @@ export default function Contact() {
                   </a>
                 </div>
               </motion.div>
+
+              {/* Substack */}
+              <motion.div
+                className="flex items-center space-x-4"
+                whileHover={{ x: 5 }}
+                transition={{ duration: 0.2 }}
+              >
+                <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
+                  <svg
+                    className="w-6 h-6 text-white"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z" />
+                  </svg>
+                </div>
+                <div>
+                  <h4
+                    className={`font-semibold transition-colors duration-300 ${colors.heading}`}
+                  >
+                    Substack
+                  </h4>
+                  <a
+                    href="https://hectornorza.substack.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() =>
+                      trackExternalLinkClick(
+                        'https://hectornorza.substack.com/'
+                      )
+                    }
+                    className={`transition-colors duration-300 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded ${colors.interactive}`}
+                    aria-label="Subscribe to Hector's newsletter on Substack (opens in new tab)"
+                  >
+                    hectornorza.substack.com
+                  </a>
+                </div>
+              </motion.div>
+
+              {/* Medium */}
+              <motion.div
+                className="flex items-center space-x-4"
+                whileHover={{ x: 5 }}
+                transition={{ duration: 0.2 }}
+              >
+                <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
+                  <svg
+                    className="w-6 h-6 text-white"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z" />
+                  </svg>
+                </div>
+                <div>
+                  <h4
+                    className={`font-semibold transition-colors duration-300 ${colors.heading}`}
+                  >
+                    Medium
+                  </h4>
+                  <a
+                    href="https://medium.com/@hectornorza"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() =>
+                      trackExternalLinkClick('https://medium.com/@hectornorza')
+                    }
+                    className={`transition-colors duration-300 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded ${colors.interactive}`}
+                    aria-label="Read Hector's articles on Medium (opens in new tab)"
+                  >
+                    medium.com/@hectornorza
+                  </a>
+                </div>
+              </motion.div>
             </div>
 
             {/* Additional CTA */}
