@@ -2,105 +2,22 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="/favicon.ico" sizes="any" />
-    <link rel="icon" type="image/svg+xml" href="/viteME.svg" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Welcome to Hector's page - Product Manager, developer, and community builder passionate about creating exceptional experiences." />
-    <meta name="keywords" content="Hector Norzagaray, Product Manager, Microsoft Azure, Developer Experience, Community Building, Azure SDK, Product Management" />
-    <meta name="author" content="Hector Norzagaray" />
-    
-    <style>
-      html {
-        scroll-behavior: smooth;
-      }
-    </style>
-    
-    <!-- RSS Feed Discovery -->
-    <link rel="alternate" type="application/rss+xml" title="Héctor Norzagaray's Blog" href="/rss.xml" />
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://www.hectornorza.com/" />
-    <meta property="og:title" content="Hector Norzagaray - Product Manager & Community Builder" />
-    <meta property="og:description" content="Product Manager on the Microsoft Azure SDK team, dedicated to improving developer experience and fostering strong tech communities." />
-    <meta property="og:image" content="https://www.hectornorza.com/apple-touch-icon.png" />
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://www.hectornorza.com/" />
-    <meta property="twitter:title" content="Hector Norzagaray - Product Manager & Community Builder" />
-    <meta property="twitter:description" content="Product Manager on the Microsoft Azure SDK team, dedicated to improving developer experience and fostering strong tech communities." />
-    <meta property="twitter:image" content="https://www.hectornorza.com/apple-touch-icon.png" />
-    
-    <!-- Additional SEO -->
-    <link rel="canonical" href="https://www.hectornorza.com/" />
-    <meta name="robots" content="index, follow" />
-    <meta name="googlebot" content="index, follow" />
+    <title>Hector Norzagaray - Product Manager & Community Builder</title>
+    <meta name="description" content="Product Manager focused on community-driven development and responsible AI. Building tools that bring people together." />
     
     <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VPC78XB0H1"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-VPC78XB0H1');
+      gtag('config', 'GA_MEASUREMENT_ID');
     </script>
-
-    <!-- Google Translate Widget -->
-    <script type="text/javascript">
-      function googleTranslateElementInit() {
-        // Desktop translate element
-        new google.translate.TranslateElement(
-          {
-            pageLanguage: 'en',
-            includedLanguages: 'en,es,fr,pt,de,it',
-            layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-            autoDisplay: false
-          },
-          'google_translate_element'
-        );
-        
-        // Mobile translate element
-        new google.translate.TranslateElement(
-          {
-            pageLanguage: 'en',
-            includedLanguages: 'en,es,fr,pt,de,it',
-            layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-            autoDisplay: false
-          },
-          'google_translate_element_mobile'
-        );
-      }
-    </script>
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-    
-    <title>Hector Norzagaray</title>
   </head>
   <body>
-    <header>
-      <!-- You can add a navigation bar or site title here in the future -->
-    </header>
-    <main>
-      <div id="root"></div>
-    </main>
-    <footer>
-      <!-- You can add copyright or contact info here in the future -->
-    </footer>
-    
-    <!-- Buffer polyfill for browser compatibility -->
-    <script>
-      if (typeof global === 'undefined') {
-        window.global = window;
-      }
-    </script>
-    <script type="module">
-      import { Buffer } from 'buffer';
-      window.Buffer = Buffer;
-    </script>
-    
+    <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
