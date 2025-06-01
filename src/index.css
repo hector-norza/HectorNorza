@@ -3,8 +3,13 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --header-height: 4rem;
+  }
+
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--header-height) + 2rem);
     font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -12,6 +17,17 @@
   
   body {
     @apply bg-gray-50 text-gray-900 min-h-screen;
+  }
+
+  /* Ensure proper stacking context */
+  body > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Add global scroll-margin-top for all sections */
+  section {
+    scroll-margin-top: calc(var(--header-height) + 2rem);
   }
 }
 

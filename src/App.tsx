@@ -1,4 +1,5 @@
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import About from './components/About'
@@ -13,6 +14,25 @@ import AccessibilityToolbar from './components/AccessibilityToolbar'
 import { useAnalyticsConsent } from './utils/privacy'
 
 function HomePage() {
+  const { hash } = useLocation();
+
+  useEffect(() => {
+    if (hash) {
+      const id = hash.replace('#', '');
+      const element = document.getElementById(id);
+      if (element) {
+        // Calculate header + extra offset (2rem)
+        const rootStyle = getComputedStyle(document.documentElement);
+        const rootFontSize = parseFloat(rootStyle.fontSize);
+        const headerRem = parseFloat(rootStyle.getPropertyValue('--header-height'));
+        const extraRem = 2;
+        const offset = (headerRem + extraRem) * rootFontSize;
+        const elementY = element.getBoundingClientRect().top + window.pageYOffset;
+        window.scrollTo({ top: elementY - offset, behavior: 'smooth' });
+      }
+    }
+  }, [hash]);
+
   return (
     <>
       <SkipLink href="#main-content">Skip to main content</SkipLink>

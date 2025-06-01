@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { Dialog } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 
 const navigation = [
-  { name: 'About', href: '#about', isExternal: false },
-  { name: 'Experience', href: '#resume', isExternal: false },
+  { name: 'About', href: '/#about', isExternal: false },
+  { name: 'Experience', href: '/#resume', isExternal: false },
   { name: 'Blog', href: '/blog', isExternal: true },
-  { name: 'Contact', href: '#contact', isExternal: false },
+  { name: 'Contact', href: '/#contact', isExternal: false },
 ];
 
 export default function Navbar() {
@@ -79,8 +79,8 @@ export default function Navbar() {
   };
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 bg-white/95 backdrop-blur-sm">
-      {/* Hide Google Translate's default styling */}
+    <header className="sticky top-0 z-[999] bg-white/95 backdrop-blur-sm border-b border-gray-200">
+      {/* Google Translate styles */}
       <style>{`
         .goog-te-banner-frame,
         .goog-te-combo,
@@ -122,13 +122,13 @@ export default function Navbar() {
         <div className="hidden lg:flex lg:gap-x-12">
           {navigation.map((item) => (
             item.isExternal ? (
-              <Link
+              <RouterLink
                 key={item.name}
                 to={item.href}
                 className="text-sm font-semibold leading-6 text-gray-900 hover:text-primary transition-colors"
               >
                 {item.name}
-              </Link>
+              </RouterLink>
             ) : (
               <a
                 key={item.name}
@@ -260,23 +260,23 @@ export default function Navbar() {
               <div className="space-y-2 py-6">
                 {navigation.map((item) => (
                   item.isExternal ? (
-                    <Link
+                    <RouterLink
                       key={item.name}
                       to={item.href}
-                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                       onClick={() => setMobileMenuOpen(false)}
+                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                     >
                       {item.name}
-                    </Link>
+                    </RouterLink>
                   ) : (
-                    <a
+                    <RouterLink
                       key={item.name}
-                      href={item.href}
-                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                      to={item.href}
                       onClick={() => setMobileMenuOpen(false)}
+                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                     >
                       {item.name}
-                    </a>
+                    </RouterLink>
                   )
                 ))}
               </div>
