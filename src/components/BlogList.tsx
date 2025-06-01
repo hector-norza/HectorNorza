@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { 
-  CalendarIcon, 
-  ClockIcon, 
+import {
+  CalendarIcon,
+  ClockIcon,
   TagIcon,
   FolderIcon,
-  ArrowRightIcon
+  ArrowRightIcon,
 } from '@heroicons/react/24/outline';
 import { BlogService } from '../utils/blog';
 import type { BlogPostMeta } from '../types/blog';
@@ -23,7 +23,7 @@ export default function BlogList() {
         console.log('🔄 Loading blog data...');
         const [allPosts, allCategories] = await Promise.all([
           BlogService.getAllPosts(),
-          BlogService.getCategories()
+          BlogService.getCategories(),
         ]);
         console.log('📝 Posts loaded:', allPosts);
         console.log('📂 Categories loaded:', allCategories);
@@ -39,9 +39,10 @@ export default function BlogList() {
     loadBlogData();
   }, []);
 
-  const filteredPosts = selectedCategory === 'all' 
-    ? posts 
-    : posts.filter(post => post.category === selectedCategory);
+  const filteredPosts =
+    selectedCategory === 'all'
+      ? posts
+      : posts.filter((post) => post.category === selectedCategory);
 
   if (loading) {
     return (
@@ -74,7 +75,8 @@ export default function BlogList() {
             </h1>
             <div className="w-20 h-1.5 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto mb-6"></div>
             <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-8">
-              Exploring product management, community building, and the intersection of technology and human connection.
+              Exploring product management, community building, and the
+              intersection of technology and human connection.
             </p>
           </motion.div>
         </div>
@@ -96,8 +98,10 @@ export default function BlogList() {
           >
             All Posts ({posts.length})
           </button>
-          {categories.map(category => {
-            const categoryCount = posts.filter(post => post.category === category).length;
+          {categories.map((category) => {
+            const categoryCount = posts.filter(
+              (post) => post.category === category
+            ).length;
             return (
               <button
                 key={category}
@@ -161,7 +165,7 @@ export default function BlogList() {
 
                 {/* Tags */}
                 <div className="flex flex-wrap gap-2 mb-4">
-                  {post.tags.slice(0, 3).map(tag => (
+                  {post.tags.slice(0, 3).map((tag) => (
                     <span
                       key={tag}
                       className="inline-flex items-center gap-1 px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full"
@@ -204,10 +208,9 @@ export default function BlogList() {
                 No posts found
               </h3>
               <p className="text-gray-600">
-                {selectedCategory === 'all' 
-                  ? "No blog posts are available yet. Check back soon!"
-                  : `No posts found in the "${selectedCategory}" category.`
-                }
+                {selectedCategory === 'all'
+                  ? 'No blog posts are available yet. Check back soon!'
+                  : `No posts found in the "${selectedCategory}" category.`}
               </p>
             </div>
           </motion.div>

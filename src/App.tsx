@@ -5,7 +5,11 @@ import {
   useLocation,
 } from 'react-router-dom';
 import { useEffect, Suspense, lazy } from 'react';
+import ThemeProvider from './components/ThemeProvider';
+import { useTheme } from './hooks/useTheme'; // New import path
+import { ThemeToggle } from './components/ThemeToggle';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer'; // Import Footer
 import Hero from './components/Hero';
 import About from './components/About';
 import Resume from './components/Resume';
@@ -37,18 +41,9 @@ function HomePage() {
 
   useEffect(() => {
     if (hash) {
-      const id = hash.replace('#', '');
-      const element = document.getElementById(id);
+      const element = document.querySelector(hash);
       if (element) {
-        const headerOffset = 80;
-        const elementPosition = element.getBoundingClientRect().top;
-        const offsetPosition =
-          elementPosition + window.pageYOffset - headerOffset;
-
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth',
-        });
+        element.scrollIntoView({ behavior: 'smooth' });
       }
     }
   }, [hash]);
@@ -63,32 +58,31 @@ function HomePage() {
   );
 }
 
-function App() {
-  const handlePerformanceMetrics = (metrics: PerformanceMetrics) => {
-    // Simple analytics tracking - no consent needed
-    if (window.gtag) {
-      window.gtag('event', 'web_vitals', {
-        event_category: 'Performance',
-        event_label: 'Core Web Vitals',
-        lcp: metrics.lcp,
-        fid: metrics.fid,
-        cls: metrics.cls,
-        fcp: metrics.fcp,
-        ttfb: metrics.ttfb,
-      });
-    }
-  };
+// Create a new component inside the ThemeProvider
+function AppContent({
+  onPerformanceMetrics,
+}: {
+  onPerformanceMetrics: (metrics: PerformanceMetrics) => void;
+}) {
+  const { isDarkMode } = useTheme(); // Now we can use the theme context
 
   return (
     <ErrorBoundary>
-      <div className="min-h-screen bg-white">
+      <div
+        className={`min-h-screen transition-colors duration-300 ${
+          isDarkMode
+            ? 'bg-gradient-to-br from-gray-900 via-blue-900/20 to-purple-900/20'
+            : 'bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/20'
+        }`}
+      >
         <SkipLink href="#main">Skip to main content</SkipLink>
         <AccessibilityToolbar />
-        <PerformanceMonitor onMetricsCollected={handlePerformanceMetrics} />
+        <ThemeToggle />
+        <PerformanceMonitor onMetricsCollected={onPerformanceMetrics} />
 
         <Router>
           <Navbar />
-          <main id="main">
+          <main id="main" className="flex-grow">
             <Suspense fallback={<LoadingSpinner />}>
               <Routes>
                 <Route path="/" element={<HomePage />} />
@@ -97,9 +91,23 @@ function App() {
               </Routes>
             </Suspense>
           </main>
+          <Footer /> {/* Add Footer here */}
         </Router>
       </div>
     </ErrorBoundary>
+  );
+}
+
+function App() {
+  const handlePerformanceMetrics = (metrics: PerformanceMetrics) => {
+    // Log metrics or send to analytics service
+    console.log('Performance metrics:', metrics);
+  };
+
+  return (
+    <ThemeProvider>
+      <AppContent onPerformanceMetrics={handlePerformanceMetrics} />
+    </ThemeProvider>
   );
 }
 

@@ -1,14 +1,21 @@
 ---
-title: "Hola World"
-slug: "hola-world"
-excerpt: "In my first blog post, I share my journey from grassroots community building to becoming a product manager passionate about tech that fosters human connections."
-date: "2025-05-31"
-category: "Community Reach"
-tags: ["Technology for Good", "Product Management", "Community Engagement", "Human-Centered Design"]
-author: "Héctor Norzagaray"
-readTime: "5 min read"
+title: 'Hola World'
+slug: 'hola-world'
+excerpt: 'In my first blog post, I share my journey from grassroots community building to becoming a product manager passionate about tech that fosters human connections.'
+date: '2025-05-31'
+category: 'Community Reach'
+tags:
+  [
+    'Technology for Good',
+    'Product Management',
+    'Community Engagement',
+    'Human-Centered Design',
+  ]
+author: 'Héctor Norzagaray'
+readTime: '5 min read'
 published: true
 ---
+
 # My First Blog Post 🌟
 
 Hello and welcome! I'm Hector Norzagaray, a product manager fueled by a passion for forging meaningful human connections through technology. This blog is my platform to explore the dynamic intersection of product development, technology, and community engagement. I'm thrilled to share my insights, lessons learned, and occasional breakthroughs with you! 🚀
@@ -21,7 +28,7 @@ As a product manager, my community-building roots have been supercharged. For ex
 
 ## My Product Philosophy: Community at the Core 🤝
 
-As a product manager, I champion a *community-first* approach. Every feature, strategy, and roadmap I develop prioritizes the human connections that technology can foster. My methodology blends strategic vision, empathetic user focus, and transparent collaboration to align diverse teams—engineers, designers, marketers—toward a shared goal: building products that strengthen communities. 💡
+As a product manager, I champion a _community-first_ approach. Every feature, strategy, and roadmap I develop prioritizes the human connections that technology can foster. My methodology blends strategic vision, empathetic user focus, and transparent collaboration to align diverse teams—engineers, designers, marketers—toward a shared goal: building products that strengthen communities. 💡
 
 Whether I'm diving into user research to uncover community needs, defining a product vision that inspires collective action, or guiding teams to bring ideas to life, my mission remains clear: create digital pathways that connect people, bridge perspectives, and empower communities to thrive.
 
@@ -46,7 +53,7 @@ This blog will be a space to explore my journey and convictions, with a focus on
 ## Key Takeaways 🔑
 
 - My transition from community organizing to product management was driven by a desire to build technology that strengthens human connections.
-- As a PM, my *community-first* philosophy—rooted in empathy, strategy, and collaboration—guides every decision.
+- As a PM, my _community-first_ philosophy—rooted in empathy, strategy, and collaboration—guides every decision.
 - This blog will delve into how technology and product development can drive meaningful community engagement.
 
 ## Conclusion: Let's Build Together! 🙌
@@ -59,6 +66,7 @@ Thank you for joining me on this journey. Let's explore new ways to build a more
 
 Best,  
 Hector Norzagaray
+
 <!-- # My First Blog Post
 
 Start writing your blog post here...
@@ -72,7 +80,84 @@ Your content goes here.
 More detailed content.
 
 ## Key Takeaways
+export interface BlogPost {
+  id: string;
+  title: string;
+  excerpt: string;
+  date: string;
+  slug: string;
+  category: string;
+  tags: string[];
+  author: string;
+  readTime: string;
+  content: string;
+}
 
+export async function loadBlogPosts(): Promise<BlogPost[]> {
+  // List of your markdown files
+  const blogFiles = [
+    'my-first-blog-post.md',
+    'building-community-driven-products.md',
+    'future-of-responsible-ai.md',
+  ];
+
+  const posts = await Promise.all(
+    blogFiles.map(async (filename) => {
+      try {
+        const response = await fetch(`/blog/${filename}`);
+        const content = await response.text();
+        return parseMarkdownPost(content, filename);
+      } catch (error) {
+        console.error(`Error loading ${filename}:`, error);
+        return null;
+      }
+    })
+  );
+
+  return posts
+    .filter((post): post is BlogPost => post !== null)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+}
+
+function parseMarkdownPost(content: string, filename: string): BlogPost | null {
+  // Parse frontmatter
+  const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+  if (!frontmatterMatch) return null;
+
+  const [, frontmatterText, markdownContent] = frontmatterMatch;
+  const frontmatter: Record<string, any> = {};
+
+  // Parse YAML-like frontmatter
+  frontmatterText.split('\n').forEach(line => {
+    const [key, ...valueParts] = line.split(':');
+    if (key && valueParts.length) {
+      const value = valueParts.join(':').trim().replace(/^["']|["']$/g, '');
+
+      if (key === 'tags') {
+        // Parse array format
+        frontmatter[key] = value
+          .replace(/^\[|\]$/g, '')
+          .split(',')
+          .map(tag => tag.trim().replace(/^["']|["']$/g, ''));
+      } else {
+        frontmatter[key] = value;
+      }
+    }
+  });
+
+  return {
+    id: frontmatter.slug || filename.replace('.md', ''),
+    title: frontmatter.title || 'Untitled',
+    excerpt: frontmatter.excerpt || '',
+    date: frontmatter.date || '',
+    slug: frontmatter.slug || filename.replace('.md', ''),
+    category: frontmatter.category || '',
+    tags: frontmatter.tags || [],
+    author: frontmatter.author || '',
+    readTime: frontmatter.readTime || '',
+    content: markdownContent.trim(),
+  };
+}
 - Point 1
 - Point 2
 - Point 3
@@ -83,4 +168,4 @@ Wrap up your thoughts here. -->
 
 ---
 
-*What are your thoughts on this topic? I'd love to hear from you.*
+_What are your thoughts on this topic? I'd love to hear from you._
