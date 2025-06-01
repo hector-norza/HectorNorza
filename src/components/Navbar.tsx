@@ -2,16 +2,46 @@ import { useState } from 'react';
 import { Dialog, DialogPanel } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useTheme } from '../hooks/useTheme';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const navigation = [
   { name: 'About', href: '/#about' },
   { name: 'Experience', href: '/#resume' },
+  { name: 'Blog', href: '/blog' },
   { name: 'Contact', href: '/#contact' },
 ];
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isDarkMode } = useTheme();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleNavClick = (e: React.MouseEvent, href: string) => {
+    e.preventDefault();
+
+    if (href.startsWith('#') || href.startsWith('/#')) {
+      // If we're not on the home page, navigate to home first, then scroll
+      if (location.pathname !== '/') {
+        navigate('/');
+        // Wait for navigation to complete, then scroll
+        setTimeout(() => {
+          const anchor = href.replace('/', '');
+          const element = document.querySelector(anchor);
+          element?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      } else {
+        // We're already on home page, just scroll
+        const anchor = href.replace('/', '');
+        const element = document.querySelector(anchor);
+        element?.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      // Handle route navigation
+      navigate(href);
+    }
+    setMobileMenuOpen(false);
+  };
 
   return (
     <header
@@ -58,9 +88,9 @@ export default function Navbar() {
         {/* Desktop navigation */}
         <div className="hidden lg:flex lg:gap-x-8">
           {navigation.map((item) => (
-            <a
+            <button
               key={item.name}
-              href={item.href}
+              onClick={(e) => handleNavClick(e, item.href)}
               className={`text-sm font-semibold leading-6 transition-colors duration-300 ${
                 isDarkMode
                   ? 'text-gray-300 hover:text-primary'
@@ -68,7 +98,7 @@ export default function Navbar() {
               }`}
             >
               {item.name}
-            </a>
+            </button>
           ))}
         </div>
       </nav>
@@ -122,18 +152,17 @@ export default function Navbar() {
             <div className="-my-6 divide-y divide-gray-500/10">
               <div className="space-y-2 py-6">
                 {navigation.map((item) => (
-                  <a
+                  <button
                     key={item.name}
-                    href={item.href}
-                    className={`-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 transition-colors duration-300 ${
+                    onClick={(e) => handleNavClick(e, item.href)}
+                    className={`-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 transition-colors duration-300 w-full text-left ${
                       isDarkMode
                         ? 'text-gray-300 hover:bg-gray-800 hover:text-white'
                         : 'text-gray-900 hover:bg-gray-50'
                     }`}
-                    onClick={() => setMobileMenuOpen(false)}
                   >
                     {item.name}
-                  </a>
+                  </button>
                 ))}
               </div>
             </div>

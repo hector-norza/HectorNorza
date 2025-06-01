@@ -1,4 +1,6 @@
 import { RssIcon, EnvelopeIcon } from '@heroicons/react/24/outline';
+import { useTheme } from '../hooks/useTheme';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 // Add these social media icons - you might need to install @heroicons/react if you don't have these
 // Or you can use simple SVGs for LinkedIn and Twitter/X
@@ -14,9 +16,45 @@ const XIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
+const navigation = [
+  { name: 'About', href: '/#about' },
+  { name: 'Experience', href: '/#resume' },
+  { name: 'Blog', href: '/blog' }, // Add blog link
+  { name: 'Contact', href: '/#contact' },
+];
+
 export default function Footer() {
+  const { isDarkMode } = useTheme();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleNavClick = (e: React.MouseEvent, href: string) => {
+    e.preventDefault();
+
+    if (href.startsWith('#') || href.startsWith('/#')) {
+      if (location.pathname !== '/') {
+        navigate('/');
+        setTimeout(() => {
+          const anchor = href.replace('/', '');
+          const element = document.querySelector(anchor);
+          element?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      } else {
+        const anchor = href.replace('/', '');
+        const element = document.querySelector(anchor);
+        element?.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      navigate(href);
+    }
+  };
+
   return (
-    <footer className="bg-gray-900 dark:bg-black text-white transition-colors duration-300">
+    <footer
+      className={`border-t transition-colors duration-300 ${
+        isDarkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* About */}
@@ -33,30 +71,20 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2 text-sm">
-              <li>
-                <a
-                  href="/#about"
-                  className="text-gray-300 hover:text-white transition-colors"
-                >
-                  About
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/#resume"
-                  className="text-gray-300 hover:text-white transition-colors"
-                >
-                  Experience
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/#contact"
-                  className="text-gray-300 hover:text-white transition-colors"
-                >
-                  Contact
-                </a>
-              </li>
+              {navigation.map((item) => (
+                <li key={item.name}>
+                  <button
+                    onClick={(e) => handleNavClick(e, item.href)}
+                    className={`text-sm font-medium transition-colors duration-300 ${
+                      isDarkMode
+                        ? 'text-gray-400 hover:text-white'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    {item.name}
+                  </button>
+                </li>
+              ))}
             </ul>
           </div>
 
