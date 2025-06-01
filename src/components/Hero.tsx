@@ -42,7 +42,7 @@ export default function Hero() {
             >
               Hi, I&apos;m{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">
-                Hector Norzagaray
+                Hector
               </span>
             </h1>
             {/* Make description theme-aware */}
