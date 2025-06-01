@@ -82,13 +82,13 @@ function App() {
   return (
     <ErrorBoundary>
       <div className="min-h-screen bg-white">
-        <SkipLink />
+        <SkipLink href="#main">Skip to main content</SkipLink>
         <AccessibilityToolbar />
         <PerformanceMonitor onMetricsCollected={handlePerformanceMetrics} />
 
         <Router>
           <Navbar />
-          <main>
+          <main id="main">
             <Suspense fallback={<LoadingSpinner />}>
               <Routes>
                 <Route path="/" element={<HomePage />} />
