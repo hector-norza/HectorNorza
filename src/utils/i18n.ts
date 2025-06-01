@@ -12,23 +12,25 @@ export const translations: Record<Language, Translation> = {
       experience: 'Experience',
       blog: 'Blog',
       contact: 'Contact',
-      language: 'Language'
+      language: 'Language',
     },
     hero: {
       title: 'Building products that bring people together',
-      subtitle: 'Product Manager passionate about community-driven development and responsible AI',
+      subtitle:
+        'Product Manager passionate about community-driven development and responsible AI',
       cta: 'View My Work',
-      blogCta: 'Read My Blog'
+      blogCta: 'Read My Blog',
     },
     blog: {
       title: 'Blog',
-      subtitle: 'Thoughts on product management, community building, and the intersection of technology and human connection',
+      subtitle:
+        'Thoughts on product management, community building, and the intersection of technology and human connection',
       subscribeEmail: 'Subscribe via Email',
       subscribeRss: 'Subscribe to RSS',
       readMore: 'Read More',
       backToBlog: 'Back to Blog',
-      allPosts: 'All Posts'
-    }
+      allPosts: 'All Posts',
+    },
   },
   es: {
     nav: {
@@ -36,23 +38,25 @@ export const translations: Record<Language, Translation> = {
       experience: 'Experiencia',
       blog: 'Blog',
       contact: 'Contacto',
-      language: 'Idioma'
+      language: 'Idioma',
     },
     hero: {
       title: 'Construyendo productos que unen a las personas',
-      subtitle: 'Product Manager apasionado por el desarrollo impulsado por la comunidad y la IA responsable',
+      subtitle:
+        'Product Manager apasionado por el desarrollo impulsado por la comunidad y la IA responsable',
       cta: 'Ver Mi Trabajo',
-      blogCta: 'Leer Mi Blog'
+      blogCta: 'Leer Mi Blog',
     },
     blog: {
       title: 'Blog',
-      subtitle: 'Reflexiones sobre gestión de productos, construcción de comunidades, y la intersección entre tecnología y conexión humana',
+      subtitle:
+        'Reflexiones sobre gestión de productos, construcción de comunidades, y la intersección entre tecnología y conexión humana',
       subscribeEmail: 'Suscribirse por Email',
       subscribeRss: 'Suscribirse al RSS',
       readMore: 'Leer Más',
       backToBlog: 'Volver al Blog',
-      allPosts: 'Todas las Publicaciones'
-    }
+      allPosts: 'Todas las Publicaciones',
+    },
   },
   fr: {
     nav: {
@@ -60,23 +64,25 @@ export const translations: Record<Language, Translation> = {
       experience: 'Expérience',
       blog: 'Blog',
       contact: 'Contact',
-      language: 'Langue'
+      language: 'Langue',
     },
     hero: {
       title: 'Construire des produits qui rassemblent les gens',
-      subtitle: 'Product Manager passionné par le développement communautaire et l\'IA responsable',
+      subtitle:
+        "Product Manager passionné par le développement communautaire et l'IA responsable",
       cta: 'Voir Mon Travail',
-      blogCta: 'Lire Mon Blog'
+      blogCta: 'Lire Mon Blog',
     },
     blog: {
       title: 'Blog',
-      subtitle: 'Réflexions sur la gestion de produits, la construction de communautés, et l\'intersection entre technologie et connexion humaine',
-      subscribeEmail: 'S\'abonner par Email',
-      subscribeRss: 'S\'abonner au RSS',
+      subtitle:
+        "Réflexions sur la gestion de produits, la construction de communautés, et l'intersection entre technologie et connexion humaine",
+      subscribeEmail: "S'abonner par Email",
+      subscribeRss: "S'abonner au RSS",
       readMore: 'Lire Plus',
       backToBlog: 'Retour au Blog',
-      allPosts: 'Tous les Articles'
-    }
+      allPosts: 'Tous les Articles',
+    },
   },
   pt: {
     nav: {
@@ -84,23 +90,25 @@ export const translations: Record<Language, Translation> = {
       experience: 'Experiência',
       blog: 'Blog',
       contact: 'Contato',
-      language: 'Idioma'
+      language: 'Idioma',
     },
     hero: {
       title: 'Construindo produtos que unem pessoas',
-      subtitle: 'Product Manager apaixonado por desenvolvimento orientado pela comunidade e IA responsável',
+      subtitle:
+        'Product Manager apaixonado por desenvolvimento orientado pela comunidade e IA responsável',
       cta: 'Ver Meu Trabalho',
-      blogCta: 'Ler Meu Blog'
+      blogCta: 'Ler Meu Blog',
     },
     blog: {
       title: 'Blog',
-      subtitle: 'Reflexões sobre gestão de produtos, construção de comunidades, e a interseção entre tecnologia e conexão humana',
+      subtitle:
+        'Reflexões sobre gestão de produtos, construção de comunidades, e a interseção entre tecnologia e conexão humana',
       subscribeEmail: 'Inscrever-se por Email',
       subscribeRss: 'Inscrever-se no RSS',
       readMore: 'Ler Mais',
       backToBlog: 'Voltar ao Blog',
-      allPosts: 'Todas as Publicações'
-    }
+      allPosts: 'Todas as Publicações',
+    },
   },
   de: {
     nav: {
@@ -108,23 +116,25 @@ export const translations: Record<Language, Translation> = {
       experience: 'Erfahrung',
       blog: 'Blog',
       contact: 'Kontakt',
-      language: 'Sprache'
+      language: 'Sprache',
     },
     hero: {
       title: 'Produkte entwickeln, die Menschen zusammenbringen',
-      subtitle: 'Product Manager mit Leidenschaft für gemeinschaftsgetriebene Entwicklung und verantwortliche KI',
+      subtitle:
+        'Product Manager mit Leidenschaft für gemeinschaftsgetriebene Entwicklung und verantwortliche KI',
       cta: 'Meine Arbeit Ansehen',
-      blogCta: 'Meinen Blog Lesen'
+      blogCta: 'Meinen Blog Lesen',
     },
     blog: {
       title: 'Blog',
-      subtitle: 'Gedanken zu Produktmanagement, Community-Building und der Schnittstelle zwischen Technologie und menschlicher Verbindung',
+      subtitle:
+        'Gedanken zu Produktmanagement, Community-Building und der Schnittstelle zwischen Technologie und menschlicher Verbindung',
       subscribeEmail: 'Per E-Mail Abonnieren',
       subscribeRss: 'RSS Abonnieren',
       readMore: 'Mehr Lesen',
       backToBlog: 'Zurück zum Blog',
-      allPosts: 'Alle Beiträge'
-    }
+      allPosts: 'Alle Beiträge',
+    },
   },
   it: {
     nav: {
@@ -132,24 +142,26 @@ export const translations: Record<Language, Translation> = {
       experience: 'Esperienza',
       blog: 'Blog',
       contact: 'Contatto',
-      language: 'Lingua'
+      language: 'Lingua',
     },
     hero: {
       title: 'Costruire prodotti che uniscono le persone',
-      subtitle: 'Product Manager appassionato di sviluppo guidato dalla comunità e IA responsabile',
+      subtitle:
+        'Product Manager appassionato di sviluppo guidato dalla comunità e IA responsabile',
       cta: 'Vedi il Mio Lavoro',
-      blogCta: 'Leggi il Mio Blog'
+      blogCta: 'Leggi il Mio Blog',
     },
     blog: {
       title: 'Blog',
-      subtitle: 'Riflessioni sulla gestione dei prodotti, la costruzione di comunità, e l\'intersezione tra tecnologia e connessione umana',
+      subtitle:
+        "Riflessioni sulla gestione dei prodotti, la costruzione di comunità, e l'intersezione tra tecnologia e connessione umana",
       subscribeEmail: 'Iscriviti via Email',
       subscribeRss: 'Iscriviti al RSS',
       readMore: 'Leggi di Più',
       backToBlog: 'Torna al Blog',
-      allPosts: 'Tutti gli Articoli'
-    }
-  }
+      allPosts: 'Tutti gli Articoli',
+    },
+  },
 };
 
 // Get current language from URL or localStorage
@@ -180,7 +192,7 @@ export function getCurrentLanguage(): Language {
 // Set language preference
 export function setLanguage(lang: Language): void {
   localStorage.setItem('preferred-language', lang);
-  
+
   // Update URL parameter
   const url = new URL(window.location.href);
   url.searchParams.set('lang', lang);
@@ -191,17 +203,17 @@ export function setLanguage(lang: Language): void {
 export function t(key: string, lang?: Language): string {
   const currentLang = lang || getCurrentLanguage();
   const keys = key.split('.');
-  let value: any = translations[currentLang];
-  
+  let value: unknown = translations[currentLang];
+
   for (const k of keys) {
     if (value && typeof value === 'object' && k in value) {
-      value = value[k];
+      value = (value as Record<string, unknown>)[k];
     } else {
       // Fallback to English if key not found
       value = translations.en;
       for (const fallbackKey of keys) {
         if (value && typeof value === 'object' && fallbackKey in value) {
-          value = value[fallbackKey];
+          value = (value as Record<string, unknown>)[fallbackKey];
         } else {
           return key; // Return key if not found
         }
@@ -209,7 +221,7 @@ export function t(key: string, lang?: Language): string {
       break;
     }
   }
-  
+
   return typeof value === 'string' ? value : key;
 }
 
@@ -220,9 +232,9 @@ export const languageConfig = {
   languageNames: {
     en: 'English',
     es: 'Español',
-    fr: 'Français', 
+    fr: 'Français',
     pt: 'Português',
     de: 'Deutsch',
-    it: 'Italiano'
-  }
+    it: 'Italiano',
+  },
 };

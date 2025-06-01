@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Cog6ToothIcon, 
-  EyeIcon, 
+import {
+  Cog6ToothIcon,
+  EyeIcon,
   SpeakerWaveIcon,
   AdjustmentsHorizontalIcon,
-  XMarkIcon 
+  XMarkIcon,
 } from '@heroicons/react/24/outline';
 import { useHighContrast } from '../utils/accessibility';
 
@@ -46,7 +46,9 @@ export default function AccessibilityToolbar() {
         onClick={() => setIsOpen(!isOpen)}
         className="fixed left-4 top-1/2 z-50 bg-primary text-white p-3 rounded-full shadow-lg hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors"
         style={{ transform: 'translateY(-50%)' }}
-        aria-label={isOpen ? 'Close accessibility toolbar' : 'Open accessibility toolbar'}
+        aria-label={
+          isOpen ? 'Close accessibility toolbar' : 'Open accessibility toolbar'
+        }
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
@@ -64,14 +66,20 @@ export default function AccessibilityToolbar() {
             initial={{ x: -300, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: -300, opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
+            transition={{ duration: 0.3, ease: 'easeOut' }}
             className="fixed left-4 top-1/2 z-40 bg-white border border-gray-200 rounded-lg shadow-xl p-6 w-80"
             style={{ transform: 'translateY(-50%)' }}
             role="dialog"
             aria-labelledby="accessibility-toolbar-title"
           >
-            <h2 id="accessibility-toolbar-title" className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <AdjustmentsHorizontalIcon className="w-5 h-5" aria-hidden="true" />
+            <h2
+              id="accessibility-toolbar-title"
+              className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2"
+            >
+              <AdjustmentsHorizontalIcon
+                className="w-5 h-5"
+                aria-hidden="true"
+              />
               Accessibility Options
             </h2>
 
@@ -124,9 +132,14 @@ export default function AccessibilityToolbar() {
               {/* Screen Reader Info */}
               <div className="border-t border-gray-200 pt-4">
                 <div className="flex items-start gap-2">
-                  <SpeakerWaveIcon className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" aria-hidden="true" />
+                  <SpeakerWaveIcon
+                    className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0"
+                    aria-hidden="true"
+                  />
                   <div>
-                    <p className="text-sm text-gray-700 font-medium">Screen Reader Ready</p>
+                    <p className="text-sm text-gray-700 font-medium">
+                      Screen Reader Ready
+                    </p>
                     <p className="text-xs text-gray-500">
                       This site supports NVDA, JAWS, and VoiceOver
                     </p>
