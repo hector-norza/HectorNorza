@@ -65,6 +65,16 @@ function AppContent({
   onPerformanceMetrics: (metrics: PerformanceMetrics) => void;
 }) {
   const { isDarkMode } = useTheme(); // Now we can use the theme context
+  const location = useLocation();
+
+  useEffect(() => {
+    // Track page views on route changes
+    if (typeof gtag !== 'undefined') {
+      gtag('config', 'G-VPC78XB0H1', {
+        page_path: location.pathname,
+      });
+    }
+  }, [location]);
 
   return (
     <ErrorBoundary>
