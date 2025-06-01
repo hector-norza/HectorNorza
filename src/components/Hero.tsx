@@ -7,7 +7,7 @@ export default function Hero() {
 
   return (
     <section
-      className={`relative min-h-screen flex items-center justify-center transition-colors duration-300 ${
+      className={`relative min-h-screen flex items-center justify-center overflow-hidden transition-colors duration-300 ${
         isDarkMode
           ? 'bg-gradient-to-br from-gray-900 via-blue-900/20 to-purple-900/20'
           : 'bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/20'

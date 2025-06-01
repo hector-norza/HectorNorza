@@ -5,6 +5,7 @@ import {
   ClipboardDocumentCheckIcon,
   RocketLaunchIcon,
 } from '@heroicons/react/24/outline';
+import { useTheme } from '../hooks/useTheme'; // Fix this import - remove next-themes
 
 // Define Product Manager skills with icons and descriptions
 const skills = [
@@ -55,10 +56,16 @@ const skills = [
 ];
 
 export default function About() {
+  const { isDarkMode } = useTheme();
+
   return (
     <section
       id="about"
-      className="relative py-24 overflow-hidden scroll-mt-24 bg-gray-50 dark:bg-gray-900 transition-colors duration-300"
+      className={`relative py-24 overflow-hidden scroll-mt-24 transition-colors duration-300 ${
+        isDarkMode
+          ? 'bg-gradient-to-br from-gray-900 via-blue-900/20 to-purple-900/20'
+          : 'bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/20'
+      }`}
     >
       {/* Background decorations */}
       <div className="absolute right-0 top-1/3 w-1/3 h-full bg-primary/5 dark:bg-primary/10 -z-10 -skew-x-12 translate-x-1/2 transition-colors duration-300"></div>
@@ -139,11 +146,19 @@ export default function About() {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.7 }}
               viewport={{ once: true }}
-              className="bg-white dark:bg-gray-800/95 backdrop-blur-sm border border-gray-100 dark:border-gray-700/50 p-8 rounded-2xl shadow-xl transition-colors duration-300"
+              className={`p-8 rounded-2xl shadow-xl transition-colors duration-300 ${
+                isDarkMode
+                  ? 'bg-gray-800/90 backdrop-blur-sm border border-gray-700/50'
+                  : 'bg-white/95 backdrop-blur-sm border border-gray-200/50'
+              }`}
             >
               <div className="relative mb-6">
                 <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-lg -z-10"></div>
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white px-4 py-2 transition-colors duration-300">
+                <h3
+                  className={`text-2xl font-bold px-4 py-2 transition-colors duration-300 ${
+                    isDarkMode ? 'text-white' : 'text-gray-900'
+                  }`}
+                >
                   My Skills & Expertise
                 </h3>
               </div>
@@ -156,11 +171,20 @@ export default function About() {
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.1 * index }}
                     viewport={{ once: true }}
-                    className="bg-gray-50 dark:bg-gray-700/60 hover:bg-gray-100 dark:hover:bg-gray-700/80 p-6 rounded-xl hover:shadow-md transition-all duration-300"
+                    className={`p-6 rounded-xl hover:shadow-md transition-all duration-300 ${
+                      isDarkMode
+                        ? 'bg-gray-700/80 hover:bg-gray-700/90'
+                        : 'bg-gray-50 hover:bg-gray-100'
+                    }`}
                   >
+                    {/* Skill content remains the same */}
                     <div className="flex items-center gap-3 mb-4">
                       {skillGroup.icon}
-                      <h4 className="text-xl font-semibold text-gray-900 dark:text-white transition-colors duration-300">
+                      <h4
+                        className={`text-xl font-semibold transition-colors duration-300 ${
+                          isDarkMode ? 'text-white' : 'text-gray-900'
+                        }`}
+                      >
                         {skillGroup.category}
                       </h4>
                     </div>
@@ -168,7 +192,11 @@ export default function About() {
                       {skillGroup.items.map((skill) => (
                         <span
                           key={skill}
-                          className="px-3 py-1 bg-white dark:bg-gray-600/80 text-gray-700 dark:text-gray-100 rounded-full text-sm border border-gray-200 dark:border-gray-500/50 shadow-sm transition-colors duration-300"
+                          className={`px-3 py-1 rounded-full text-sm border shadow-sm transition-colors duration-300 ${
+                            isDarkMode
+                              ? 'bg-gray-600/90 text-gray-100 border-gray-500/50'
+                              : 'bg-white text-gray-700 border-gray-200'
+                          }`}
                         >
                           {skill}
                         </span>

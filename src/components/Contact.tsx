@@ -10,8 +10,10 @@ import {
   trackFormSubmission,
   trackExternalLinkClick,
 } from '../utils/analytics';
+import { useTheme } from '../hooks/useTheme';
 
 export default function Contact() {
+  const { isDarkMode } = useTheme();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -148,7 +150,11 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="relative py-24 overflow-hidden bg-white dark:bg-gradient-to-br dark:from-gray-900 dark:via-blue-900/20 dark:to-purple-900/20 transition-colors duration-300"
+      className={`relative py-24 sm:py-32 overflow-hidden transition-colors duration-300 ${
+        isDarkMode
+          ? 'bg-gradient-to-br from-gray-900 via-blue-900/20 to-purple-900/20'
+          : 'bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/20'
+      }`}
     >
       {/* Background decorations - Dark mode aware */}
       <div className="absolute left-0 top-0 w-64 h-64 bg-primary/5 dark:bg-primary/10 rounded-full blur-3xl -z-10 transition-colors duration-300"></div>

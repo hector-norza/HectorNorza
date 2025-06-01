@@ -6,9 +6,7 @@ import {
   ChartBarIcon,
   CalendarIcon,
 } from '@heroicons/react/24/outline';
-
-// Remove the useTheme import since we're using Tailwind dark mode
-// import { useTheme } from '../contexts/ThemeContext';
+import { useTheme } from '../hooks/useTheme'; // Fix this import
 
 // Keep all your existing data arrays exactly the same...
 const experiences = [
@@ -226,10 +224,16 @@ const skills = [
 ];
 
 export default function Resume() {
+  const { isDarkMode } = useTheme();
+
   return (
     <section
       id="resume"
-      className="relative py-24 bg-gray-50 dark:bg-gray-900 transition-colors duration-300"
+      className={`py-24 sm:py-32 transition-colors duration-300 ${
+        isDarkMode
+          ? 'bg-gradient-to-br from-gray-900 via-blue-900/20 to-purple-900/20'
+          : 'bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/20'
+      }`}
     >
       {/* Background decorations */}
       <div className="absolute top-20 right-10 w-72 h-72 bg-primary/5 dark:bg-primary/10 rounded-full blur-3xl -z-10 transition-colors duration-300"></div>
@@ -477,16 +481,24 @@ export default function Resume() {
               </div>
             </div>
 
-            {/* Impact Summary - Already fixed from earlier */}
+            {/* Impact Summary - Updated with darker colors */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
               viewport={{ once: true }}
-              className="bg-gradient-to-r from-primary/10 to-secondary/10 dark:from-primary/20 dark:to-secondary/20 p-6 rounded-xl transition-colors duration-300"
+              className={`p-8 rounded-2xl shadow-xl transition-colors duration-300 ${
+                isDarkMode
+                  ? 'bg-gray-800/90 backdrop-blur-sm border border-gray-700/50'
+                  : 'bg-white/95 backdrop-blur-sm border border-gray-200/50'
+              }`}
             >
-              <div className="mb-4">
-                <h4 className="text-xl font-bold text-gray-900 dark:text-white text-center transition-colors duration-300">
+              <div className="mb-6">
+                <h4
+                  className={`text-xl font-bold text-center transition-colors duration-300 ${
+                    isDarkMode ? 'text-white' : 'text-gray-900'
+                  }`}
+                >
                   Impact <span className="text-primary">Summary</span>
                 </h4>
                 <div className="w-16 h-0.5 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto mt-2"></div>
@@ -494,53 +506,85 @@ export default function Resume() {
 
               <div className="grid grid-cols-2 gap-4">
                 <motion.div
-                  className="text-center p-3 bg-white/50 dark:bg-gray-700/30 rounded-lg border border-primary/20 dark:border-primary/30 transition-colors duration-300"
+                  className={`text-center p-4 rounded-lg transition-all duration-300 ${
+                    isDarkMode
+                      ? 'bg-gray-700/80 border border-primary/30 hover:bg-gray-700/90'
+                      : 'bg-gray-50/80 border border-primary/20 hover:bg-gray-50'
+                  }`}
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.2 }}
                 >
                   <div className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-600">
                     7+
                   </div>
-                  <div className="text-xs text-gray-600 dark:text-gray-300 transition-colors duration-300">
+                  <div
+                    className={`text-xs transition-colors duration-300 ${
+                      isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                    }`}
+                  >
                     Years Experience
                   </div>
                 </motion.div>
 
                 <motion.div
-                  className="text-center p-3 bg-white/50 dark:bg-gray-700/30 rounded-lg border border-secondary/20 dark:border-secondary/30 transition-colors duration-300"
+                  className={`text-center p-4 rounded-lg transition-all duration-300 ${
+                    isDarkMode
+                      ? 'bg-gray-700/80 border border-secondary/30 hover:bg-gray-700/90'
+                      : 'bg-gray-50/80 border border-secondary/20 hover:bg-gray-50'
+                  }`}
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.2 }}
                 >
                   <div className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-secondary to-purple-600">
                     3+
                   </div>
-                  <div className="text-xs text-gray-600 dark:text-gray-300 transition-colors duration-300">
+                  <div
+                    className={`text-xs transition-colors duration-300 ${
+                      isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                    }`}
+                  >
                     Years at Microsoft
                   </div>
                 </motion.div>
 
                 <motion.div
-                  className="text-center p-3 bg-white/50 dark:bg-gray-700/30 rounded-lg border border-green-400/20 dark:border-green-400/30 transition-colors duration-300"
+                  className={`text-center p-4 rounded-lg transition-all duration-300 ${
+                    isDarkMode
+                      ? 'bg-gray-700/80 border border-green-400/30 hover:bg-gray-700/90'
+                      : 'bg-gray-50/80 border border-green-400/20 hover:bg-gray-50'
+                  }`}
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.2 }}
                 >
                   <div className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-500 to-emerald-600">
                     100+
                   </div>
-                  <div className="text-xs text-gray-600 dark:text-gray-300 transition-colors duration-300">
+                  <div
+                    className={`text-xs transition-colors duration-300 ${
+                      isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                    }`}
+                  >
                     Students Mentored
                   </div>
                 </motion.div>
 
                 <motion.div
-                  className="text-center p-3 bg-white/50 dark:bg-gray-700/30 rounded-lg border border-orange-400/20 dark:border-orange-400/30 transition-colors duration-300"
+                  className={`text-center p-4 rounded-lg transition-all duration-300 ${
+                    isDarkMode
+                      ? 'bg-gray-700/80 border border-orange-400/30 hover:bg-gray-700/90'
+                      : 'bg-gray-50/80 border border-orange-400/20 hover:bg-gray-50'
+                  }`}
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.2 }}
                 >
                   <div className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-red-500">
                     Global
                   </div>
-                  <div className="text-xs text-gray-600 dark:text-gray-300 transition-colors duration-300">
+                  <div
+                    className={`text-xs transition-colors duration-300 ${
+                      isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                    }`}
+                  >
                     Azure Community
                   </div>
                 </motion.div>
@@ -549,16 +593,24 @@ export default function Resume() {
           </div>
         </div>
 
-        {/* Skills Section */}
+        {/* Skills Section - Consistent text colors with other sections */}
         <div className="mt-16">
-          <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center transition-colors duration-300">
+          <h3
+            className={`text-2xl font-bold mb-6 text-center transition-colors duration-300 ${
+              isDarkMode ? 'text-white' : 'text-gray-900'
+            }`}
+          >
             Skills & Expertise
           </h3>
           <div className="flex flex-wrap justify-center gap-3">
             {skills.map((skill, i) => (
               <span
                 key={i}
-                className="px-4 py-2 bg-primary/10 dark:bg-primary/30 text-primary dark:text-white font-medium rounded-full text-sm border border-primary/20 dark:border-primary/50 transition-colors duration-300"
+                className={`px-4 py-2 font-medium rounded-full text-sm border transition-colors duration-300 ${
+                  isDarkMode
+                    ? 'bg-gray-700/80 text-gray-200 border-gray-600/50 hover:bg-gray-700/90'
+                    : 'bg-gray-100/80 text-gray-700 border-gray-300/50 hover:bg-gray-100'
+                }`}
               >
                 {skill}
               </span>

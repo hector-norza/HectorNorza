@@ -21,24 +21,22 @@ export default function Navbar() {
     e.preventDefault();
 
     if (href.startsWith('#') || href.startsWith('/#')) {
-      // If we're not on the home page, navigate to home first, then scroll
       if (location.pathname !== '/') {
         navigate('/');
-        // Wait for navigation to complete, then scroll
         setTimeout(() => {
           const anchor = href.replace('/', '');
           const element = document.querySelector(anchor);
           element?.scrollIntoView({ behavior: 'smooth' });
         }, 100);
       } else {
-        // We're already on home page, just scroll
         const anchor = href.replace('/', '');
         const element = document.querySelector(anchor);
         element?.scrollIntoView({ behavior: 'smooth' });
       }
     } else {
-      // Handle route navigation
+      // Navigate to route and scroll to top
       navigate(href);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
     setMobileMenuOpen(false);
   };

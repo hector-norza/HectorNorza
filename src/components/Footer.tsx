@@ -45,7 +45,9 @@ export default function Footer() {
         element?.scrollIntoView({ behavior: 'smooth' });
       }
     } else {
+      // Navigate to route and scroll to top
       navigate(href);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 

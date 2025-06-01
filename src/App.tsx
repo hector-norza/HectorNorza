@@ -97,6 +97,9 @@ function RouterContent() {
         page_path: location.pathname,
       });
     }
+
+    // Scroll to top on route change
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [location]);
 
   return (
