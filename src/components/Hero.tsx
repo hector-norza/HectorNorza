@@ -1,112 +1,125 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { useTheme } from '../hooks/useTheme';
+import { useContrastColors } from '../hooks/useContrastColors';
 
 export default function Hero() {
-  const { isDarkMode } = useTheme();
+  const colors = useContrastColors();
+
+  const scrollToContact = () => {
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+      const headerHeight = 64;
+      const additionalPadding = 32;
+      const elementPosition = contactSection.offsetTop;
+      const offsetPosition = elementPosition - headerHeight - additionalPadding;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth',
+      });
+    }
+  };
 
   return (
     <section
-      className={`relative min-h-screen flex items-center justify-center overflow-hidden transition-colors duration-300 ${
-        isDarkMode
-          ? 'bg-gradient-to-br from-gray-900 via-blue-900/20 to-purple-900/20'
-          : 'bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/20'
-      }`}
+      className={`relative min-h-screen flex items-center justify-center overflow-hidden transition-colors duration-300 ${colors.background.primary}`}
+      aria-label="Hero section"
     >
-      {/* Background gradient and pattern - Make theme-aware */}
-      <div
-        className={`absolute inset-0 -z-10 transition-colors duration-300 ${
-          isDarkMode
-            ? 'bg-gradient-to-b from-gray-900 via-blue-900/10 to-gray-900'
-            : 'bg-gradient-to-b from-white via-primary/5 to-white'
-        }`}
-      ></div>
-      <div
-        className={`absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMwMDAiIGZpbGwtb3BhY2l0eT0iLjAyIj48cGF0aCBkPSJNMzYgMzRjMC0yLjIxLTEuNzktNC00LTRzLTQgMS43OS00IDQgMS43OSA0IDQgNCA0LTEuNzkgNC00ek0yMCAyMGMwLTIuMjEtMS43OS00LTQtNHMtNCAxLjc5LTQgNCAxLjc5IDQgNCA0IDQtMS43OSA0LTR6bTMyIDBjMC0yLjIxLTEuNzktNC00LTRzLTQgMS43OS00IDQgMS43OSA0IDQgNCA0LTEuNzkgNC00eiI+PC9wYXRoPjwvZz48L2c+PC9zdmc+')] -z-10 transition-opacity duration-300 ${
-          isDarkMode ? 'opacity-10' : 'opacity-30'
-        }`}
-      ></div>
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 -z-10"></div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 z-10">
-        <div className="mx-auto max-w-2xl text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="space-y-8"
+        >
+          {/* Main heading - Fixed spacing */}
+          <motion.h1
+            className={`text-4xl sm:text-6xl lg:text-7xl font-bold transition-colors duration-300 ${colors.heading}`}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: 'easeOut' }}
+            transition={{ duration: 0.8, delay: 0.2 }}
           >
-            {/* Make title theme-aware */}
-            <h1
-              className={`text-5xl sm:text-6xl md:text-7xl font-bold mb-8 leading-tight transition-colors duration-300 ${
-                isDarkMode ? 'text-white' : 'text-gray-900'
-              }`}
-            >
-              Hi, I&apos;m{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">
-                Hector
-              </span>
-            </h1>
-            {/* Make description theme-aware */}
-            <motion.p
-              className={`text-xl md:text-2xl leading-8 mb-12 transition-colors duration-300 ${
-                isDarkMode ? 'text-gray-300' : 'text-gray-600'
-              }`}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.7, delay: 0.3 }}
-            >
-              Product Manager on the Microsoft Azure SDK team, dedicated to
-              improving developer experience and fostering strong tech
-              communities. <br />
-              <br />
-              Host of the Azure Developer SDK Community Standup, where I connect
-              developers with insights, tools, and discussions to elevate their
-              experience.
-            </motion.p>
-            <motion.div
-              className="flex flex-wrap items-center justify-center gap-x-6 gap-y-4"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.6 }}
-            >
-              <a
-                href="#resume"
-                className="inline-flex items-center px-8 py-4 border border-transparent text-base font-medium rounded-xl shadow-lg text-white bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300 transform hover:-translate-y-1"
-              >
-                View My Experience
-              </a>
-              {/* Make secondary button theme-aware */}
-              <Link
-                to="/blog"
-                className={`inline-flex items-center px-8 py-4 border text-base font-medium rounded-xl shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300 transform hover:-translate-y-1 ${
-                  isDarkMode
-                    ? 'border-gray-600 text-white bg-gray-800 hover:bg-gray-700'
-                    : 'border-gray-300 text-gray-900 bg-white hover:bg-gray-50'
-                }`}
-              >
-                Read My Blog
-              </Link>
-              {/* Make contact link theme-aware */}
-              <a
-                href="#contact"
-                className={`text-base font-semibold leading-7 transition-colors group flex items-center ${
-                  isDarkMode
-                    ? 'text-gray-300 hover:text-blue-400'
-                    : 'text-gray-900 hover:text-primary'
-                }`}
-              >
-                Contact Me{' '}
-                <span className="ml-1 group-hover:translate-x-1 transition-transform duration-200">
-                  →
-                </span>
-              </a>
-            </motion.div>
-          </motion.div>
-        </div>
-      </div>
+            <span className="block mb-2">Hi, I'm</span>
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-primary bg-300% animate-gradient leading-tight">
+              Hector Norzagaray
+            </span>
+          </motion.h1>
 
-      {/* Decorative elements */}
-      <div className="absolute top-1/4 right-[10%] w-64 h-64 bg-secondary/10 rounded-full blur-3xl -z-10"></div>
-      <div className="absolute bottom-1/4 left-[15%] w-96 h-96 bg-primary/10 rounded-full blur-3xl -z-10"></div>
+          {/* Subtitle - Added more spacing */}
+          <motion.p
+            className={`text-xl md:text-2xl font-medium max-w-3xl mx-auto transition-colors duration-300 ${colors.secondary} mt-8`}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+          >
+            Product Manager & Community Builder
+          </motion.p>
+
+          {/* Description - Added more spacing */}
+          <motion.p
+            className={`text-lg md:text-xl max-w-4xl mx-auto leading-relaxed transition-colors duration-300 ${colors.body} mt-8`}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+          >
+            Passionate about building tools that bring people together through
+            responsible AI and community-driven development. I bridge the gap
+            between technology and human connection.
+          </motion.p>
+
+          {/* CTA Buttons - Added more spacing */}
+          <motion.div
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-12"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+          >
+            <button
+              onClick={scrollToContact}
+              className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-primary to-secondary text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+              aria-label="Navigate to contact section"
+            >
+              Get In Touch
+            </button>
+
+            <Link
+              to="/blog"
+              className={`inline-flex items-center px-8 py-4 border-2 border-primary font-semibold rounded-lg hover:bg-primary hover:text-white transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary ${colors.interactive}`}
+              aria-label="Read Hector's blog posts"
+            >
+              Read Blog
+            </Link>
+          </motion.div>
+        </motion.div>
+      </div>
     </section>
   );
 }
+
+// Add these custom animations to your tailwind.config.js if not already present:
+/*
+module.exports = {
+  theme: {
+    extend: {
+      animation: {
+        'gradient': 'gradient 6s ease infinite',
+      },
+      keyframes: {
+        gradient: {
+          '0%, 100%': {
+            'background-size': '200% 200%',
+            'background-position': 'left center'
+          },
+          '50%': {
+            'background-size': '200% 200%',
+            'background-position': 'right center'
+          },
+        },
+      }
+    }
+  }
+}
+*/

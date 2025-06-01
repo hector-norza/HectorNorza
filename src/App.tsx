@@ -127,7 +127,11 @@ function App() {
 
   return (
     <ThemeProvider>
-      <AppContent onPerformanceMetrics={handlePerformanceMetrics} />
+      <div className="min-h-screen overflow-x-hidden">
+        {' '}
+        {/* Add overflow-x-hidden */}
+        <AppContent onPerformanceMetrics={handlePerformanceMetrics} />
+      </div>
     </ThemeProvider>
   );
 }

@@ -5,7 +5,7 @@ import {
   ClipboardDocumentCheckIcon,
   RocketLaunchIcon,
 } from '@heroicons/react/24/outline';
-import { useTheme } from '../hooks/useTheme'; // Fix this import - remove next-themes
+import { useContrastColors } from '../hooks/useContrastColors';
 
 // Define Product Manager skills with icons and descriptions
 const skills = [
@@ -56,16 +56,31 @@ const skills = [
 ];
 
 export default function About() {
-  const { isDarkMode } = useTheme();
+  const colors = useContrastColors();
+
+  // This function belongs in your React component, not in CSS:
+  const scrollToContact = () => {
+    const contactSection = document.getElementById('contact');
+
+    if (contactSection) {
+      // Use your CSS variable for header height
+      const headerHeight = 64; // 4rem = 64px (from --header-height: 4rem)
+      const additionalPadding = 32; // 2rem = 32px (from scroll-padding-top)
+
+      const elementPosition = contactSection.offsetTop;
+      const offsetPosition = elementPosition - headerHeight - additionalPadding;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth',
+      });
+    }
+  };
 
   return (
     <section
       id="about"
-      className={`relative py-24 overflow-hidden scroll-mt-24 transition-colors duration-300 ${
-        isDarkMode
-          ? 'bg-gradient-to-br from-gray-900 via-blue-900/20 to-purple-900/20'
-          : 'bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/20'
-      }`}
+      className={`relative py-24 overflow-hidden scroll-mt-24 transition-colors duration-300 ${colors.background.primary}`}
     >
       {/* Background decorations */}
       <div className="absolute right-0 top-1/3 w-1/3 h-full bg-primary/5 dark:bg-primary/10 -z-10 -skew-x-12 translate-x-1/2 transition-colors duration-300"></div>
@@ -82,15 +97,21 @@ export default function About() {
               transition={{ duration: 0.7 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-3xl md:text-5xl font-bold mb-6 text-gray-900 dark:text-white transition-colors duration-300">
+              <h2
+                className={`text-3xl md:text-5xl font-bold mb-6 transition-colors duration-300 ${colors.heading}`}
+              >
                 About Me
               </h2>
               <div className="w-20 h-1.5 bg-gradient-to-r from-primary to-secondary rounded-full mb-8"></div>
 
-              <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 transition-colors duration-300">
+              <div
+                className={`space-y-6 text-lg transition-colors duration-300 ${colors.body}`}
+              >
                 <p>
                   I'm{' '}
-                  <span className="font-semibold text-gray-900 dark:text-white transition-colors duration-300">
+                  <span
+                    className={`font-semibold transition-colors duration-300 ${colors.heading}`}
+                  >
                     Hector Norzagaray
                   </span>{' '}
                   — a product manager with a deep passion for building
@@ -124,6 +145,7 @@ export default function About() {
                 </p>
               </div>
 
+              {/* Fixed Connect with Me button */}
               <motion.div
                 className="mt-10"
                 initial={{ opacity: 0, y: 20 }}
@@ -131,12 +153,13 @@ export default function About() {
                 transition={{ duration: 0.5, delay: 0.3 }}
                 viewport={{ once: true }}
               >
-                <a
-                  href="#contact"
-                  className="inline-flex items-center px-6 py-3 border border-primary text-base font-medium rounded-lg shadow-sm text-primary hover:bg-primary hover:text-white transition-all duration-300"
+                <button
+                  onClick={scrollToContact}
+                  className="inline-flex items-center px-6 py-3 border border-primary text-base font-medium rounded-lg shadow-sm text-primary hover:bg-primary hover:text-white transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+                  aria-label="Navigate to contact section"
                 >
                   Connect with Me
-                </a>
+                </button>
               </motion.div>
             </motion.div>
 
@@ -146,18 +169,12 @@ export default function About() {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.7 }}
               viewport={{ once: true }}
-              className={`p-8 rounded-2xl shadow-xl transition-colors duration-300 ${
-                isDarkMode
-                  ? 'bg-gray-800/90 backdrop-blur-sm border border-gray-700/50'
-                  : 'bg-white/95 backdrop-blur-sm border border-gray-200/50'
-              }`}
+              className={`p-8 rounded-2xl shadow-xl transition-colors duration-300 ${colors.background.card} border ${colors.border}`}
             >
               <div className="relative mb-6">
                 <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-lg -z-10"></div>
                 <h3
-                  className={`text-2xl font-bold px-4 py-2 transition-colors duration-300 ${
-                    isDarkMode ? 'text-white' : 'text-gray-900'
-                  }`}
+                  className={`text-2xl font-bold px-4 py-2 transition-colors duration-300 ${colors.heading}`}
                 >
                   My Skills & Expertise
                 </h3>
@@ -171,19 +188,12 @@ export default function About() {
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.1 * index }}
                     viewport={{ once: true }}
-                    className={`p-6 rounded-xl hover:shadow-md transition-all duration-300 ${
-                      isDarkMode
-                        ? 'bg-gray-700/80 hover:bg-gray-700/90'
-                        : 'bg-gray-50 hover:bg-gray-100'
-                    }`}
+                    className={`p-6 rounded-xl hover:shadow-md transition-all duration-300 ${colors.background.secondary}`}
                   >
-                    {/* Skill content remains the same */}
                     <div className="flex items-center gap-3 mb-4">
                       {skillGroup.icon}
                       <h4
-                        className={`text-xl font-semibold transition-colors duration-300 ${
-                          isDarkMode ? 'text-white' : 'text-gray-900'
-                        }`}
+                        className={`text-xl font-semibold transition-colors duration-300 ${colors.heading}`}
                       >
                         {skillGroup.category}
                       </h4>
@@ -192,11 +202,7 @@ export default function About() {
                       {skillGroup.items.map((skill) => (
                         <span
                           key={skill}
-                          className={`px-3 py-1 rounded-full text-sm border shadow-sm transition-colors duration-300 ${
-                            isDarkMode
-                              ? 'bg-gray-600/90 text-gray-100 border-gray-500/50'
-                              : 'bg-white text-gray-700 border-gray-200'
-                          }`}
+                          className="px-3 py-1.5 bg-primary/10 text-primary rounded-full text-sm font-medium border border-primary/20 hover:bg-primary/20 transition-all duration-200"
                         >
                           {skill}
                         </span>

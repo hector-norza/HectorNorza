@@ -1,19 +1,22 @@
 import { motion } from 'framer-motion';
 import {
-  EnvelopeIcon,
-  GlobeAltIcon,
-  ArrowTopRightOnSquareIcon,
+  // EnvelopeIcon,
+  // Remove unused imports:
+  // PhoneIcon,
+  // MapPinIcon,
   PaperAirplaneIcon,
+  CheckCircleIcon,
+  ExclamationCircleIcon,
 } from '@heroicons/react/24/outline';
 import { useState, useEffect } from 'react';
 import {
   trackFormSubmission,
   trackExternalLinkClick,
 } from '../utils/analytics';
-import { useTheme } from '../hooks/useTheme';
+import { useContrastColors } from '../hooks/useContrastColors';
 
 export default function Contact() {
-  const { isDarkMode } = useTheme();
+  const colors = useContrastColors();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -32,38 +35,76 @@ export default function Contact() {
       // Announce the status change and focus the status message
       const statusElement = document.getElementById('form-status');
       if (statusElement) {
-        // Force screen reader to announce the change
-        statusElement.setAttribute('aria-live', 'assertive');
-        setTimeout(() => {
-          statusElement.setAttribute('aria-live', 'polite');
-        }, 1000);
+        statusElement.focus();
+        statusElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     }
   }, [submitStatus]);
 
-  const validateField = (name: string, value: string): string => {
-    switch (name) {
-      case 'name': {
-        if (!value.trim()) return 'Name is required';
-        if (value.trim().length < 2)
-          return 'Name must be at least 2 characters';
-        return '';
+  const validateForm = () => {
+    const newErrors: { [key: string]: string } = {};
+
+    if (!formData.name.trim()) {
+      newErrors.name = 'Name is required';
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email address';
+    }
+
+    if (!formData.subject.trim()) {
+      newErrors.subject = 'Subject is required';
+    }
+
+    if (!formData.message.trim()) {
+      newErrors.message = 'Message is required';
+    } else if (formData.message.trim().length < 10) {
+      newErrors.message = 'Message must be at least 10 characters long';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      // Focus first error field
+      const firstErrorField = Object.keys(errors)[0];
+      const errorElement = document.getElementById(firstErrorField);
+      if (errorElement) {
+        errorElement.focus();
       }
-      case 'email': {
-        if (!value.trim()) return 'Email is required';
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(value))
-          return 'Please enter a valid email address';
-        return '';
-      }
-      case 'message': {
-        if (!value.trim()) return 'Message is required';
-        if (value.trim().length < 10)
-          return 'Message must be at least 10 characters';
-        return '';
-      }
-      default:
-        return '';
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
+
+    try {
+      // Create mailto link
+      const subject = encodeURIComponent(formData.subject);
+      const body = encodeURIComponent(
+        `Hello Hector,\n\n${formData.message}\n\nBest regards,\n${formData.name}\n${formData.email}`
+      );
+      const mailtoLink = `mailto:hnorza@proton.me?subject=${subject}&body=${body}`;
+
+      // Open email client
+      window.location.href = mailtoLink;
+
+      // Track successful form submission - fix function call
+      trackFormSubmission('contact');
+
+      setSubmitStatus('success');
+      setFormData({ name: '', email: '', subject: '', message: '' });
+    } catch (error) {
+      console.error('Contact form error:', error);
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -71,468 +112,428 @@ export default function Contact() {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
 
     // Clear error when user starts typing
     if (errors[name]) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: '',
-      }));
-    }
-  };
-
-  const handleBlur = (
-    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-
-    const error = validateField(name, value);
-    setErrors((prev) => ({
-      ...prev,
-      [name]: error,
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    // Validate all fields
-    const newErrors: { [key: string]: string } = {};
-    Object.keys(formData).forEach((key) => {
-      const error = validateField(key, formData[key as keyof typeof formData]);
-      if (error) newErrors[key] = error;
-    });
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      setIsSubmitting(false);
-      // Focus first field with error for accessibility
-      const firstErrorField = Object.keys(newErrors)[0];
-      const errorElement = document.getElementById(firstErrorField);
-      if (errorElement) {
-        errorElement.focus();
-        errorElement.setAttribute('aria-invalid', 'true');
-      }
-      return;
-    }
-
-    try {
-      // Track form submission for analytics
-      trackFormSubmission('contact_form');
-
-      // Create mailto link with form data
-      const subject = encodeURIComponent(
-        formData.subject || 'Contact from Portfolio'
-      );
-      const body = encodeURIComponent(
-        `Hi Hector,\n\n${formData.message}\n\nBest regards,\n${formData.name}\n${formData.email}`
-      );
-      const mailtoLink = `mailto:hnorza@proton.me?subject=${subject}&body=${body}`;
-
-      // Open mailto in a new window instead of redirecting current page
-      window.open(mailtoLink, '_self');
-
-      setSubmitStatus('success');
-      setFormData({ name: '', email: '', subject: '', message: '' });
-      setErrors({});
-    } catch {
-      setSubmitStatus('error');
-    } finally {
-      setIsSubmitting(false);
+      setErrors((prev) => ({ ...prev, [name]: '' }));
     }
   };
 
   return (
     <section
       id="contact"
-      className={`relative py-24 sm:py-32 overflow-hidden transition-colors duration-300 ${
-        isDarkMode
-          ? 'bg-gradient-to-br from-gray-900 via-blue-900/20 to-purple-900/20'
-          : 'bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/20'
-      }`}
+      className={`relative py-24 scroll-mt-24 transition-colors duration-300 ${colors.background.primary}`}
     >
-      {/* Background decorations - Dark mode aware */}
-      <div className="absolute left-0 top-0 w-64 h-64 bg-primary/5 dark:bg-primary/10 rounded-full blur-3xl -z-10 transition-colors duration-300"></div>
-      <div className="absolute right-0 bottom-0 w-96 h-96 bg-secondary/5 dark:bg-secondary/10 rounded-full blur-3xl -z-10 transition-colors duration-300"></div>
+      {/* Background decorations */}
+      <div className="absolute left-0 top-1/4 w-1/3 h-2/3 bg-gradient-to-r from-primary/5 to-transparent -z-10"></div>
+      <div className="absolute right-0 bottom-0 w-64 h-64 bg-secondary/5 rounded-full -z-10 translate-x-1/3 translate-y-1/3"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-3xl text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-3xl md:text-5xl font-bold mb-6 text-gray-900 dark:text-white transition-colors duration-300">
-              Get in Touch
-            </h2>
-            <div className="w-20 h-1.5 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto mb-6"></div>
-            <p className="text-lg md:text-xl leading-8 text-gray-600 dark:text-gray-200 transition-colors duration-300">
-              I'm always excited to connect with fellow developers, product
-              professionals, and community builders. Whether you want to discuss
-              cloud development, product management, or community initiatives,
-              let's chat!
-            </p>
-          </motion.div>
-        </div>
-
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
+          transition={{ duration: 0.7 }}
           viewport={{ once: true }}
-          className="relative bg-white dark:bg-gray-800/95 backdrop-blur-sm border border-gray-100 dark:border-gray-700/50 rounded-2xl shadow-xl overflow-hidden max-w-4xl mx-auto transition-colors duration-300"
+          className="text-center mb-16"
         >
-          <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary to-secondary"></div>
-          <div className="grid grid-cols-1 md:grid-cols-2">
-            {/* Left column - Contact Form */}
-            <div className="p-8 md:p-12">
-              <form
-                onSubmit={handleSubmit}
-                className="space-y-6"
-                noValidate
-                aria-labelledby="contact-form-heading"
+          <h2
+            className={`text-3xl md:text-5xl font-bold mb-6 transition-colors duration-300 ${colors.heading}`}
+          >
+            Let's Connect
+          </h2>
+          <div className="w-20 h-1.5 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto mb-6"></div>
+          <p
+            className={`text-lg md:text-xl max-w-3xl mx-auto leading-relaxed transition-colors duration-300 ${colors.body}`}
+          >
+            I'm always excited to discuss new opportunities, collaborate on
+            projects, or simply chat about product management, community
+            building, and responsible AI. Let's start a conversation!
+          </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+          {/* Contact Information */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7 }}
+            viewport={{ once: true }}
+            className="space-y-8"
+          >
+            <div>
+              <h3
+                className={`text-2xl font-bold mb-6 transition-colors duration-300 ${colors.heading}`}
               >
-                <h3
-                  id="contact-form-heading"
-                  className="text-2xl font-bold text-gray-900 dark:text-white mb-8 transition-colors duration-300"
-                >
-                  Send me a message
-                </h3>
-
-                {/* Live region for form status announcements */}
-                <div
-                  role="status"
-                  aria-live="polite"
-                  aria-atomic="true"
-                  className="sr-only"
-                  id="form-status"
-                >
-                  {isSubmitting && 'Preparing to send your message...'}
-                  {submitStatus === 'success' &&
-                    'Message prepared successfully! Your email client should open.'}
-                  {submitStatus === 'error' &&
-                    'There was an error preparing your message. Please try again.'}
-                </div>
-
-                {/* Form instructions for screen readers */}
-                <div className="sr-only" id="form-instructions">
-                  This contact form has 4 fields. Name and message are required.
-                  After submitting, your email client will open with a
-                  pre-filled message ready to send.
-                </div>
-
-                <fieldset
-                  className="space-y-6"
-                  aria-describedby="form-instructions"
-                >
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.1 }}
-                    viewport={{ once: true }}
-                  >
-                    <label
-                      htmlFor="name"
-                      className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2 transition-colors duration-300"
-                    >
-                      Name *
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      required
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      onBlur={handleBlur}
-                      aria-invalid={errors.name ? 'true' : 'false'}
-                      aria-describedby={errors.name ? 'name-error' : undefined}
-                      className={`w-full px-4 py-3 bg-white dark:bg-gray-700 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors duration-300 ${
-                        errors.name
-                          ? 'border-red-300 bg-red-50 dark:border-red-500 dark:bg-red-900/20'
-                          : 'border-gray-300 dark:border-gray-600'
-                      }`}
-                      placeholder="Your full name"
-                    />
-                    {errors.name && (
-                      <p
-                        id="name-error"
-                        role="alert"
-                        className="mt-1 text-sm text-red-600 dark:text-red-400"
-                      >
-                        {errors.name}
-                      </p>
-                    )}
-                  </motion.div>
-
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                    viewport={{ once: true }}
-                  >
-                    <label
-                      htmlFor="email"
-                      className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2 transition-colors duration-300"
-                    >
-                      Email *
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      required
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      onBlur={handleBlur}
-                      aria-invalid={errors.email ? 'true' : 'false'}
-                      aria-describedby={
-                        errors.email ? 'email-error' : undefined
-                      }
-                      className={`w-full px-4 py-3 bg-white dark:bg-gray-700 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors duration-300 ${
-                        errors.email
-                          ? 'border-red-300 bg-red-50 dark:border-red-500 dark:bg-red-900/20'
-                          : 'border-gray-300 dark:border-gray-600'
-                      }`}
-                      placeholder="your.email@example.com"
-                    />
-                    {errors.email && (
-                      <p
-                        id="email-error"
-                        role="alert"
-                        className="mt-1 text-sm text-red-600 dark:text-red-400"
-                      >
-                        {errors.email}
-                      </p>
-                    )}
-                  </motion.div>
-
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.3 }}
-                    viewport={{ once: true }}
-                  >
-                    <label
-                      htmlFor="subject"
-                      className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2 transition-colors duration-300"
-                    >
-                      Subject
-                    </label>
-                    <input
-                      type="text"
-                      id="subject"
-                      name="subject"
-                      value={formData.subject}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors duration-300"
-                      placeholder="What would you like to discuss?"
-                    />
-                  </motion.div>
-
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.4 }}
-                    viewport={{ once: true }}
-                  >
-                    <label
-                      htmlFor="message"
-                      className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2 transition-colors duration-300"
-                    >
-                      Message *
-                    </label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      required
-                      rows={5}
-                      value={formData.message}
-                      onChange={handleInputChange}
-                      onBlur={handleBlur}
-                      aria-invalid={errors.message ? 'true' : 'false'}
-                      aria-describedby={
-                        errors.message ? 'message-error' : undefined
-                      }
-                      className={`w-full px-4 py-3 bg-white dark:bg-gray-700 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors duration-300 resize-none ${
-                        errors.message
-                          ? 'border-red-300 bg-red-50 dark:border-red-500 dark:bg-red-900/20'
-                          : 'border-gray-300 dark:border-gray-600'
-                      }`}
-                      placeholder="Tell me about your project, question, or just say hello!"
-                    />
-                    {errors.message && (
-                      <p
-                        id="message-error"
-                        role="alert"
-                        className="mt-1 text-sm text-red-600 dark:text-red-400"
-                      >
-                        {errors.message}
-                      </p>
-                    )}
-                  </motion.div>
-
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.5 }}
-                    viewport={{ once: true }}
-                  >
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white font-medium rounded-lg hover:from-secondary hover:to-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      <PaperAirplaneIcon className="w-5 h-5" />
-                      {isSubmitting
-                        ? 'Opening email client...'
-                        : 'Send Message'}
-                    </button>
-                  </motion.div>
-                </fieldset>
-
-                {submitStatus === 'success' && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-lg transition-colors duration-300"
-                  >
-                    <p className="text-green-800 dark:text-green-200 text-sm">
-                      Your email client should open with the message ready to
-                      send!
-                    </p>
-                  </motion.div>
-                )}
-
-                {submitStatus === 'error' && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg transition-colors duration-300"
-                  >
-                    <p className="text-red-800 dark:text-red-200 text-sm">
-                      Something went wrong. Please try again or contact me
-                      directly.
-                    </p>
-                  </motion.div>
-                )}
-              </form>
+                Get in Touch
+              </h3>
+              <p
+                className={`leading-relaxed mb-8 transition-colors duration-300 ${colors.body}`}
+              >
+                Whether you're looking to discuss a potential collaboration,
+                need advice on product strategy, or want to explore how we can
+                build better communities together, I'd love to hear from you.
+              </p>
             </div>
 
-            {/* Right column - Contact Info */}
-            <div className="p-8 md:p-12 bg-gray-50 dark:bg-gray-700/50 transition-colors duration-300">
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-8 transition-colors duration-300">
-                Let's Connect
-              </h3>
-
-              <div className="space-y-8">
-                <motion.div
-                  className="flex items-start gap-4"
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: 0.3 }}
-                  viewport={{ once: true }}
-                >
-                  <div className="bg-white dark:bg-gray-600 p-3 rounded-lg shadow-sm transition-colors duration-300">
-                    <EnvelopeIcon className="w-6 h-6 text-primary" />
-                  </div>
-                  <div>
-                    <h4 className="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">
-                      Email
-                    </h4>
-                    <p className="text-gray-600 dark:text-gray-200 transition-colors duration-300">
-                      Use the form to get in touch, or reach out directly for
-                      urgent matters.
-                    </p>
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  className="flex items-start gap-4"
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: 0.4 }}
-                  viewport={{ once: true }}
-                >
-                  <div className="bg-white dark:bg-gray-600 p-3 rounded-lg shadow-sm transition-colors duration-300">
-                    <GlobeAltIcon className="w-6 h-6 text-primary" />
-                  </div>
-                  <div>
-                    <h4 className="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">
-                      Social Profiles
-                    </h4>
-                    <div className="mt-2 space-y-2">
-                      <a
-                        href="https://github.com/hector-norza"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 text-gray-600 dark:text-gray-200 hover:text-primary transition-colors duration-300"
-                        onClick={() =>
-                          trackExternalLinkClick(
-                            'https://github.com/hector-norza'
-                          )
-                        }
-                      >
-                        <svg
-                          className="w-5 h-5"
-                          viewBox="0 0 24 24"
-                          fill="currentColor"
-                        >
-                          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-                        </svg>
-                        GitHub <ArrowTopRightOnSquareIcon className="w-4 h-4" />
-                      </a>
-                      <a
-                        href="https://www.linkedin.com/in/norza/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 text-gray-600 dark:text-gray-200 hover:text-primary transition-colors duration-300"
-                        onClick={() =>
-                          trackExternalLinkClick(
-                            'https://www.linkedin.com/in/norza/'
-                          )
-                        }
-                      >
-                        <svg
-                          className="w-5 h-5"
-                          viewBox="0 0 24 24"
-                          fill="currentColor"
-                        >
-                          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z" />
-                        </svg>
-                        LinkedIn{' '}
-                        <ArrowTopRightOnSquareIcon className="w-4 h-4" />
-                      </a>
-                    </div>
-                  </div>
-                </motion.div>
-              </div>
-
+            <div className="space-y-6">
+              {/* LinkedIn */}
               <motion.div
-                className="mt-12"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.6 }}
-                viewport={{ once: true }}
+                className="flex items-center space-x-4"
+                whileHover={{ x: 5 }}
+                transition={{ duration: 0.2 }}
               >
-                <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-3 transition-colors duration-300">
-                  Let's connect and collaborate!
-                </h4>
-                <p className="text-gray-600 dark:text-gray-200 transition-colors duration-300">
-                  Whether you're interested in cloud development, product
-                  management insights, or community building strategies, I'm
-                  always open to meaningful conversations and new opportunities.
-                </p>
+                <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
+                  <svg
+                    className="w-6 h-6 text-white"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                  </svg>
+                </div>
+                <div>
+                  <h4
+                    className={`font-semibold transition-colors duration-300 ${colors.heading}`}
+                  >
+                    LinkedIn
+                  </h4>
+                  <a
+                    href="https://www.linkedin.com/in/norza/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() =>
+                      trackExternalLinkClick(
+                        'https://www.linkedin.com/in/norza/'
+                      )
+                    }
+                    className={`transition-colors duration-300 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded ${colors.interactive}`}
+                    aria-label="Visit Hector's LinkedIn profile (opens in new tab)"
+                  >
+                    linkedin.com/in/norza
+                  </a>
+                </div>
+              </motion.div>
+
+              {/* X (Twitter) */}
+              <motion.div
+                className="flex items-center space-x-4"
+                whileHover={{ x: 5 }}
+                transition={{ duration: 0.2 }}
+              >
+                <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
+                  <svg
+                    className="w-6 h-6 text-white"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932L18.901 1.153ZM17.61 20.644h2.039L6.486 3.24H4.298L17.61 20.644Z" />
+                  </svg>
+                </div>
+                <div>
+                  <h4
+                    className={`font-semibold transition-colors duration-300 ${colors.heading}`}
+                  >
+                    X (Twitter)
+                  </h4>
+                  <a
+                    href="https://x.com/hectorOnCloud"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() =>
+                      trackExternalLinkClick('https://x.com/hectorOnCloud')
+                    }
+                    className={`transition-colors duration-300 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded ${colors.interactive}`}
+                    aria-label="Follow Hector on X (formerly Twitter) (opens in new tab)"
+                  >
+                    @hectorOnCloud
+                  </a>
+                </div>
               </motion.div>
             </div>
-          </div>
-        </motion.div>
+
+            {/* Additional CTA */}
+            <div
+              className={`p-6 rounded-xl border transition-colors duration-300 ${colors.background.secondary} ${colors.border}`}
+            >
+              <h4
+                className={`font-semibold mb-2 transition-colors duration-300 ${colors.heading}`}
+              >
+                Quick Response Time
+              </h4>
+              <p
+                className={`text-sm transition-colors duration-300 ${colors.body}`}
+              >
+                I typically respond to emails within 24-48 hours. For urgent
+                matters, feel free to reach out via LinkedIn for a quicker
+                response.
+              </p>
+            </div>
+          </motion.div>
+
+          {/* Contact Form */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7 }}
+            viewport={{ once: true }}
+            className={`p-8 rounded-2xl shadow-xl transition-colors duration-300 ${colors.background.card} border ${colors.border}`}
+          >
+            <h3
+              className={`text-2xl font-bold mb-6 transition-colors duration-300 ${colors.heading}`}
+            >
+              Send a Message
+            </h3>
+
+            {/* Status Message */}
+            {submitStatus !== 'idle' && (
+              <motion.div
+                id="form-status"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`mb-6 p-4 rounded-lg flex items-center space-x-3 transition-colors duration-300 ${
+                  submitStatus === 'success'
+                    ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800'
+                    : 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800'
+                }`}
+                role="alert"
+                aria-live="polite"
+                tabIndex={-1}
+              >
+                {submitStatus === 'success' ? (
+                  <CheckCircleIcon
+                    className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0"
+                    aria-hidden="true"
+                  />
+                ) : (
+                  <ExclamationCircleIcon
+                    className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0"
+                    aria-hidden="true"
+                  />
+                )}
+                <div>
+                  <p
+                    className={`font-medium ${
+                      submitStatus === 'success'
+                        ? 'text-green-800 dark:text-green-200'
+                        : 'text-red-800 dark:text-red-200'
+                    }`}
+                  >
+                    {submitStatus === 'success'
+                      ? 'Message prepared successfully!'
+                      : 'There was an error preparing your message.'}
+                  </p>
+                  <p
+                    className={`text-sm ${
+                      submitStatus === 'success'
+                        ? 'text-green-700 dark:text-green-300'
+                        : 'text-red-700 dark:text-red-300'
+                    }`}
+                  >
+                    {submitStatus === 'success'
+                      ? 'Your email client should have opened with the message ready to send.'
+                      : 'Please try again or contact me directly at hello@hectornorza.com'}
+                  </p>
+                </div>
+              </motion.div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+              {/* Name Field */}
+              <div>
+                <label
+                  htmlFor="name"
+                  className={`block text-sm font-medium mb-2 transition-colors duration-300 ${colors.secondary}`}
+                >
+                  Name *
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  required
+                  aria-invalid={errors.name ? 'true' : 'false'}
+                  aria-describedby={errors.name ? 'name-error' : undefined}
+                  className={`mt-1 block w-full px-4 py-3 border rounded-lg shadow-sm focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 ${
+                    errors.name
+                      ? 'border-red-500 focus:ring-red-500'
+                      : colors.border
+                  } ${colors.background.primary} ${colors.body} ${colors.placeholder}`}
+                  placeholder="Your full name"
+                />
+                {errors.name && (
+                  <p
+                    id="name-error"
+                    role="alert"
+                    className="mt-1 text-sm text-red-600 dark:text-red-400"
+                  >
+                    {errors.name}
+                  </p>
+                )}
+              </div>
+
+              {/* Email Field */}
+              <div>
+                <label
+                  htmlFor="email"
+                  className={`block text-sm font-medium mb-2 transition-colors duration-300 ${colors.secondary}`}
+                >
+                  Email *
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  required
+                  aria-invalid={errors.email ? 'true' : 'false'}
+                  aria-describedby={errors.email ? 'email-error' : undefined}
+                  className={`mt-1 block w-full px-4 py-3 border rounded-lg shadow-sm focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 ${
+                    errors.email
+                      ? 'border-red-500 focus:ring-red-500'
+                      : colors.border
+                  } ${colors.background.primary} ${colors.body} ${colors.placeholder}`}
+                  placeholder="your.email@example.com"
+                />
+                {errors.email && (
+                  <p
+                    id="email-error"
+                    role="alert"
+                    className="mt-1 text-sm text-red-600 dark:text-red-400"
+                  >
+                    {errors.email}
+                  </p>
+                )}
+              </div>
+
+              {/* Subject Field */}
+              <div>
+                <label
+                  htmlFor="subject"
+                  className={`block text-sm font-medium mb-2 transition-colors duration-300 ${colors.secondary}`}
+                >
+                  Subject *
+                </label>
+                <input
+                  type="text"
+                  id="subject"
+                  name="subject"
+                  value={formData.subject}
+                  onChange={handleInputChange}
+                  required
+                  aria-invalid={errors.subject ? 'true' : 'false'}
+                  aria-describedby={
+                    errors.subject ? 'subject-error' : undefined
+                  }
+                  className={`mt-1 block w-full px-4 py-3 border rounded-lg shadow-sm focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 ${
+                    errors.subject
+                      ? 'border-red-500 focus:ring-red-500'
+                      : colors.border
+                  } ${colors.background.primary} ${colors.body} ${colors.placeholder}`}
+                  placeholder="What would you like to discuss?"
+                />
+                {errors.subject && (
+                  <p
+                    id="subject-error"
+                    role="alert"
+                    className="mt-1 text-sm text-red-600 dark:text-red-400"
+                  >
+                    {errors.subject}
+                  </p>
+                )}
+              </div>
+
+              {/* Message Field */}
+              <div>
+                <label
+                  htmlFor="message"
+                  className={`block text-sm font-medium mb-2 transition-colors duration-300 ${colors.secondary}`}
+                >
+                  Message *
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  rows={6}
+                  value={formData.message}
+                  onChange={handleInputChange}
+                  required
+                  aria-invalid={errors.message ? 'true' : 'false'}
+                  aria-describedby={
+                    errors.message ? 'message-error' : 'message-help'
+                  }
+                  className={`mt-1 block w-full px-4 py-3 border rounded-lg shadow-sm focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 resize-none ${
+                    errors.message
+                      ? 'border-red-500 focus:ring-red-500'
+                      : colors.border
+                  } ${colors.background.primary} ${colors.body} ${colors.placeholder}`}
+                  placeholder="Tell me about your project, idea, or how we can collaborate..."
+                />
+                <p
+                  id="message-help"
+                  className={`mt-1 text-sm transition-colors duration-300 ${colors.body}`}
+                >
+                  Minimum 10 characters required
+                </p>
+                {errors.message && (
+                  <p
+                    id="message-error"
+                    role="alert"
+                    className="mt-1 text-sm text-red-600 dark:text-red-400"
+                  >
+                    {errors.message}
+                  </p>
+                )}
+              </div>
+
+              {/* Submit Button */}
+              <motion.button
+                type="submit"
+                disabled={isSubmitting}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className={`w-full flex items-center justify-center px-6 py-4 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300 ${
+                  isSubmitting
+                    ? 'opacity-50 cursor-not-allowed'
+                    : 'hover:shadow-lg transform hover:-translate-y-0.5'
+                }`}
+                aria-label={
+                  isSubmitting ? 'Preparing message...' : 'Send message'
+                }
+              >
+                {isSubmitting ? (
+                  <>
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3"></div>
+                    Preparing Message...
+                  </>
+                ) : (
+                  <>
+                    <PaperAirplaneIcon
+                      className="w-5 h-5 mr-2"
+                      aria-hidden="true"
+                    />
+                    Send Message
+                  </>
+                )}
+              </motion.button>
+            </form>
+
+            {/* Form Footer */}
+            <div className={`mt-6 pt-6 border-t text-center ${colors.border}`}>
+              <p
+                className={`text-sm transition-colors duration-300 ${colors.body}`}
+              >
+                By sending a message, you agree to be contacted via email
+                regarding your inquiry.
+              </p>
+            </div>
+          </motion.div>
+        </div>
       </div>
     </section>
   );

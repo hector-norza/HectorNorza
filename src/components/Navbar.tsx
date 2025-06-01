@@ -3,6 +3,7 @@ import { Dialog, DialogPanel } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useTheme } from '../hooks/useTheme';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useContrastColors } from '../hooks/useContrastColors';
 
 const navigation = [
   { name: 'About', href: '/#about' },
@@ -16,6 +17,7 @@ export default function Navbar() {
   const { isDarkMode } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
+  const colors = useContrastColors();
 
   const handleNavClick = (e: React.MouseEvent, href: string) => {
     e.preventDefault();
@@ -71,11 +73,7 @@ export default function Navbar() {
         <div className="flex lg:hidden">
           <button
             type="button"
-            className={`-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 transition-colors duration-300 ${
-              isDarkMode
-                ? 'text-gray-300 hover:text-white'
-                : 'text-gray-700 hover:text-gray-900'
-            }`}
+            className={`inline-flex items-center justify-center p-2 rounded-md transition-colors duration-300 ${colors.interactive}`}
             onClick={() => setMobileMenuOpen(true)}
           >
             <span className="sr-only">Open main menu</span>
@@ -153,11 +151,7 @@ export default function Navbar() {
                   <button
                     key={item.name}
                     onClick={(e) => handleNavClick(e, item.href)}
-                    className={`-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 transition-colors duration-300 w-full text-left ${
-                      isDarkMode
-                        ? 'text-gray-300 hover:bg-gray-800 hover:text-white'
-                        : 'text-gray-900 hover:bg-gray-50'
-                    }`}
+                    className={`block px-3 py-2 text-base font-medium transition-colors duration-300 ${colors.interactive}`}
                   >
                     {item.name}
                   </button>

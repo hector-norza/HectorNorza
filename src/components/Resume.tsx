@@ -6,7 +6,7 @@ import {
   ChartBarIcon,
   CalendarIcon,
 } from '@heroicons/react/24/outline';
-import { useTheme } from '../hooks/useTheme'; // Fix this import
+import { useContrastColors } from '../hooks/useContrastColors';
 
 // Keep all your existing data arrays exactly the same...
 const experiences = [
@@ -60,8 +60,8 @@ const experiences = [
     period: '2020 - 2021',
     location: 'Seattle, WA',
     description: [
-      ' Delivered 4+ web applications for global events, managing agile workflows and aligning diverse stakeholder expectations, a key skill for community program management',
-      ' Launched a sales tool as both PM and UX/UI designer, improving sales efficiency and enhancing user satisfaction through a user-centric design approach.',
+      'Delivered 4+ web applications for global events, managing agile workflows and aligning diverse stakeholder expectations, a key skill for community program management',
+      'Launched a sales tool as both PM and UX/UI designer, improving sales efficiency and enhancing user satisfaction through a user-centric design approach.',
     ],
     technologies: [
       'React',
@@ -166,7 +166,7 @@ const achievements = [
   {
     name: 'Azure SDK Monthly Release Blog Author',
     description:
-      ' Authored and published monthly technical blog posts detailing the latest Azure SDK releases, ensuring the developer community remained informed of new features, improvements, and best practices',
+      'Authored and published monthly technical blog posts detailing the latest Azure SDK releases, ensuring the developer community remained informed of new features, improvements, and best practices',
     year: '2022 - Current',
     impact: 'Weekly engagement with of Azure developer Community',
   },
@@ -224,398 +224,290 @@ const skills = [
 ];
 
 export default function Resume() {
-  const { isDarkMode } = useTheme();
+  const colors = useContrastColors();
 
   return (
     <section
       id="resume"
-      className={`py-24 sm:py-32 transition-colors duration-300 ${
-        isDarkMode
-          ? 'bg-gradient-to-br from-gray-900 via-blue-900/20 to-purple-900/20'
-          : 'bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/20'
-      }`}
+      className={`relative py-24 scroll-mt-24 transition-colors duration-300 ${colors.background.primary}`}
     >
       {/* Background decorations */}
-      <div className="absolute top-20 right-10 w-72 h-72 bg-primary/5 dark:bg-primary/10 rounded-full blur-3xl -z-10 transition-colors duration-300"></div>
-      <div className="absolute bottom-20 left-10 w-96 h-96 bg-secondary/5 dark:bg-secondary/10 rounded-full blur-3xl -z-10 transition-colors duration-300"></div>
+      <div className="absolute left-0 top-1/4 w-1/3 h-2/3 bg-gradient-to-r from-primary/5 to-transparent -z-10"></div>
+      <div className="absolute right-0 bottom-0 w-64 h-64 bg-secondary/5 rounded-full -z-10 translate-x-1/3 translate-y-1/3"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center mb-16">
+        {/* Section Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <h2
+            className={`text-3xl md:text-5xl font-bold mb-6 transition-colors duration-300 ${colors.heading}`}
+          >
+            Experience
+          </h2>
+          <div className="w-20 h-1.5 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto mb-6"></div>
+          <p
+            className={`text-lg md:text-xl max-w-3xl mx-auto leading-relaxed transition-colors duration-300 ${colors.body}`}
+          >
+            A journey through product management, community building, and
+            responsible AI development.
+          </p>
+        </motion.div>
+
+        <div className="space-y-16">
+          {/* Professional Experience */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl md:text-5xl font-bold mb-6 text-gray-900 dark:text-white transition-colors duration-300">
-              Experience
-            </h2>
-            <div className="w-20 h-1.5 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto mb-6"></div>
-            <p className="text-lg md:text-xl text-gray-600 dark:text-gray-200 max-w-2xl mx-auto transition-colors duration-300">
-              Driven by a passion for community building, I transitioned into
-              product management, a role that now provides strategic tools to
-              cultivate and scale even more vibrant and robust communities.
-            </p>
+            <div className="flex items-center mb-8">
+              <BriefcaseIcon className="w-8 h-8 text-primary mr-4" />
+              <h3
+                className={`text-2xl font-bold transition-colors duration-300 ${colors.heading}`}
+              >
+                Professional Experience
+              </h3>
+            </div>
+
+            <div className="space-y-8">
+              {experiences.map((exp, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className={`border-l-4 border-primary pl-6 transition-colors duration-300 ${colors.background.secondary} rounded-r-lg p-6`}
+                >
+                  <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-4">
+                    <h4
+                      className={`text-xl font-semibold transition-colors duration-300 ${colors.heading}`}
+                    >
+                      {exp.title}
+                    </h4>
+                    <span
+                      className={`text-sm font-medium transition-colors duration-300 ${colors.secondary} flex items-center`}
+                    >
+                      <CalendarIcon className="w-4 h-4 mr-1" />
+                      {exp.period}
+                    </span>
+                  </div>
+                  <p
+                    className={`font-medium mb-2 transition-colors duration-300 ${colors.secondary}`}
+                  >
+                    {exp.company} • {exp.location}
+                  </p>
+                  <ul
+                    className={`space-y-2 mb-4 transition-colors duration-300 ${colors.body}`}
+                  >
+                    {exp.description.map((item, idx) => (
+                      <li key={idx} className="leading-relaxed">
+                        • {item}
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="flex flex-wrap gap-2">
+                    {exp.technologies.map((tech, idx) => (
+                      <span
+                        key={idx}
+                        className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
-        </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-          {/* Left Column - Experience & Education */}
-          <div className="lg:col-span-2 space-y-12">
-            {/* Experience Section */}
-            <div>
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5 }}
-                viewport={{ once: true }}
-                className="flex items-center gap-3 mb-8"
+          {/* Education */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.4 }}
+            viewport={{ once: true }}
+          >
+            <div className="flex items-center mb-8">
+              <AcademicCapIcon className="w-8 h-8 text-primary mr-4" />
+              <h3
+                className={`text-2xl font-bold transition-colors duration-300 ${colors.heading}`}
               >
-                <div className="p-3 bg-gradient-to-r from-primary to-secondary rounded-lg text-white">
-                  <BriefcaseIcon className="w-6 h-6" />
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white transition-colors duration-300">
-                  Professional Experience
-                </h3>
-              </motion.div>
-
-              <div className="space-y-8">
-                {experiences.map((exp, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    viewport={{ once: true }}
-                    className="relative bg-white dark:bg-gray-800/95 p-6 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700/50 hover:shadow-xl transition-all duration-300"
-                  >
-                    <div className="absolute left-0 top-0 w-1 h-full bg-gradient-to-b from-primary to-secondary rounded-l-xl"></div>
-                    <div className="ml-4">
-                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
-                        <h4 className="text-xl font-semibold text-gray-900 dark:text-white transition-colors duration-300">
-                          {exp.title}
-                        </h4>
-                        <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-300 transition-colors duration-300">
-                          <CalendarIcon className="w-4 h-4" />
-                          {exp.period}
-                        </div>
-                      </div>
-                      <div className="text-primary font-medium mb-2">
-                        {exp.company} • {exp.location}
-                      </div>
-                      <ul className="space-y-2 text-gray-600 dark:text-gray-200 mb-4 transition-colors duration-300">
-                        {exp.description.map((item, i) => (
-                          <li key={i} className="flex items-start gap-2">
-                            <span className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0"></span>
-                            {item}
-                          </li>
-                        ))}
-                      </ul>
-                      <div className="flex flex-wrap gap-2">
-                        {exp.technologies.map((tech, i) => (
-                          <span
-                            key={i}
-                            className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm rounded-full transition-colors duration-300"
-                          >
-                            {tech}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
+                Education
+              </h3>
             </div>
 
-            {/* Education Section */}
-            <div>
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5 }}
-                viewport={{ once: true }}
-                className="flex items-center gap-3 mb-8"
-              >
-                <div className="p-3 bg-gradient-to-r from-green-500 to-blue-500 rounded-lg text-white">
-                  <AcademicCapIcon className="w-6 h-6" />
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white transition-colors duration-300">
-                  Education
-                </h3>
-              </motion.div>
-
-              <div className="space-y-6">
-                {education.map((edu, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    viewport={{ once: true }}
-                    className="bg-white dark:bg-gray-800/95 p-6 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700/50 transition-colors duration-300"
+            <div className="space-y-6">
+              {education.map((edu, index) => (
+                <div
+                  key={index}
+                  className={`border-l-4 border-secondary pl-6 transition-colors duration-300 ${colors.background.secondary} rounded-r-lg p-6`}
+                >
+                  <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-4">
+                    <h4
+                      className={`text-xl font-semibold transition-colors duration-300 ${colors.heading}`}
+                    >
+                      {edu.degree}
+                    </h4>
+                    <span
+                      className={`text-sm font-medium transition-colors duration-300 ${colors.secondary}`}
+                    >
+                      {edu.period}
+                    </span>
+                  </div>
+                  <p
+                    className={`font-medium mb-3 transition-colors duration-300 ${colors.secondary}`}
                   >
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
-                      <h4 className="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">
-                        {edu.degree}
-                      </h4>
-                      <span className="text-sm text-gray-500 dark:text-gray-300 transition-colors duration-300">
-                        {edu.period}
-                      </span>
-                    </div>
-                    <div className="text-primary font-medium mb-2">
-                      {edu.school}
-                    </div>
-                    <div className="text-gray-600 dark:text-gray-200 mb-3 transition-colors duration-300">
-                      GPA: {edu.gpa}
-                    </div>
-                    <div className="space-y-1">
-                      {edu.achievements.map((achievement, i) => (
-                        <div
-                          key={i}
-                          className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-200 transition-colors duration-300"
-                        >
-                          <TrophyIcon className="w-4 h-4 text-yellow-500" />
-                          {achievement}
-                        </div>
-                      ))}
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
+                    {edu.school} • {edu.gpa}
+                  </p>
+                  <ul
+                    className={`space-y-1 transition-colors duration-300 ${colors.body}`}
+                  >
+                    {edu.achievements.map((achievement, idx) => (
+                      <li key={idx}>• {achievement}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
             </div>
-          </div>
+          </motion.div>
 
-          {/* Right Column - Certifications & Achievements */}
-          <div className="space-y-12">
-            {/* Certifications */}
-            <div>
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5 }}
-                viewport={{ once: true }}
-                className="flex items-center gap-3 mb-8"
+          {/* Certifications */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <div className="flex items-center mb-8">
+              <ChartBarIcon className="w-8 h-8 text-primary mr-4" />
+              <h3
+                className={`text-2xl font-bold transition-colors duration-300 ${colors.heading}`}
               >
-                <div className="p-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg text-white">
-                  <TrophyIcon className="w-6 h-6" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white transition-colors duration-300">
-                  Certifications
-                </h3>
-              </motion.div>
-
-              <div className="space-y-4">
-                {certifications.map((cert, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    viewport={{ once: true }}
-                    className="bg-white dark:bg-gray-800/95 p-4 rounded-lg shadow-md border border-gray-100 dark:border-gray-700/50 hover:shadow-lg transition-all duration-300"
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="text-2xl">{cert.icon}</span>
-                      <div>
-                        <h4 className="font-semibold text-sm text-gray-900 dark:text-white transition-colors duration-300">
-                          {cert.name}
-                        </h4>
-                        <p className="text-sm text-gray-600 dark:text-gray-200 transition-colors duration-300">
-                          {cert.issuer}
-                        </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-300 transition-colors duration-300">
-                          {cert.date}
-                        </p>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
+                Certifications
+              </h3>
             </div>
 
-            {/* Key Achievements */}
-            <div>
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5 }}
-                viewport={{ once: true }}
-                className="flex items-center gap-3 mb-8"
-              >
-                <div className="p-3 bg-gradient-to-r from-orange-500 to-red-500 rounded-lg text-white">
-                  <ChartBarIcon className="w-6 h-6" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white transition-colors duration-300">
-                  Key Achievements
-                </h3>
-              </motion.div>
-
-              <div className="space-y-6">
-                {achievements.map((achievement, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    viewport={{ once: true }}
-                    className="bg-white dark:bg-gray-800/95 p-5 rounded-lg shadow-md border border-gray-100 dark:border-gray-700/50 transition-colors duration-300"
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {certifications.map((cert, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className={`p-6 rounded-lg transition-colors duration-300 ${colors.background.secondary} border border-gray-200 dark:border-gray-700`}
+                >
+                  <div className="flex items-start justify-between mb-3">
+                    <span className="text-2xl">{cert.icon}</span>
+                    <span
+                      className={`text-sm transition-colors duration-300 ${colors.secondary}`}
+                    >
+                      {cert.date}
+                    </span>
+                  </div>
+                  <h4
+                    className={`font-semibold mb-2 transition-colors duration-300 ${colors.heading}`}
                   >
-                    <div className="flex items-center gap-2 mb-2">
-                      <TrophyIcon className="w-5 h-5 text-yellow-500" />
-                      <span className="text-sm text-gray-500 dark:text-gray-300 transition-colors duration-300">
-                        {achievement.year}
-                      </span>
-                    </div>
-                    <h4 className="font-semibold text-gray-900 dark:text-white mb-2 transition-colors duration-300">
+                    {cert.name}
+                  </h4>
+                  <p
+                    className={`text-sm transition-colors duration-300 ${colors.body}`}
+                  >
+                    {cert.issuer}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Achievements */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <div className="flex items-center mb-8">
+              <TrophyIcon className="w-8 h-8 text-primary mr-4" />
+              <h3
+                className={`text-2xl font-bold transition-colors duration-300 ${colors.heading}`}
+              >
+                Key Achievements
+              </h3>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {achievements.map((achievement, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className={`p-6 rounded-lg transition-colors duration-300 ${colors.background.secondary} border border-gray-200 dark:border-gray-700`}
+                >
+                  <div className="flex justify-between items-start mb-3">
+                    <h4
+                      className={`font-semibold transition-colors duration-300 ${colors.heading}`}
+                    >
                       {achievement.name}
                     </h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-200 mb-3 transition-colors duration-300">
-                      {achievement.description}
-                    </p>
-                    <div className="text-sm font-medium text-primary">
-                      {achievement.impact}
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
+                    <span
+                      className={`text-sm transition-colors duration-300 ${colors.secondary}`}
+                    >
+                      {achievement.year}
+                    </span>
+                  </div>
+                  <p
+                    className={`text-sm mb-3 leading-relaxed transition-colors duration-300 ${colors.body}`}
+                  >
+                    {achievement.description}
+                  </p>
+                  <p
+                    className={`text-xs font-medium transition-colors duration-300 ${colors.secondary}`}
+                  >
+                    Impact: {achievement.impact}
+                  </p>
+                </motion.div>
+              ))}
             </div>
+          </motion.div>
 
-            {/* Impact Summary - Updated with darker colors */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-              className={`p-8 rounded-2xl shadow-xl transition-colors duration-300 ${
-                isDarkMode
-                  ? 'bg-gray-800/90 backdrop-blur-sm border border-gray-700/50'
-                  : 'bg-white/95 backdrop-blur-sm border border-gray-200/50'
-              }`}
-            >
-              <div className="mb-6">
-                <h4
-                  className={`text-xl font-bold text-center transition-colors duration-300 ${
-                    isDarkMode ? 'text-white' : 'text-gray-900'
-                  }`}
-                >
-                  Impact <span className="text-primary">Summary</span>
-                </h4>
-                <div className="w-16 h-0.5 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto mt-2"></div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <motion.div
-                  className={`text-center p-4 rounded-lg transition-all duration-300 ${
-                    isDarkMode
-                      ? 'bg-gray-700/80 border border-primary/30 hover:bg-gray-700/90'
-                      : 'bg-gray-50/80 border border-primary/20 hover:bg-gray-50'
-                  }`}
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <div className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-600">
-                    7+
-                  </div>
-                  <div
-                    className={`text-xs transition-colors duration-300 ${
-                      isDarkMode ? 'text-gray-300' : 'text-gray-600'
-                    }`}
-                  >
-                    Years Experience
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  className={`text-center p-4 rounded-lg transition-all duration-300 ${
-                    isDarkMode
-                      ? 'bg-gray-700/80 border border-secondary/30 hover:bg-gray-700/90'
-                      : 'bg-gray-50/80 border border-secondary/20 hover:bg-gray-50'
-                  }`}
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <div className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-secondary to-purple-600">
-                    3+
-                  </div>
-                  <div
-                    className={`text-xs transition-colors duration-300 ${
-                      isDarkMode ? 'text-gray-300' : 'text-gray-600'
-                    }`}
-                  >
-                    Years at Microsoft
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  className={`text-center p-4 rounded-lg transition-all duration-300 ${
-                    isDarkMode
-                      ? 'bg-gray-700/80 border border-green-400/30 hover:bg-gray-700/90'
-                      : 'bg-gray-50/80 border border-green-400/20 hover:bg-gray-50'
-                  }`}
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <div className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-500 to-emerald-600">
-                    100+
-                  </div>
-                  <div
-                    className={`text-xs transition-colors duration-300 ${
-                      isDarkMode ? 'text-gray-300' : 'text-gray-600'
-                    }`}
-                  >
-                    Students Mentored
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  className={`text-center p-4 rounded-lg transition-all duration-300 ${
-                    isDarkMode
-                      ? 'bg-gray-700/80 border border-orange-400/30 hover:bg-gray-700/90'
-                      : 'bg-gray-50/80 border border-orange-400/20 hover:bg-gray-50'
-                  }`}
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <div className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-red-500">
-                    Global
-                  </div>
-                  <div
-                    className={`text-xs transition-colors duration-300 ${
-                      isDarkMode ? 'text-gray-300' : 'text-gray-600'
-                    }`}
-                  >
-                    Azure Community
-                  </div>
-                </motion.div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Skills Section - Consistent text colors with other sections */}
-        <div className="mt-16">
-          <h3
-            className={`text-2xl font-bold mb-6 text-center transition-colors duration-300 ${
-              isDarkMode ? 'text-white' : 'text-gray-900'
-            }`}
+          {/* Skills */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 1.0 }}
+            viewport={{ once: true }}
           >
-            Skills & Expertise
-          </h3>
-          <div className="flex flex-wrap justify-center gap-3">
-            {skills.map((skill, i) => (
-              <span
-                key={i}
-                className={`px-4 py-2 font-medium rounded-full text-sm border transition-colors duration-300 ${
-                  isDarkMode
-                    ? 'bg-gray-700/80 text-gray-200 border-gray-600/50 hover:bg-gray-700/90'
-                    : 'bg-gray-100/80 text-gray-700 border-gray-300/50 hover:bg-gray-100'
-                }`}
-              >
-                {skill}
-              </span>
-            ))}
-          </div>
+            <h3
+              className={`text-2xl font-bold mb-8 transition-colors duration-300 ${colors.heading}`}
+            >
+              Core Skills
+            </h3>
+
+            <div className="flex flex-wrap gap-3">
+              {skills.map((skill, index) => (
+                <motion.span
+                  key={index}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3, delay: index * 0.05 }}
+                  viewport={{ once: true }}
+                  className="px-4 py-2 bg-gradient-to-r from-primary/10 to-secondary/10 text-primary border border-primary/20 rounded-full text-sm font-medium hover:from-primary/20 hover:to-secondary/20 transition-all duration-300"
+                >
+                  {skill}
+                </motion.span>
+              ))}
+            </div>
+          </motion.div>
         </div>
       </div>
     </section>

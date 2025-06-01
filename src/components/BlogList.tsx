@@ -10,8 +10,12 @@ import {
 } from '@heroicons/react/24/outline';
 import { BlogService } from '../utils/blog';
 import type { BlogPostMeta } from '../types/blog';
+import { useContrastColors } from '../hooks/useContrastColors';
+import { useTheme } from '../hooks/useTheme';
 
 export default function BlogList() {
+  const { isDarkMode } = useTheme();
+  const colors = useContrastColors();
   const [posts, setPosts] = useState<BlogPostMeta[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -132,7 +136,13 @@ export default function BlogList() {
               <div className="p-6 pb-0">
                 <div className="flex items-center gap-2 mb-4">
                   <FolderIcon className="w-4 h-4 text-primary" />
-                  <span className="text-sm font-medium text-primary bg-primary/10 px-2 py-1 rounded-full">
+                  <span
+                    className={`inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full ${
+                      isDarkMode
+                        ? 'text-primary bg-primary/10'
+                        : 'text-primary bg-primary/10'
+                    }`}
+                  >
                     {post.category}
                   </span>
                 </div>
@@ -147,7 +157,9 @@ export default function BlogList() {
                 </h2>
 
                 {/* Excerpt */}
-                <p className="text-gray-600 mb-4 line-clamp-3">
+                <p
+                  className={`leading-relaxed mb-4 line-clamp-3 ${colors.body}`}
+                >
                   {post.excerpt}
                 </p>
 

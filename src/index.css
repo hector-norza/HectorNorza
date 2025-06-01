@@ -13,10 +13,17 @@
     font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
   }
-  
+
   body {
     @apply bg-gray-50 text-gray-900 min-h-screen;
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  #root {
+    overflow-x: hidden;
   }
 
   /* Ensure proper stacking context */
@@ -29,6 +36,10 @@
   section {
     scroll-margin-top: calc(var(--header-height) + 2rem);
   }
+
+  /* Prevent horizontal scroll */
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 
 @layer components {
@@ -116,4 +127,10 @@
 .high-contrast :focus {
   outline: 3px solid #000000 !important;
   outline-offset: 2px !important;
+}
+
+/* Prevent any element from causing horizontal scroll */
+* {
+  max-width: 100%;
+  box-sizing: border-box;
 }
