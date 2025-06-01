@@ -6,7 +6,6 @@ import { useTheme } from '../hooks/useTheme';
 const navigation = [
   { name: 'About', href: '/#about' },
   { name: 'Experience', href: '/#resume' },
-  { name: 'Blog', href: '/blog' },
   { name: 'Contact', href: '/#contact' },
 ];
 

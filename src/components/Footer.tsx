@@ -51,14 +51,6 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="/blog"
-                  className="text-gray-300 hover:text-white transition-colors"
-                >
-                  Blog
-                </a>
-              </li>
-              <li>
-                <a
                   href="/#contact"
                   className="text-gray-300 hover:text-white transition-colors"
                 >
