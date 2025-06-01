@@ -59,8 +59,18 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* About */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Hector Norzagaray</h3>
-            <p className="text-gray-300 text-sm">
+            <h3
+              className={`text-lg font-semibold mb-4 ${
+                isDarkMode ? 'text-white' : 'text-gray-900'
+              }`}
+            >
+              Hector Norzagaray
+            </h3>
+            <p
+              className={`text-sm ${
+                isDarkMode ? 'text-gray-300' : 'text-gray-600'
+              }`}
+            >
               Product Manager focused on creating tools for community and
               connection through responsible AI. Passionate about building tools
               that bring people together.
@@ -69,7 +79,13 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+            <h3
+              className={`text-lg font-semibold mb-4 ${
+                isDarkMode ? 'text-white' : 'text-gray-900'
+              }`}
+            >
+              Quick Links
+            </h3>
             <ul className="space-y-2 text-sm">
               {navigation.map((item) => (
                 <li key={item.name}>
@@ -90,8 +106,18 @@ export default function Footer() {
 
           {/* Newsletter Signup */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Stay Connected</h3>
-            <p className="text-gray-300 mb-4 text-sm">
+            <h3
+              className={`text-lg font-semibold mb-4 ${
+                isDarkMode ? 'text-white' : 'text-gray-900'
+              }`}
+            >
+              Stay Connected
+            </h3>
+            <p
+              className={`mb-4 text-sm ${
+                isDarkMode ? 'text-gray-300' : 'text-gray-600'
+              }`}
+            >
               Subscribe to my newsletter for the latest insights and articles.
             </p>
             <div className="flex gap-3">
@@ -118,8 +144,18 @@ export default function Footer() {
 
           {/* Social Media */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Connect</h3>
-            <p className="text-gray-300 mb-4 text-sm">
+            <h3
+              className={`text-lg font-semibold mb-4 ${
+                isDarkMode ? 'text-white' : 'text-gray-900'
+              }`}
+            >
+              Connect
+            </h3>
+            <p
+              className={`mb-4 text-sm ${
+                isDarkMode ? 'text-gray-300' : 'text-gray-600'
+              }`}
+            >
               Follow me on social media for updates and insights.
             </p>
             <div className="flex gap-3">
@@ -146,8 +182,16 @@ export default function Footer() {
         </div>
 
         {/* Copyright */}
-        <div className="mt-8 pt-8 border-t border-gray-700">
-          <p className="text-center text-gray-400 text-sm">
+        <div
+          className={`mt-8 pt-8 border-t ${
+            isDarkMode ? 'border-gray-700' : 'border-gray-200'
+          }`}
+        >
+          <p
+            className={`text-center text-sm ${
+              isDarkMode ? 'text-gray-400' : 'text-gray-600'
+            }`}
+          >
             © {new Date().getFullYear()} Hector Norzagaray. All rights
             reserved.
           </p>
