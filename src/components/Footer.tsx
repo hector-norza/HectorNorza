@@ -37,7 +37,7 @@ const navigation = [
 
 export default function Footer() {
   const { isDarkMode } = useTheme();
-  const colors = useContrastColors(); // Add this line
+  const colors = useContrastColors();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -65,18 +65,19 @@ export default function Footer() {
 
   return (
     <footer
-      className={`border-t transition-colors duration-300 overflow-hidden ${colors.background.primary} ${colors.border}`} // Add overflow-hidden
+      className={`border-t transition-colors duration-300 overflow-hidden ${colors.background.primary} ${colors.border}`}
       role="contentinfo"
       aria-label="Site footer"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 w-full">
-          {' '}
-          {/* Add w-full */}
-          {/* About */}
+      {/* Reduce padding: py-8 → py-6 */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Reduce gap: gap-6 → gap-4 */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
+          {/* About - More compact */}
           <div>
+            {/* Reduce margin: mb-3 → mb-2 */}
             <h3
-              className={`text-lg font-semibold mb-4 transition-colors duration-300 ${colors.heading}`}
+              className={`text-lg font-semibold mb-2 transition-colors duration-300 ${colors.heading}`}
             >
               Hector Norzagaray
             </h3>
@@ -84,176 +85,152 @@ export default function Footer() {
               className={`text-sm leading-relaxed transition-colors duration-300 ${colors.body}`}
             >
               Product Manager focused on creating tools for community and
-              connection through responsible AI. Passionate about building tools
-              that bring people together.
+              connection through responsible AI.
             </p>
           </div>
-          {/* Quick Links */}
+
+          {/* Quick Links - More compact */}
           <div>
             <h3
-              className={`text-lg font-semibold mb-4 transition-colors duration-300 ${colors.heading}`}
+              className={`text-lg font-semibold mb-2 transition-colors duration-300 ${colors.heading}`}
             >
               Quick Links
             </h3>
             <nav aria-label="Footer navigation">
-              <ul className="space-y-3">
+              {/* Reduce gap: gap-4 → gap-3 */}
+              <div className="flex flex-wrap gap-3">
                 {navigation.map((item) => (
-                  <li key={item.name}>
-                    <button
-                      onClick={(e) => handleNavClick(e, item.href)}
-                      className={`text-sm font-medium transition-colors duration-300 py-1 px-2 -mx-2 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${colors.interactive} ${
-                        isDarkMode
-                          ? 'focus:ring-offset-gray-900'
-                          : 'focus:ring-offset-white'
-                      }`}
-                      aria-label={`Navigate to ${item.name} section`}
-                    >
-                      {item.name}
-                    </button>
-                  </li>
+                  <button
+                    key={item.name}
+                    onClick={(e) => handleNavClick(e, item.href)}
+                    className={`text-sm font-medium transition-colors duration-300 py-1 px-2 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${colors.interactive} ${
+                      isDarkMode
+                        ? 'focus:ring-offset-gray-900'
+                        : 'focus:ring-offset-white'
+                    }`}
+                    aria-label={`Navigate to ${item.name} section`}
+                  >
+                    {item.name}
+                  </button>
                 ))}
-              </ul>
+              </div>
             </nav>
           </div>
-          {/* Newsletter Signup */}
-          <div>
+
+          {/* Social Media & Newsletter - More compact */}
+          <div className="md:col-span-2 lg:col-span-1">
             <h3
-              className={`text-lg font-semibold mb-4 transition-colors duration-300 ${colors.heading}`}
+              className={`text-lg font-semibold mb-2 transition-colors duration-300 ${colors.heading}`}
             >
-              Stay Connected
+              Connect & Subscribe
             </h3>
-            <p
-              className={`mb-4 text-sm leading-relaxed transition-colors duration-300 ${colors.body}`}
-            >
-              Subscribe to my newsletter for the latest insights and articles.
-            </p>
-            <div
-              className="flex gap-3"
-              role="group"
-              aria-label="Newsletter subscription options"
-            >
-              {/* RSS - Darker orange */}
-              <a
-                href="/rss.xml"
-                className={`p-3 bg-orange-700 hover:bg-orange-800 text-white rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 ${
-                  isDarkMode
-                    ? 'focus:ring-offset-gray-900'
-                    : 'focus:ring-offset-white'
-                }`}
-                aria-label="Subscribe to RSS feed"
-              >
-                <RssIcon className="w-5 h-5" aria-hidden="true" />
-              </a>
 
-              <a
-                href="https://blogtrottr.com/?subscribe=https://hectornorza.com/rss.xml"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`p-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary ${
-                  isDarkMode
-                    ? 'focus:ring-offset-gray-900'
-                    : 'focus:ring-offset-white'
-                }`}
-                aria-label="Subscribe via email using BlogTrottr"
+            {/* Remove extra wrapper and margin */}
+            <div>
+              <p
+                className={`mb-2 text-sm transition-colors duration-300 ${colors.body}`}
               >
-                <EnvelopeIcon className="w-5 h-5" aria-hidden="true" />
-              </a>
+                Follow me and subscribe:
+              </p>
+              <div
+                className="flex flex-wrap gap-2"
+                role="group"
+                aria-label="Social media and subscription links"
+              >
+                {/* Social Media */}
+                <a
+                  href="https://www.linkedin.com/in/norza/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`p-2 bg-blue-700 hover:bg-blue-800 text-white rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
+                    isDarkMode
+                      ? 'focus:ring-offset-gray-900'
+                      : 'focus:ring-offset-white'
+                  }`}
+                  aria-label="LinkedIn"
+                >
+                  <LinkedInIcon className="w-4 h-4" aria-hidden="true" />
+                </a>
 
-              {/* Substack - Lighter orange */}
-              <a
-                href="https://hectornorza.substack.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`p-3 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 ${
-                  isDarkMode
-                    ? 'focus:ring-offset-gray-900'
-                    : 'focus:ring-offset-white'
-                }`}
-                aria-label="Subscribe on Substack"
-              >
-                <SubstackIcon className="w-5 h-5" aria-hidden="true" />
-              </a>
+                <a
+                  href="https://x.com/hectorOnCloud"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`p-2 bg-gray-900 hover:bg-black text-white rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 ${
+                    isDarkMode
+                      ? 'focus:ring-offset-gray-900'
+                      : 'focus:ring-offset-white'
+                  }`}
+                  aria-label="X (Twitter)"
+                >
+                  <XIcon className="w-4 h-4" aria-hidden="true" />
+                </a>
 
-              <a
-                href="https://medium.com/@hectornorza"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`p-3 bg-gray-800 hover:bg-gray-900 text-white rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 ${
-                  isDarkMode
-                    ? 'focus:ring-offset-gray-900'
-                    : 'focus:ring-offset-white'
-                }`}
-                aria-label="Read articles on Medium"
-              >
-                <MediumIcon className="w-5 h-5" aria-hidden="true" />
-              </a>
-            </div>
-          </div>
-          {/* Social Media */}
-          <div>
-            <h3
-              className={`text-lg font-semibold mb-4 transition-colors duration-300 ${colors.heading}`}
-            >
-              Connect
-            </h3>
-            <p
-              className={`mb-4 text-sm leading-relaxed transition-colors duration-300 ${colors.body}`}
-            >
-              Follow me on social media for updates and insights.
-            </p>
-            <div
-              className="flex gap-3"
-              role="group"
-              aria-label="Social media links"
-            >
-              <a
-                href="https://www.linkedin.com/in/norza/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`p-3 bg-blue-700 hover:bg-blue-800 text-white rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
-                  isDarkMode
-                    ? 'focus:ring-offset-gray-900'
-                    : 'focus:ring-offset-white'
-                }`}
-                aria-label="Connect with Hector on LinkedIn (opens in new tab)"
-              >
-                <LinkedInIcon className="w-5 h-5" aria-hidden="true" />
-              </a>
-              <a
-                href="https://x.com/hectorOnCloud"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`p-3 bg-gray-900 hover:bg-black text-white rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 ${
-                  isDarkMode
-                    ? 'focus:ring-offset-gray-900'
-                    : 'focus:ring-offset-white'
-                }`}
-                aria-label="Follow Hector on X (formerly Twitter) (opens in new tab)"
-              >
-                <XIcon className="w-5 h-5" aria-hidden="true" />
-              </a>
+                <a
+                  href="https://medium.com/@hectornorza"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`p-2 bg-gray-800 hover:bg-gray-900 text-white rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 ${
+                    isDarkMode
+                      ? 'focus:ring-offset-gray-900'
+                      : 'focus:ring-offset-white'
+                  }`}
+                  aria-label="Medium"
+                >
+                  <MediumIcon className="w-4 h-4" aria-hidden="true" />
+                </a>
 
-              {/* Add Medium button */}
-              <a
-                href="https://medium.com/@hectornorza"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`p-3 bg-gray-800 hover:bg-gray-900 text-white rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 ${
-                  isDarkMode
-                    ? 'focus:ring-offset-gray-900'
-                    : 'focus:ring-offset-white'
-                }`}
-                aria-label="Read Hector's articles on Medium (opens in new tab)"
-              >
-                <MediumIcon className="w-5 h-5" aria-hidden="true" />
-              </a>
+                {/* Newsletter/Subscription Options */}
+                <a
+                  href="https://hectornorza.substack.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`p-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 ${
+                    isDarkMode
+                      ? 'focus:ring-offset-gray-900'
+                      : 'focus:ring-offset-white'
+                  }`}
+                  aria-label="Substack"
+                >
+                  <SubstackIcon className="w-4 h-4" aria-hidden="true" />
+                </a>
+
+                <a
+                  href="/rss.xml"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`p-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 ${
+                    isDarkMode
+                      ? 'focus:ring-offset-gray-900'
+                      : 'focus:ring-offset-white'
+                  }`}
+                  aria-label="RSS"
+                >
+                  <RssIcon className="w-4 h-4" aria-hidden="true" />
+                </a>
+
+                <a
+                  href="https://blogtrottr.com/?subscribe=https://hectornorza.com/rss.xml"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary ${
+                    isDarkMode
+                      ? 'focus:ring-offset-gray-900'
+                      : 'focus:ring-offset-white'
+                  }`}
+                  aria-label="Email"
+                >
+                  <EnvelopeIcon className="w-4 h-4" aria-hidden="true" />
+                </a>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Copyright */}
+        {/* Copyright - More compact */}
+        {/* Reduce margin: mt-6 pt-4 → mt-4 pt-3 */}
         <div
-          className={`mt-8 pt-8 border-t transition-colors duration-300 ${colors.border}`}
+          className={`mt-4 pt-3 border-t transition-colors duration-300 ${colors.border}`}
         >
           <p
             className={`text-center text-sm transition-colors duration-300 ${colors.body}`}

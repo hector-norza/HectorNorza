@@ -44,7 +44,7 @@ export default function Hero() {
           >
             <span className="block mb-2">Hi, I'm</span>
             <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-primary bg-300% animate-gradient leading-tight">
-              Hector Norzagaray
+              Hector
             </span>
           </motion.h1>
 
@@ -55,7 +55,7 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            Product Manager & Community Builder
+            a Product Manager & Community Builder
           </motion.p>
 
           {/* Description - Added more spacing */}
