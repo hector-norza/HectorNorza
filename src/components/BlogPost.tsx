@@ -165,7 +165,7 @@ export default function BlogPost() {
               </p>
               <div className="mt-3">
                 <Link
-                  to="/about"
+                  to="/#about"
                   className="text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 text-sm font-medium transition-colors"
                 >
                   Learn more about my work →
