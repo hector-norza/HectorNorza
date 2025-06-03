@@ -12,7 +12,9 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "deploy": "npm run build && gh-pages -d dist",
-    "predeploy": "npm run build"
+    "predeploy": "npm run build",
+    "new-post": "node scripts/create-blog-post.js",
+    "blog:new": "node scripts/create-blog-post.js"
   },
   "dependencies": {
     "buffer": "^6.0.3",

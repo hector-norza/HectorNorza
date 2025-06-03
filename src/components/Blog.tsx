@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import Navbar from './Navbar';
 import BlogList from './blog/BlogList';
 import BlogPost from './blog/BlogPost';
+import Footer from './Footer';
 import { useContrastColors } from '../hooks/useContrastColors';
 import { trackBlogView } from '../utils/analytics'; // ← This should work now
 
@@ -36,13 +37,16 @@ export default function Blog() {
       <Navbar />
       
       {/* Blog Content */}
-      <main>
+      <main style={{ paddingTop: '80px' }}>
         {selectedPost ? (
           <BlogPost slug={selectedPost} onBack={handleBackToBlog} />
         ) : (
           <BlogList onPostSelect={handlePostSelect} />
         )}
       </main>
+
+      {/* Footer */}
+      <Footer />
     </motion.div>
   );
 }

@@ -1,140 +1,86 @@
 import type { BlogPost } from '../types';
+import { getBlogPostFiles, markdownToBlogPost, markdownToHtml } from './markdown-blog';
 
-// Mock blog data for now (replace with actual blog posts later)
-const MOCK_BLOG_POSTS: BlogPost[] = [
-  {
-    id: '1',
-    slug: 'getting-started-with-azure-ai',
-    title: 'Getting Started with Azure AI: A Product Manager\'s Guide',
-    excerpt: 'Learn how to leverage Azure AI services for product development and create responsible AI solutions that scale.',
-    content: `# Getting Started with Azure AI
+// Cache for parsed blog posts
+let cachedPosts: BlogPost[] | null = null;
 
-As a Product Manager working with Azure AI, I've learned that the key to successful AI implementation lies not just in the technology, but in understanding how to integrate it thoughtfully into your product strategy.
+// Load and parse all blog posts from markdown files
+const loadBlogPosts = async (): Promise<BlogPost[]> => {
+  if (cachedPosts) {
+    return cachedPosts;
+  }
 
-## Key Areas to Focus On
+  try {
+    const files = await getBlogPostFiles();
+    const posts: BlogPost[] = [];
 
-1. **Responsible AI Principles**
-2. **User Experience Design**
-3. **Scalability Considerations**
-4. **Performance Monitoring**
+    for (const { filename, content } of files) {
+      const post = markdownToBlogPost(filename, content);
+      if (post) {
+        // Convert markdown content to HTML
+        post.content = markdownToHtml(post.content);
+        posts.push(post);
+      }
+    }
 
-Let's dive into each of these areas...`,
-    publishedAt: '2024-01-15',
-    category: 'Azure AI',
-    tags: ['azure', 'ai', 'product-management', 'responsible-ai'],
-    readingTime: 8,
-    published: true,
-    featured: true,
-    author: 'Hector Norza',
-    imageUrl: '/blog/azure-ai-guide.jpg',
-    seoTitle: 'Azure AI Guide for Product Managers | Hector Norza',
-    seoDescription: 'Complete guide to implementing Azure AI services in your products with responsible AI practices.',
-  },
-  {
-    id: '2',
-    slug: 'building-developer-communities',
-    title: 'Building Thriving Developer Communities',
-    excerpt: 'Strategies for creating and nurturing developer communities that drive product adoption and innovation.',
-    content: `# Building Thriving Developer Communities
+    cachedPosts = posts;
+    return posts;
+  } catch (error) {
+    console.error('Error loading blog posts:', error);
+    return [];
+  }
+};
 
-Community building is both an art and a science. Here's what I've learned from building developer communities at scale.
+// Clear cache function (useful for development)
+export const clearBlogCache = (): void => {
+  cachedPosts = null;
+};
 
-## The Foundation
-
-Every successful developer community starts with:
-- Clear value proposition
-- Authentic engagement
-- Consistent support
-- Growth opportunities
-
-## Engagement Strategies
-
-1. **Regular Events**
-2. **Educational Content**
-3. **Recognition Programs**
-4. **Feedback Loops**
-
-Let me share some specific examples...`,
-    publishedAt: '2024-01-10',
-    category: 'Community',
-    tags: ['community', 'developer-experience', 'engagement'],
-    readingTime: 6,
-    published: true,
-    featured: false,
-    author: 'Hector Norza',
-    imageUrl: '/blog/developer-communities.jpg',
-  },
-  {
-    id: '3',
-    slug: 'product-management-best-practices',
-    title: 'Product Management Best Practices for AI Products',
-    excerpt: 'Essential practices for managing AI-powered products, from ideation to deployment and beyond.',
-    content: `# Product Management Best Practices for AI Products
-
-Managing AI products requires a unique blend of traditional product management skills and AI-specific considerations.
-
-## Key Principles
-
-1. **Data-Driven Decisions**
-2. **Iterative Development**
-3. **User-Centric Design**
-4. **Ethical Considerations**
-
-## Implementation Framework
-
-Here's the framework I use for AI product management...`,
-    publishedAt: '2024-01-05',
-    category: 'Product Management',
-    tags: ['product-management', 'ai', 'best-practices'],
-    readingTime: 10,
-    published: true,
-    featured: true,
-    author: 'Hector Norza',
-  },
-];
-
-// Re-export BlogPost type for convenience
-export type { BlogPost } from '../types';
-
-// Utility functions with correct names matching imports
-export const getAllPosts = (): BlogPost[] => {
-  return MOCK_BLOG_POSTS.filter(post => post.published)
+// Main blog functions
+export const getAllPosts = async (): Promise<BlogPost[]> => {
+  const posts = await loadBlogPosts();
+  return posts.filter(post => post.published)
     .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
 };
 
-// Add alias for getAllBlogPosts
+// Alias for getAllBlogPosts
 export const getAllBlogPosts = async (): Promise<BlogPost[]> => {
-  return Promise.resolve(getAllPosts());
+  return getAllPosts();
 };
 
-export const getPostBySlug = (slug: string): BlogPost | undefined => {
-  return MOCK_BLOG_POSTS.find(post => post.slug === slug && post.published);
+export const getPostBySlug = async (slug: string): Promise<BlogPost | undefined> => {
+  const posts = await loadBlogPosts();
+  return posts.find(post => post.slug === slug && post.published);
 };
 
-// Add alias for getBlogPost
+// Alias for getBlogPost
 export const getBlogPost = async (slug: string): Promise<BlogPost | undefined> => {
-  return Promise.resolve(getPostBySlug(slug));
+  return getPostBySlug(slug);
 };
 
-export const getFeaturedPosts = (): BlogPost[] => {
-  return MOCK_BLOG_POSTS.filter(post => post.published && post.featured);
+export const getFeaturedPosts = async (): Promise<BlogPost[]> => {
+  const posts = await loadBlogPosts();
+  return posts.filter(post => post.published && post.featured);
 };
 
-export const getPostsByCategory = (category: string): BlogPost[] => {
-  return MOCK_BLOG_POSTS.filter(post => 
+export const getPostsByCategory = async (category: string): Promise<BlogPost[]> => {
+  const posts = await loadBlogPosts();
+  return posts.filter(post => 
     post.published && post.category.toLowerCase() === category.toLowerCase()
   );
 };
 
-export const getPostsByTag = (tag: string): BlogPost[] => {
-  return MOCK_BLOG_POSTS.filter(post => 
+export const getPostsByTag = async (tag: string): Promise<BlogPost[]> => {
+  const posts = await loadBlogPosts();
+  return posts.filter(post => 
     post.published && post.tags.some(t => t.toLowerCase() === tag.toLowerCase())
   );
 };
 
-export const searchPosts = (query: string): BlogPost[] => {
+export const searchPosts = async (query: string): Promise<BlogPost[]> => {
+  const posts = await loadBlogPosts();
   const lowercaseQuery = query.toLowerCase();
-  return MOCK_BLOG_POSTS.filter(post => 
+  return posts.filter(post => 
     post.published && (
       post.title.toLowerCase().includes(lowercaseQuery) ||
       post.excerpt.toLowerCase().includes(lowercaseQuery) ||
@@ -144,20 +90,86 @@ export const searchPosts = (query: string): BlogPost[] => {
   );
 };
 
-// Calculate reading time based on content
+// Utility functions
 export const calculateReadingTime = (content: string): number => {
   const wordsPerMinute = 200;
   const wordCount = content.split(/\s+/).length;
   return Math.ceil(wordCount / wordsPerMinute);
 };
 
-// Parse markdown-like content (basic implementation)
+// Legacy parseContent function for backward compatibility
 export const parseContent = (content: string): string => {
-  return content
-    .replace(/^# (.*$)/gim, '<h1>$1</h1>')
-    .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-    .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-    .replace(/\*\*(.*)\*\*/gim, '<strong>$1</strong>')
-    .replace(/\*(.*)\*/gim, '<em>$1</em>')
-    .replace(/\n/gim, '<br>');
+  // Since content is already converted to HTML by markdownToHtml, just return it
+  return content;
 };
+
+// Get all unique categories
+export const getAllCategories = async (): Promise<string[]> => {
+  const posts = await loadBlogPosts();
+  const categories = posts
+    .filter(post => post.published)
+    .map(post => post.category);
+  return [...new Set(categories)].sort();
+};
+
+// Get all unique tags
+export const getAllTags = async (): Promise<string[]> => {
+  const posts = await loadBlogPosts();
+  const allTags = posts
+    .filter(post => post.published)
+    .flatMap(post => post.tags);
+  return [...new Set(allTags)].sort();
+};
+
+// Get related posts (same category or tags)
+export const getRelatedPosts = async (currentSlug: string, limit: number = 3): Promise<BlogPost[]> => {
+  const posts = await loadBlogPosts();
+  const currentPost = posts.find(post => post.slug === currentSlug);
+  
+  if (!currentPost) return [];
+
+  const relatedPosts = posts
+    .filter(post => 
+      post.published && 
+      post.slug !== currentSlug &&
+      (
+        post.category === currentPost.category ||
+        post.tags.some(tag => currentPost.tags.includes(tag))
+      )
+    )
+    .sort((a, b) => {
+      // Score based on category match and common tags
+      const aScore = (a.category === currentPost.category ? 2 : 0) + 
+                    a.tags.filter(tag => currentPost.tags.includes(tag)).length;
+      const bScore = (b.category === currentPost.category ? 2 : 0) + 
+                    b.tags.filter(tag => currentPost.tags.includes(tag)).length;
+      return bScore - aScore;
+    })
+    .slice(0, limit);
+
+  return relatedPosts;
+};
+
+// Get posts with pagination
+export const getPostsWithPagination = async (page: number = 1, pageSize: number = 10): Promise<{
+  posts: BlogPost[];
+  totalPages: number;
+  currentPage: number;
+  totalPosts: number;
+}> => {
+  const allPosts = await getAllPosts();
+  const totalPosts = allPosts.length;
+  const totalPages = Math.ceil(totalPosts / pageSize);
+  const startIndex = (page - 1) * pageSize;
+  const posts = allPosts.slice(startIndex, startIndex + pageSize);
+
+  return {
+    posts,
+    totalPages,
+    currentPage: page,
+    totalPosts,
+  };
+};
+
+// Re-export types for convenience
+export type { BlogPost } from '../types';

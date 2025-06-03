@@ -1,53 +1,59 @@
-import { useState, useEffect } from 'react'; // ← ADD THIS LINE
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useContrastColors } from '../hooks/useContrastColors';
 import {
   EnvelopeIcon,
   MapPinIcon,
-  PhoneIcon,
   PaperAirplaneIcon,
   CheckCircleIcon,
   ExclamationCircleIcon,
+  RssIcon,
 } from '@heroicons/react/24/outline';
-import {
-  trackFormSubmission,
-  trackContactAction,
-} from '../utils/analytics'; // ← REMOVE trackExternalLinkClick since it doesn't exist
+import { trackFormSubmission, trackContactAction } from '../utils/analytics';
+
+interface FormData {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}
+
+interface FormErrors {
+  [key: string]: string;
+}
 
 const contactInfo = [
   {
     icon: EnvelopeIcon,
     label: 'Email',
-    value: 'hector@yourEmail.com', // Replace with your actual email
-    href: 'mailto:hector@yourEmail.com',
+    value: 'hnorza@proton.me',
+    href: 'mailto:hnorza@proton.me',
   },
   {
     icon: MapPinIcon,
     label: 'Location',
-    value: 'Your City, Country', // Replace with your location
+    value: 'Seattle, USA',
     href: null,
   },
   {
-    icon: PhoneIcon,
-    label: 'Phone',
-    value: '+1 (555) 123-4567', // Replace with your phone (optional)
-    href: 'tel:+15551234567',
+    icon: RssIcon,
+    label: 'RSS Feed',
+    value: 'Subscribe to Blog',
+    href: '/rss.xml',
   },
 ];
 
 export default function Contact() {
   const colors = useContrastColors();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
     subject: '',
     message: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<
-    'idle' | 'success' | 'error'
-  >('idle');
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [errors, setErrors] = useState<FormErrors>({});
 
   // Enhanced focus management for accessibility
   useEffect(() => {
@@ -350,7 +356,7 @@ export default function Contact() {
                   >
                     {submitStatus === 'success'
                       ? 'Your email client should have opened with the message ready to send.'
-                      : 'Please try again or contact me directly at hello@hectornorza.com'}
+                      : 'Please try again or contact me directly at hnorza@proton.me'}
                   </p>
                 </div>
               </motion.div>

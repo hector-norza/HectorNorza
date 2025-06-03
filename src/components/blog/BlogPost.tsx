@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { useContrastColors } from '../../hooks/useContrastColors';
 import { trackBlogInteraction } from '../../utils/analytics';
-import { getBlogPost, parseContent, type BlogPost as BlogPostType } from '../../utils/blog';
+import { getBlogPost, type BlogPost as BlogPostType } from '../../utils/blog';
 
 interface BlogPostProps {
   slug: string;
@@ -159,7 +159,7 @@ export default function BlogPost({ slug, onBack }: BlogPostProps) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.4 }}
         className={`prose prose-lg max-w-none ${colors.body} prose-headings:${colors.heading} prose-links:text-primary-600 dark:prose-links:text-primary-400`}
-        dangerouslySetInnerHTML={{ __html: parseContent(post.content) }}
+        dangerouslySetInnerHTML={{ __html: post.content }}
       />
     </motion.article>
   );

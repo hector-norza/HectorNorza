@@ -1,0 +1,13 @@
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="600" fill="#f9fafb"/>
+  <rect x="100" y="100" width="600" height="400" fill="#ffffff" stroke="#e5e7eb" stroke-width="2" rx="8"/>
+  <text x="400" y="280" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#111827">
+    Portfolio Architecture Diagram
+  </text>
+  <text x="400" y="320" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#6b7280">
+    React + TypeScript + AI Integration
+  </text>
+  <text x="400" y="350" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af">
+    800x600 - Replace with actual architecture diagram
+  </text>
+</svg>
