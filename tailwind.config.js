@@ -1,17 +1,74 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
-  darkMode: 'class', // Make sure this is set to 'class'
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        primary: '#3B82F6', // your primary color
-        secondary: '#8B5CF6', // your secondary color
+        primary: {
+          50: '#eff6ff',
+          100: '#dbeafe',
+          200: '#bfdbfe',
+          300: '#93c5fd',
+          400: '#60a5fa',
+          500: '#3b82f6',
+          600: '#2563eb',
+          700: '#1d4ed8',
+          800: '#1e40af',
+          900: '#1e3a8a',
+        },
+        secondary: {
+          50: '#fdf4ff',
+          100: '#fae8ff',
+          200: '#f5d0fe',
+          300: '#f0abfc',
+          400: '#e879f9',
+          500: '#d946ef',
+          600: '#c026d3',
+          700: '#a21caf',
+          800: '#86198f',
+          900: '#701a75',
+        },
+        text: {
+          primary: '#1f2937',
+          secondary: '#6b7280',
+          'primary-dark': '#f9fafb',
+          'secondary-dark': '#d1d5db',
+        },
+        background: {
+          light: '#ffffff',
+          dark: '#111827',
+          'card-light': '#f9fafb',
+          'card-dark': '#1f2937',
+        }
       },
-    },
+      animation: {
+        'gradient': 'gradient 6s ease infinite',
+      },
+      keyframes: {
+        gradient: {
+          '0%, 100%': {
+            'background-size': '200% 200%',
+            'background-position': 'left center'
+          },
+          '50%': {
+            'background-size': '200% 200%',
+            'background-position': 'right center'
+          },
+        },
+      }
+    }
   },
-  plugins: [
-    require('@tailwindcss/typography'),
-    // ...other plugins
+  plugins: [],
+  safelist: [
+    'animate-pulse',
+    'animate-spin',
+    'animate-bounce',
   ],
-};
+  future: {
+    hoverOnlyWhenSupported: true,
+  },
+}

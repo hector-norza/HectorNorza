@@ -1,19 +1,39 @@
+import { useState, useEffect } from 'react'; // ← ADD THIS LINE
 import { motion } from 'framer-motion';
+import { useContrastColors } from '../hooks/useContrastColors';
 import {
-  // EnvelopeIcon,
-  // Remove unused imports:
-  // PhoneIcon,
-  // MapPinIcon,
+  EnvelopeIcon,
+  MapPinIcon,
+  PhoneIcon,
   PaperAirplaneIcon,
   CheckCircleIcon,
   ExclamationCircleIcon,
 } from '@heroicons/react/24/outline';
-import { useState, useEffect } from 'react';
 import {
   trackFormSubmission,
-  trackExternalLinkClick,
-} from '../utils/analytics';
-import { useContrastColors } from '../hooks/useContrastColors';
+  trackContactAction,
+} from '../utils/analytics'; // ← REMOVE trackExternalLinkClick since it doesn't exist
+
+const contactInfo = [
+  {
+    icon: EnvelopeIcon,
+    label: 'Email',
+    value: 'hector@yourEmail.com', // Replace with your actual email
+    href: 'mailto:hector@yourEmail.com',
+  },
+  {
+    icon: MapPinIcon,
+    label: 'Location',
+    value: 'Your City, Country', // Replace with your location
+    href: null,
+  },
+  {
+    icon: PhoneIcon,
+    label: 'Phone',
+    value: '+1 (555) 123-4567', // Replace with your phone (optional)
+    href: 'tel:+15551234567',
+  },
+];
 
 export default function Contact() {
   const colors = useContrastColors();
@@ -126,7 +146,7 @@ export default function Contact() {
       className={`relative py-24 scroll-mt-24 transition-colors duration-300 ${colors.background.primary}`}
     >
       {/* Background decorations */}
-      <div className="absolute left-0 top-1/4 w-1/3 h-2/3 bg-gradient-to-r from-primary/5 to-transparent -z-10"></div>
+      <div className="absolute left-0 top-1/4 w-1/3 h-2/3 bg-gradient-to-r from-primary-500/5 to-transparent -z-10"></div>
       <div className="absolute right-0 bottom-0 w-64 h-64 bg-secondary/5 rounded-full -z-10 translate-x-1/3 translate-y-1/3"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -142,7 +162,7 @@ export default function Contact() {
           >
             Let's Connect
           </h2>
-          <div className="w-20 h-1.5 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto mb-6"></div>
+          <div className="w-20 h-1.5 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full mx-auto mb-6"></div>
           <p
             className={`text-lg md:text-xl max-w-3xl mx-auto leading-relaxed transition-colors duration-300 ${colors.body}`}
           >
@@ -177,183 +197,103 @@ export default function Contact() {
             </div>
 
             <div className="space-y-6">
-              {/* LinkedIn */}
-              <motion.div
-                className="flex items-center space-x-4"
-                whileHover={{ x: 5 }}
-                transition={{ duration: 0.2 }}
-              >
-                <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
-                  <svg
-                    className="w-6 h-6 text-white"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                  >
-                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                  </svg>
-                </div>
-                <div>
-                  <h4
-                    className={`font-semibold transition-colors duration-300 ${colors.heading}`}
-                  >
-                    LinkedIn
-                  </h4>
-                  <a
-                    href="https://www.linkedin.com/in/norza/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() =>
-                      trackExternalLinkClick(
-                        'https://www.linkedin.com/in/norza/'
-                      )
-                    }
-                    className={`transition-colors duration-300 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded ${colors.interactive}`}
-                    aria-label="Visit Hector's LinkedIn profile (opens in new tab)"
-                  >
-                    linkedin.com/in/norza
-                  </a>
-                </div>
-              </motion.div>
+              {contactInfo.map((info, index) => (
+                <motion.div
+                  key={info.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className="flex items-center space-x-4"
+                >
+                  <div className="flex-shrink-0">
+                    <div className="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+                      <info.icon className="w-6 h-6 text-primary-600 dark:text-primary-400" />
+                    </div>
+                  </div>
+                  <div>
+                    <p
+                      className={`text-sm font-medium ${colors.secondary} uppercase tracking-wide`}
+                    >
+                      {info.label}
+                    </p>
+                    {info.href ? (
+                      <a
+                        href={info.href}
+                        onClick={() =>
+                          trackContactAction(
+                            `${info.label.toLowerCase()}_click`
+                          )
+                        } // ← ADD THIS - Tracks to G-VPC78XB0H1
+                        className={`text-lg ${colors.heading} hover:text-primary-600 dark:hover:text-primary-400 transition-colors`}
+                      >
+                        {info.value}
+                      </a>
+                    ) : (
+                      <p className={`text-lg ${colors.heading}`}>
+                        {info.value}
+                      </p>
+                    )}
+                  </div>
+                </motion.div>
+              ))}
 
-              {/* X (Twitter) */}
-              <motion.div
-                className="flex items-center space-x-4"
-                whileHover={{ x: 5 }}
-                transition={{ duration: 0.2 }}
+              {/* Additional CTA */}
+              <div
+                className={`p-6 rounded-xl border transition-colors duration-300 ${colors.background.secondary} ${colors.border}`}
               >
-                <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
-                  <svg
-                    className="w-6 h-6 text-white"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                  >
-                    <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932L18.901 1.153ZM17.61 20.644h2.039L6.486 3.24H4.298L17.61 20.644Z" />
-                  </svg>
-                </div>
-                <div>
-                  <h4
-                    className={`font-semibold transition-colors duration-300 ${colors.heading}`}
-                  >
-                    X (Twitter)
-                  </h4>
-                  <a
-                    href="https://x.com/hectorOnCloud"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() =>
-                      trackExternalLinkClick('https://x.com/hectorOnCloud')
-                    }
-                    className={`transition-colors duration-300 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded ${colors.interactive}`}
-                    aria-label="Follow Hector on X (formerly Twitter) (opens in new tab)"
-                  >
-                    @hectorOnCloud
-                  </a>
-                </div>
-              </motion.div>
-
-              {/* Substack */}
-              <motion.div
-                className="flex items-center space-x-4"
-                whileHover={{ x: 5 }}
-                transition={{ duration: 0.2 }}
-              >
-                <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
-                  <svg
-                    className="w-6 h-6 text-white"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                  >
-                    <path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z" />
-                  </svg>
-                </div>
-                <div>
-                  <h4
-                    className={`font-semibold transition-colors duration-300 ${colors.heading}`}
-                  >
-                    Substack
-                  </h4>
-                  <a
-                    href="https://hectornorza.substack.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() =>
-                      trackExternalLinkClick(
-                        'https://hectornorza.substack.com/'
-                      )
-                    }
-                    className={`transition-colors duration-300 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded ${colors.interactive}`}
-                    aria-label="Subscribe to Hector's newsletter on Substack (opens in new tab)"
-                  >
-                    hectornorza.substack.com
-                  </a>
-                </div>
-              </motion.div>
-
-              {/* Medium */}
-              <motion.div
-                className="flex items-center space-x-4"
-                whileHover={{ x: 5 }}
-                transition={{ duration: 0.2 }}
-              >
-                <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
-                  <svg
-                    className="w-6 h-6 text-white"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                  >
-                    <path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z" />
-                  </svg>
-                </div>
-                <div>
-                  <h4
-                    className={`font-semibold transition-colors duration-300 ${colors.heading}`}
-                  >
-                    Medium
-                  </h4>
-                  <a
-                    href="https://medium.com/@hectornorza"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() =>
-                      trackExternalLinkClick('https://medium.com/@hectornorza')
-                    }
-                    className={`transition-colors duration-300 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded ${colors.interactive}`}
-                    aria-label="Read Hector's articles on Medium (opens in new tab)"
-                  >
-                    medium.com/@hectornorza
-                  </a>
-                </div>
-              </motion.div>
+                <h4
+                  className={`font-semibold mb-2 transition-colors duration-300 ${colors.heading}`}
+                >
+                  Quick Response Time
+                </h4>
+                <p
+                  className={`text-sm transition-colors duration-300 ${colors.body}`}
+                >
+                  I typically respond to emails within 24-48 hours. For urgent
+                  matters, feel free to reach out via LinkedIn for a quicker
+                  response.
+                </p>
+              </div>
             </div>
 
-            {/* Additional CTA */}
-            <div
-              className={`p-6 rounded-xl border transition-colors duration-300 ${colors.background.secondary} ${colors.border}`}
+            {/* Call to Action */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              viewport={{ once: true }}
+              className="mt-12"
             >
-              <h4
-                className={`font-semibold mb-2 transition-colors duration-300 ${colors.heading}`}
-              >
-                Quick Response Time
+              <h4 className={`text-xl font-semibold ${colors.heading} mb-4`}>
+                What I'm Looking For
               </h4>
-              <p
-                className={`text-sm transition-colors duration-300 ${colors.body}`}
-              >
-                I typically respond to emails within 24-48 hours. For urgent
-                matters, feel free to reach out via LinkedIn for a quicker
-                response.
-              </p>
-            </div>
+              <ul className={`space-y-2 ${colors.body}`}>
+                <li className="flex items-start">
+                  <span className="text-primary-500 mr-2">•</span>
+                  Product Management opportunities
+                </li>
+                <li className="flex items-start">
+                  <span className="text-primary-500 mr-2">•</span>
+                  Community building collaborations
+                </li>
+                <li className="flex items-start">
+                  <span className="text-primary-500 mr-2">•</span>
+                  AI ethics and responsible development discussions
+                </li>
+                <li className="flex items-start">
+                  <span className="text-primary-500 mr-2">•</span>
+                  Speaking engagements and podcasts
+                </li>
+              </ul>
+            </motion.div>
           </motion.div>
 
           {/* Contact Form */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
+            initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7 }}
+            transition={{ duration: 0.8 }}
             viewport={{ once: true }}
             className={`p-8 rounded-2xl shadow-xl transition-colors duration-300 ${colors.background.card} border ${colors.border}`}
           >
@@ -573,7 +513,7 @@ export default function Contact() {
                 disabled={isSubmitting}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className={`w-full flex items-center justify-center px-6 py-4 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300 ${
+                className={`w-full flex items-center justify-center px-6 py-4 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-500/90 hover:to-secondary-500/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300 ${
                   isSubmitting
                     ? 'opacity-50 cursor-not-allowed'
                     : 'hover:shadow-lg transform hover:-translate-y-0.5'

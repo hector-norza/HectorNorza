@@ -1,203 +1,163 @@
-import { marked } from 'marked';
-import matter from 'gray-matter';
-import { format } from 'date-fns';
-import type { BlogPost, BlogPostMeta } from '../types/blog';
-import { Buffer } from 'buffer';
+import type { BlogPost } from '../types';
 
-// Type declaration for Buffer on window
-declare global {
-  interface Window {
-    Buffer: typeof Buffer;
-  }
-}
+// Mock blog data for now (replace with actual blog posts later)
+const MOCK_BLOG_POSTS: BlogPost[] = [
+  {
+    id: '1',
+    slug: 'getting-started-with-azure-ai',
+    title: 'Getting Started with Azure AI: A Product Manager\'s Guide',
+    excerpt: 'Learn how to leverage Azure AI services for product development and create responsible AI solutions that scale.',
+    content: `# Getting Started with Azure AI
 
-// Ensure Buffer is available globally for gray-matter
-if (typeof window !== 'undefined' && !window.Buffer) {
-  window.Buffer = Buffer;
-}
+As a Product Manager working with Azure AI, I've learned that the key to successful AI implementation lies not just in the technology, but in understanding how to integrate it thoughtfully into your product strategy.
 
-// Configure marked for better security and formatting
-marked.setOptions({
-  gfm: true,
-  breaks: true,
-});
+## Key Areas to Focus On
 
-export class BlogService {
-  // Get all blog post filenames
-  private static async getBlogFiles(): Promise<string[]> {
-    // This is a simple approach - in production you might want to use a build-time process
-    // For now, we'll maintain a list of known blog posts
-    return [
-      'my-first-blog-post.md',
-      // Add your blog post files here when you create them
-      // Example: 'my-first-blog-post.md',
-    ];
-  }
+1. **Responsible AI Principles**
+2. **User Experience Design**
+3. **Scalability Considerations**
+4. **Performance Monitoring**
 
-  // Load and parse a markdown file
-  private static async loadMarkdownFile(filename: string): Promise<BlogPost | null> {
-    try {
-      console.log(`🔍 Loading markdown file: ${filename}`);
-      const response = await fetch(`/blog/${filename}`);
-      console.log(`🌐 Fetch response status: ${response.status} ${response.statusText}`);
-      console.log(`🌐 Fetch URL: /blog/${filename}`);
-      
-      if (!response.ok) {
-        console.warn(`❌ Failed to load blog post: ${filename} (${response.status})`);
-        return null;
-      }
-      
-      const markdownContent = await response.text();
-      console.log(`📄 Content loaded for ${filename}, length: ${markdownContent.length}`);
-      
-      const { data: frontmatter, content } = matter(markdownContent);
-      console.log(`📋 Frontmatter parsed:`, frontmatter);
-      console.log(`📝 Published field:`, frontmatter.published, typeof frontmatter.published);
-      
-      // Calculate reading time
-      const readTime = this.calculateReadingTime(content);
-      
-      const post = {
-        slug: frontmatter.slug || filename.replace('.md', ''),
-        title: frontmatter.title || 'Untitled',
-        excerpt: frontmatter.excerpt || '',
-        content: await marked(content),
-        date: frontmatter.date || new Date().toISOString().split('T')[0],
-        readTime: frontmatter.readTime || readTime,
-        tags: frontmatter.tags || [],
-        category: frontmatter.category || 'Uncategorized',
-        author: frontmatter.author || 'Héctor Norzagaray',
-        published: frontmatter.published !== false // Default to true unless explicitly false
-      };
-      
-      console.log(`✅ Post parsed successfully:`, {
-        title: post.title,
-        slug: post.slug,
-        published: post.published,
-        category: post.category
-      });
-      return post;
-    } catch (error) {
-      console.error(`❌ Error loading blog post ${filename}:`, error);
-      return null;
-    }
-  }
+Let's dive into each of these areas...`,
+    publishedAt: '2024-01-15',
+    category: 'Azure AI',
+    tags: ['azure', 'ai', 'product-management', 'responsible-ai'],
+    readingTime: 8,
+    published: true,
+    featured: true,
+    author: 'Hector Norza',
+    imageUrl: '/blog/azure-ai-guide.jpg',
+    seoTitle: 'Azure AI Guide for Product Managers | Hector Norza',
+    seoDescription: 'Complete guide to implementing Azure AI services in your products with responsible AI practices.',
+  },
+  {
+    id: '2',
+    slug: 'building-developer-communities',
+    title: 'Building Thriving Developer Communities',
+    excerpt: 'Strategies for creating and nurturing developer communities that drive product adoption and innovation.',
+    content: `# Building Thriving Developer Communities
 
-  // Get all published blog posts
-  static async getAllPosts(): Promise<BlogPostMeta[]> {
-    try {
-      console.log('🔄 getAllPosts called');
-      const filenames = await this.getBlogFiles();
-      console.log('📁 Blog files found:', filenames);
-      
-      if (filenames.length === 0) {
-        console.log('📝 No blog files found');
-        return [];
-      }
-      
-      const posts = await Promise.all(
-        filenames.map(filename => this.loadMarkdownFile(filename))
-      );
-      
-      const validPosts = posts
-        .filter((post): post is BlogPost => {
-          console.log('🔍 Checking post:', post ? { title: post.title, published: post.published } : 'null');
-          return post !== null && post.published;
-        })
-        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-      
-      console.log('✅ Valid posts found:', validPosts.length);
-      
-      return validPosts.map(post => ({
-        slug: post.slug,
-        title: post.title,
-        excerpt: post.excerpt,
-        date: post.date,
-        readTime: post.readTime,
-        tags: post.tags,
-        category: post.category,
-        author: post.author,
-        published: post.published
-      }));
-    } catch (error) {
-      console.error('❌ Error in getAllPosts:', error);
-      return [];
-    }
-  }
+Community building is both an art and a science. Here's what I've learned from building developer communities at scale.
 
-  // Get a specific blog post by slug
-  static async getPostBySlug(slug: string): Promise<BlogPost | null> {
-    try {
-      console.log(`🔍 getPostBySlug called with slug: ${slug}`);
-      const filenames = await this.getBlogFiles();
-      
-      for (const filename of filenames) {
-        const post = await this.loadMarkdownFile(filename);
-        if (post && post.slug === slug && post.published) {
-          console.log(`✅ Found post for slug ${slug}:`, post.title);
-          return post;
-        }
-      }
-      
-      console.log(`❌ No post found for slug: ${slug}`);
-      return null;
-    } catch (error) {
-      console.error(`❌ Error in getPostBySlug for ${slug}:`, error);
-      return null;
-    }
-  }
+## The Foundation
 
-  // Get posts by category
-  static async getPostsByCategory(category: string): Promise<BlogPostMeta[]> {
-    const posts = await this.getAllPosts();
-    return posts.filter(post => 
-      post.category.toLowerCase() === category.toLowerCase()
-    );
-  }
+Every successful developer community starts with:
+- Clear value proposition
+- Authentic engagement
+- Consistent support
+- Growth opportunities
 
-  // Get posts by tag
-  static async getPostsByTag(tag: string): Promise<BlogPostMeta[]> {
-    const posts = await this.getAllPosts();
-    return posts.filter(post => 
-      post.tags.some(t => t.toLowerCase() === tag.toLowerCase())
-    );
-  }
+## Engagement Strategies
 
-  // Get unique categories
-  static async getCategories(): Promise<string[]> {
-    try {
-      console.log('🔄 getCategories called');
-      const posts = await this.getAllPosts();
-      const categories = [...new Set(posts.map(post => post.category))];
-      console.log('📂 Categories found:', categories);
-      return categories.sort();
-    } catch (error) {
-      console.error('❌ Error in getCategories:', error);
-      return [];
-    }
-  }
+1. **Regular Events**
+2. **Educational Content**
+3. **Recognition Programs**
+4. **Feedback Loops**
 
-  // Get unique tags
-  static async getTags(): Promise<string[]> {
-    const posts = await this.getAllPosts();
-    const tags = [...new Set(posts.flatMap(post => post.tags))];
-    return tags.sort();
-  }
+Let me share some specific examples...`,
+    publishedAt: '2024-01-10',
+    category: 'Community',
+    tags: ['community', 'developer-experience', 'engagement'],
+    readingTime: 6,
+    published: true,
+    featured: false,
+    author: 'Hector Norza',
+    imageUrl: '/blog/developer-communities.jpg',
+  },
+  {
+    id: '3',
+    slug: 'product-management-best-practices',
+    title: 'Product Management Best Practices for AI Products',
+    excerpt: 'Essential practices for managing AI-powered products, from ideation to deployment and beyond.',
+    content: `# Product Management Best Practices for AI Products
 
-  // Calculate reading time (roughly 200 words per minute)
-  static calculateReadingTime(content: string): number {
-    const wordsPerMinute = 200;
-    const wordCount = content.split(/\s+/).length;
-    return Math.ceil(wordCount / wordsPerMinute);
-  }
+Managing AI products requires a unique blend of traditional product management skills and AI-specific considerations.
 
-  // Format date for display
-  static formatDate(dateString: string): string {
-    return format(new Date(dateString), 'MMMM d, yyyy');
-  }
+## Key Principles
 
-  // Render markdown to HTML
-  static renderMarkdown(content: string): string {
-    return content; // For now, return content as-is since we're using sample data
-  }
-}
+1. **Data-Driven Decisions**
+2. **Iterative Development**
+3. **User-Centric Design**
+4. **Ethical Considerations**
+
+## Implementation Framework
+
+Here's the framework I use for AI product management...`,
+    publishedAt: '2024-01-05',
+    category: 'Product Management',
+    tags: ['product-management', 'ai', 'best-practices'],
+    readingTime: 10,
+    published: true,
+    featured: true,
+    author: 'Hector Norza',
+  },
+];
+
+// Re-export BlogPost type for convenience
+export type { BlogPost } from '../types';
+
+// Utility functions with correct names matching imports
+export const getAllPosts = (): BlogPost[] => {
+  return MOCK_BLOG_POSTS.filter(post => post.published)
+    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+};
+
+// Add alias for getAllBlogPosts
+export const getAllBlogPosts = async (): Promise<BlogPost[]> => {
+  return Promise.resolve(getAllPosts());
+};
+
+export const getPostBySlug = (slug: string): BlogPost | undefined => {
+  return MOCK_BLOG_POSTS.find(post => post.slug === slug && post.published);
+};
+
+// Add alias for getBlogPost
+export const getBlogPost = async (slug: string): Promise<BlogPost | undefined> => {
+  return Promise.resolve(getPostBySlug(slug));
+};
+
+export const getFeaturedPosts = (): BlogPost[] => {
+  return MOCK_BLOG_POSTS.filter(post => post.published && post.featured);
+};
+
+export const getPostsByCategory = (category: string): BlogPost[] => {
+  return MOCK_BLOG_POSTS.filter(post => 
+    post.published && post.category.toLowerCase() === category.toLowerCase()
+  );
+};
+
+export const getPostsByTag = (tag: string): BlogPost[] => {
+  return MOCK_BLOG_POSTS.filter(post => 
+    post.published && post.tags.some(t => t.toLowerCase() === tag.toLowerCase())
+  );
+};
+
+export const searchPosts = (query: string): BlogPost[] => {
+  const lowercaseQuery = query.toLowerCase();
+  return MOCK_BLOG_POSTS.filter(post => 
+    post.published && (
+      post.title.toLowerCase().includes(lowercaseQuery) ||
+      post.excerpt.toLowerCase().includes(lowercaseQuery) ||
+      post.content.toLowerCase().includes(lowercaseQuery) ||
+      post.tags.some(tag => tag.toLowerCase().includes(lowercaseQuery))
+    )
+  );
+};
+
+// Calculate reading time based on content
+export const calculateReadingTime = (content: string): number => {
+  const wordsPerMinute = 200;
+  const wordCount = content.split(/\s+/).length;
+  return Math.ceil(wordCount / wordsPerMinute);
+};
+
+// Parse markdown-like content (basic implementation)
+export const parseContent = (content: string): string => {
+  return content
+    .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+    .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+    .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+    .replace(/\*\*(.*)\*\*/gim, '<strong>$1</strong>')
+    .replace(/\*(.*)\*/gim, '<em>$1</em>')
+    .replace(/\n/gim, '<br>');
+};

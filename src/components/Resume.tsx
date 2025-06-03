@@ -5,10 +5,12 @@ import {
   TrophyIcon,
   ChartBarIcon,
   CalendarIcon,
+  DocumentArrowDownIcon, // ← ADD THIS ICON
 } from '@heroicons/react/24/outline';
 import { useContrastColors } from '../hooks/useContrastColors';
+import { trackResumeAction } from '../utils/analytics'; // ← ADD THIS LINE
 
-// Keep all your existing data arrays exactly the same...
+// Professional Experience Data
 const experiences = [
   {
     title: 'Product Manager II',
@@ -226,14 +228,26 @@ const skills = [
 export default function Resume() {
   const colors = useContrastColors();
 
+  // ← ADD THIS FUNCTION - Track resume downloads
+  const handleResumeDownload = () => {
+    // Track to GA ID: G-VPC78XB0H1
+    trackResumeAction('download', 'pdf');
+  };
+
+  // ← ADD THIS FUNCTION - Track section interactions
+  const handleSectionView = (sectionName: string) => {
+    // Track to GA ID: G-VPC78XB0H1
+    trackResumeAction('view', sectionName);
+  };
+
   return (
     <section
       id="resume"
       className={`relative py-24 scroll-mt-24 transition-colors duration-300 ${colors.background.primary}`}
     >
       {/* Background decorations */}
-      <div className="absolute left-0 top-1/4 w-1/3 h-2/3 bg-gradient-to-r from-primary/5 to-transparent -z-10"></div>
-      <div className="absolute right-0 bottom-0 w-64 h-64 bg-secondary/5 rounded-full -z-10 translate-x-1/3 translate-y-1/3"></div>
+      <div className="absolute left-0 top-1/4 w-1/3 h-2/3 bg-gradient-to-r from-primary-500/5 to-transparent -z-10"></div>
+      <div className="absolute right-0 bottom-0 w-64 h-64 bg-secondary-500/5 rounded-full -z-10 translate-x-1/3 translate-y-1/3"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
@@ -249,13 +263,26 @@ export default function Resume() {
           >
             Experience
           </h2>
-          <div className="w-20 h-1.5 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto mb-6"></div>
+          <div className="w-20 h-1.5 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full mx-auto mb-6"></div>
           <p
             className={`text-lg md:text-xl max-w-3xl mx-auto leading-relaxed transition-colors duration-300 ${colors.body}`}
           >
             A journey through product management, community building, and
             responsible AI development.
           </p>
+          
+          {/* ← ADD THIS - Download Resume Button with tracking to G-VPC78XB0H1 */}
+          <motion.a
+            href="/resume.pdf" // Add your actual resume file
+            download
+            onClick={handleResumeDownload}
+            className="btn-secondary inline-flex items-center mt-8"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <DocumentArrowDownIcon className="w-5 h-5 mr-2" />
+            Download Resume
+          </motion.a>
         </motion.div>
 
         <div className="space-y-16">
@@ -265,9 +292,10 @@ export default function Resume() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
             viewport={{ once: true }}
+            onViewportEnter={() => handleSectionView('experience')} // ← ADD THIS - Tracks to G-VPC78XB0H1
           >
             <div className="flex items-center mb-8">
-              <BriefcaseIcon className="w-8 h-8 text-primary mr-4" />
+              <BriefcaseIcon className="w-8 h-8 text-primary-500 mr-4" />
               <h3
                 className={`text-2xl font-bold transition-colors duration-300 ${colors.heading}`}
               >
@@ -283,7 +311,7 @@ export default function Resume() {
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   viewport={{ once: true }}
-                  className={`border-l-4 border-primary pl-6 transition-colors duration-300 ${colors.background.secondary} rounded-r-lg p-6`}
+                  className={`border-l-4 border-primary-500 pl-6 transition-colors duration-300 ${colors.background.card} ${colors.border} border rounded-r-lg p-6`}
                 >
                   <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-4">
                     <h4
@@ -316,7 +344,7 @@ export default function Resume() {
                     {exp.technologies.map((tech, idx) => (
                       <span
                         key={idx}
-                        className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium"
+                        className="px-3 py-1 bg-primary-500/10 text-primary-600 dark:text-primary-400 rounded-full text-sm font-medium"
                       >
                         {tech}
                       </span>
@@ -333,9 +361,10 @@ export default function Resume() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.4 }}
             viewport={{ once: true }}
+            onViewportEnter={() => handleSectionView('education')} // ← ADD THIS - Tracks to G-VPC78XB0H1
           >
             <div className="flex items-center mb-8">
-              <AcademicCapIcon className="w-8 h-8 text-primary mr-4" />
+              <AcademicCapIcon className="w-8 h-8 text-primary-500 mr-4" />
               <h3
                 className={`text-2xl font-bold transition-colors duration-300 ${colors.heading}`}
               >
@@ -347,7 +376,7 @@ export default function Resume() {
               {education.map((edu, index) => (
                 <div
                   key={index}
-                  className={`border-l-4 border-secondary pl-6 transition-colors duration-300 ${colors.background.secondary} rounded-r-lg p-6`}
+                  className={`border-l-4 border-secondary-500 pl-6 transition-colors duration-300 ${colors.background.card} ${colors.border} border rounded-r-lg p-6`}
                 >
                   <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-4">
                     <h4
@@ -384,9 +413,10 @@ export default function Resume() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.6 }}
             viewport={{ once: true }}
+            onViewportEnter={() => handleSectionView('certifications')} // ← ADD THIS - Tracks to G-VPC78XB0H1
           >
             <div className="flex items-center mb-8">
-              <ChartBarIcon className="w-8 h-8 text-primary mr-4" />
+              <ChartBarIcon className="w-8 h-8 text-primary-500 mr-4" />
               <h3
                 className={`text-2xl font-bold transition-colors duration-300 ${colors.heading}`}
               >
@@ -402,7 +432,7 @@ export default function Resume() {
                   whileInView={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   viewport={{ once: true }}
-                  className={`p-6 rounded-lg transition-colors duration-300 ${colors.background.secondary} border border-gray-200 dark:border-gray-700`}
+                  className={`p-6 rounded-lg transition-colors duration-300 ${colors.background.card} ${colors.border} border`}
                 >
                   <div className="flex items-start justify-between mb-3">
                     <span className="text-2xl">{cert.icon}</span>
@@ -433,9 +463,10 @@ export default function Resume() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.8 }}
             viewport={{ once: true }}
+            onViewportEnter={() => handleSectionView('achievements')} // ← ADD THIS - Tracks to G-VPC78XB0H1
           >
             <div className="flex items-center mb-8">
-              <TrophyIcon className="w-8 h-8 text-primary mr-4" />
+              <TrophyIcon className="w-8 h-8 text-primary-500 mr-4" />
               <h3
                 className={`text-2xl font-bold transition-colors duration-300 ${colors.heading}`}
               >
@@ -451,7 +482,7 @@ export default function Resume() {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   viewport={{ once: true }}
-                  className={`p-6 rounded-lg transition-colors duration-300 ${colors.background.secondary} border border-gray-200 dark:border-gray-700`}
+                  className={`p-6 rounded-lg transition-colors duration-300 ${colors.background.card} ${colors.border} border`}
                 >
                   <div className="flex justify-between items-start mb-3">
                     <h4
@@ -486,6 +517,7 @@ export default function Resume() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 1.0 }}
             viewport={{ once: true }}
+            onViewportEnter={() => handleSectionView('skills')} // ← ADD THIS - Tracks to G-VPC78XB0H1
           >
             <h3
               className={`text-2xl font-bold mb-8 transition-colors duration-300 ${colors.heading}`}
@@ -501,7 +533,7 @@ export default function Resume() {
                   whileInView={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.3, delay: index * 0.05 }}
                   viewport={{ once: true }}
-                  className="px-4 py-2 bg-gradient-to-r from-primary/10 to-secondary/10 text-primary border border-primary/20 rounded-full text-sm font-medium hover:from-primary/20 hover:to-secondary/20 transition-all duration-300"
+                  className="px-4 py-2 bg-gradient-to-r from-primary-500/10 to-secondary-500/10 text-primary-600 dark:text-primary-400 border border-primary-500/20 rounded-full text-sm font-medium hover:from-primary-500/20 hover:to-secondary-500/20 transition-all duration-300"
                 >
                   {skill}
                 </motion.span>

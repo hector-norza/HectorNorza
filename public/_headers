@@ -1,13 +1,126 @@
 # Enhanced Security Headers for GitHub Pages
-/*
-  # Security Headers
-  X-Content-Type-Options: nosniff
-  X-Frame-Options: DENY
-  X-XSS-Protection: 1; mode=block
-  Referrer-Policy: strict-origin-when-cross-origin
-  Cache-Control: no-cache, no-store, must-revalidate
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Bars3Icon, XMarkIcon, SunIcon, MoonIcon } from '@heroicons/react/24/outline';
+import { useTheme } from '@/hooks/useTheme';
+import { useContrastColors } from '@/hooks/useContrastColors';
 
-/static/*
+const navigation = [
+  { name: 'About', href: '#about' },
+  { name: 'Experience', href: '#experience' },
+  { name: 'Contact', href: '#contact' },
+];
+
+export default function Header() {
+  const [isOpen, setIsOpen] = useState(false);
+  const { isDarkMode, toggleDarkMode } = useTheme();
+  const colors = useContrastColors();
+
+  const scrollToSection = (href: string) => {
+    const element = document.querySelector(href);
+    element?.scrollIntoView({ behavior: 'smooth' });
+    setIsOpen(false);
+  };
+
+  return (
+    <header className={`fixed w-full top-0 z-50 transition-all duration-300 ${colors.background.primary} ${colors.border} border-b backdrop-blur-md bg-opacity-90`}>
+      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          {/* Logo */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="flex-shrink-0"
+          >
+            <span className={`text-xl font-bold ${colors.text.heading}`}>
+              Hector Norzagaray
+            </span>
+          </motion.div>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:block">
+            <div className="ml-10 flex items-baseline space-x-4">
+              {navigation.map((item) => (
+                <button
+                  key={item.name}
+                  onClick={() => scrollToSection(item.href)}
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${colors.interactive}`}
+                >
+                  {item.name}
+                </button>
+              ))}
+              
+              {/* Theme Toggle */}
+              <button
+                onClick={toggleDarkMode}
+                className={`p-2 rounded-md ${colors.interactive}`}
+                aria-label="Toggle theme"
+              >
+                {isDarkMode ? (
+                  <SunIcon className="h-5 w-5" />
+                ) : (
+                  <MoonIcon className="h-5 w-5" />
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Mobile menu button */}
+          <div className="md:hidden">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className={`p-2 rounded-md ${colors.interactive}`}
+            >
+              {isOpen ? (
+                <XMarkIcon className="h-6 w-6" />
+              ) : (
+                <Bars3Icon className="h-6 w-6" />
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Navigation */}
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="md:hidden"
+          >
+            <div className={`px-2 pt-2 pb-3 space-y-1 sm:px-3 ${colors.background.secondary} rounded-lg mt-2`}>
+              {navigation.map((item) => (
+                <button
+                  key={item.name}
+                  onClick={() => scrollToSection(item.href)}
+                  className={`block px-3 py-2 rounded-md text-base font-medium w-full text-left ${colors.interactive}`}
+                >
+                  {item.name}
+                </button>
+              ))}
+              <button
+                onClick={toggleDarkMode}
+                className={`flex items-center px-3 py-2 rounded-md text-base font-medium w-full ${colors.interactive}`}
+              >
+                {isDarkMode ? (
+                  <>
+                    <SunIcon className="h-5 w-5 mr-2" />
+                    Light Mode
+                  </>
+                ) : (
+                  <>
+                    <MoonIcon className="h-5 w-5 mr-2" />
+                    Dark Mode
+                  </>
+                )}
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </nav>
+    </header>
+  );
+}
   Cache-Control: public, max-age=31536000, immutable
 
 # Content Security Policy (GitHub Pages compatible)

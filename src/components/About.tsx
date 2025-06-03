@@ -58,7 +58,7 @@ const skills = [
 export default function About() {
   const colors = useContrastColors();
 
-  // This function belongs in your React component, not in CSS:
+  // Scroll function for the contact button
   const scrollToContact = () => {
     const contactSection = document.getElementById('contact');
 
@@ -145,7 +145,7 @@ export default function About() {
                 </p>
               </div>
 
-              {/* Fixed Connect with Me button */}
+              {/* Connect with Me button */}
               <motion.div
                 className="mt-10"
                 initial={{ opacity: 0, y: 20 }}
@@ -188,10 +188,10 @@ export default function About() {
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.1 * index }}
                     viewport={{ once: true }}
-                    className={`p-6 rounded-xl hover:shadow-md transition-all duration-300 ${colors.background.secondary}`}
+                    className={`p-6 rounded-xl hover:shadow-md transition-all duration-300 ${colors.background.card} border ${colors.border}`}
                   >
                     <div className="flex items-center gap-3 mb-4">
-                      {skillGroup.icon}
+                      <div className="text-primary-500">{skillGroup.icon}</div>
                       <h4
                         className={`text-xl font-semibold transition-colors duration-300 ${colors.heading}`}
                       >
@@ -202,7 +202,7 @@ export default function About() {
                       {skillGroup.items.map((skill) => (
                         <span
                           key={skill}
-                          className="px-3 py-1.5 bg-primary/10 text-primary rounded-full text-sm font-medium border border-primary/20 hover:bg-primary/20 transition-all duration-200"
+                          className="px-3 py-1.5 bg-primary-500/10 text-primary-600 dark:text-primary-400 rounded-full text-sm font-medium border border-primary-500/20 hover:bg-primary-500/20 transition-all duration-200"
                         >
                           {skill}
                         </span>
