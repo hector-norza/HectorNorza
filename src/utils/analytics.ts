@@ -453,8 +453,8 @@ export const runAnalyticsDebug = () => {
         console.error('❌ gtag function not available');
       }
       
-      // Check for ad blockers
-      fetch('https://www.google-analytics.com/analytics.js', { method: 'HEAD' })
+      // Check for ad blockers using GA4 endpoint
+      fetch(`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`, { method: 'HEAD', mode: 'no-cors' })
         .then(() => console.log('✅ No ad blocker detected'))
         .catch(() => console.warn('⚠️  Possible ad blocker or network issue'));
         
