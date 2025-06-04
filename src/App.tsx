@@ -18,6 +18,7 @@ import ErrorBoundary from './components/ErrorBoundary';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { initGA, trackPageView, trackEvent } from './utils/analytics';
 import { usePerformanceMonitoring } from './hooks/usePerformanceMonitoring';
+import { enableGADebugMode } from './utils/ga-debug';
 
 function AppContent() {
   const [currentView, setCurrentView] = useState('portfolio');
@@ -29,6 +30,9 @@ function AppContent() {
   useEffect(() => {
     // Initialize Google Analytics with your ID: G-VPC78XB0H1
     initGA();
+    
+    // Enable debug mode if requested via URL parameter
+    enableGADebugMode();
     
     // Track initial page view
     trackPageView(window.location.href, 'Portfolio Home');
