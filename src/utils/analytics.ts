@@ -415,6 +415,62 @@ export const verifyMeasurementId = () => {
   return isValidFormat;
 };
 
+// Immediate debug function that works right away
+export const runAnalyticsDebug = () => {
+  console.log('🚀 Running immediate analytics debug...');
+  
+  setTimeout(() => {
+    console.log('🔍 === ANALYTICS DEBUG REPORT ===');
+    
+    // Check if window and functions exist
+    if (typeof window !== 'undefined') {
+      console.log('✅ Window object available');
+      console.log('- Location:', window.location.href);
+      console.log('- Domain:', window.location.hostname);
+      
+      // Check GA script
+      const gaScript = document.querySelector('script[src*="googletagmanager.com"]');
+      console.log('- GA Script loaded:', !!gaScript);
+      
+      // Check gtag
+      console.log('- gtag function:', typeof window.gtag);
+      console.log('- dataLayer:', Array.isArray(window.dataLayer) ? `Array[${window.dataLayer.length}]` : 'Not found');
+      
+      // Check measurement ID
+      console.log('- Tracking ID:', GA_TRACKING_ID);
+      const ga4Pattern = /^G-[A-Z0-9]{10}$/;
+      console.log('- Valid format:', ga4Pattern.test(GA_TRACKING_ID));
+      
+      // Try sending a test event
+      if (window.gtag && typeof window.gtag === 'function') {
+        console.log('✅ Sending test event...');
+        window.gtag('event', 'debug_immediate', {
+          debug_mode: true,
+          value: 1
+        });
+        console.log('✅ Test event sent successfully');
+      } else {
+        console.error('❌ gtag function not available');
+      }
+      
+      // Check for ad blockers
+      fetch('https://www.google-analytics.com/analytics.js', { method: 'HEAD' })
+        .then(() => console.log('✅ No ad blocker detected'))
+        .catch(() => console.warn('⚠️  Possible ad blocker or network issue'));
+        
+    } else {
+      console.error('❌ Window object not available');
+    }
+    
+    console.log('🔍 === END DEBUG REPORT ===');
+  }, 2000); // Wait 2 seconds for everything to load
+};
+
+// Auto-run debug in development
+if (typeof window !== 'undefined' && !import.meta.env.PROD) {
+  setTimeout(runAnalyticsDebug, 3000);
+}
+
 // Initialize everything when window is available
 if (typeof window !== 'undefined') {
   // Initialize performance tracking
@@ -427,13 +483,37 @@ if (typeof window !== 'undefined') {
   trackUserEngagement();
   
   // Expose debug functions for browser console testing
-  (window as unknown as Record<string, unknown>).debugGA = debugGA;
-  (window as unknown as Record<string, unknown>).testTracking = testTracking;
-  (window as unknown as Record<string, unknown>).verifyMeasurementId = verifyMeasurementId;
-  console.log('🔍 Analytics debug tools available:');
-  console.log('  - window.debugGA() - Check GA setup');
-  console.log('  - window.testTracking() - Send test events');
-  console.log('  - window.verifyMeasurementId() - Verify measurement ID');
+  try {
+    const globalWindow = window as unknown as Record<string, unknown>;
+    globalWindow.debugGA = debugGA;
+    globalWindow.testTracking = testTracking;
+    globalWindow.verifyMeasurementId = verifyMeasurementId;
+    
+    // Also attach to a global analytics object for easier access
+    globalWindow.analytics = {
+      debug: debugGA,
+      test: testTracking,
+      verify: verifyMeasurementId,
+      runDebug: runAnalyticsDebug,
+      trackEvent,
+      trackPageView
+    };
+    
+    console.log('🔍 Analytics debug tools available:');
+    console.log('  - window.debugGA() or window.analytics.debug() - Check GA setup');
+    console.log('  - window.testTracking() or window.analytics.test() - Send test events');
+    console.log('  - window.verifyMeasurementId() or window.analytics.verify() - Verify measurement ID');
+    console.log('  - window.analytics.runDebug() - Run immediate comprehensive debug');
+    
+    // Test that the functions are actually attached
+    console.log('✅ Functions attached to window:', {
+      debugGA: typeof globalWindow.debugGA === 'function',
+      testTracking: typeof globalWindow.testTracking === 'function',
+      verifyMeasurementId: typeof globalWindow.verifyMeasurementId === 'function'
+    });
+  } catch (error) {
+    console.error('❌ Failed to attach debug functions to window:', error);
+  }
 }
 
 // Production-only optimizations
