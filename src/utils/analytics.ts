@@ -20,46 +20,81 @@ let pageViewTimeout: NodeJS.Timeout;
 
 // Initialize Google Analytics
 export const initGA = () => {
-  if (typeof window === 'undefined') return;
+  console.log('🚀 Analytics: Starting Google Analytics initialization...');
+  
+  if (typeof window === 'undefined') {
+    console.log('❌ Analytics: Window is undefined, skipping initialization');
+    return;
+  }
 
-  // Load gtag script
-  const script = document.createElement('script');
-  script.async = true;
-  script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`;
-  document.head.appendChild(script);
+  console.log('✅ Analytics: Window detected, proceeding with GA setup');
 
-  // Initialize gtag
+  // Initialize gtag function and dataLayer first
   window.dataLayer = window.dataLayer || [];
   function gtag(...args: any[]) {
     window.dataLayer.push(args);
   }
   window.gtag = gtag;
 
-  gtag('js', new Date());
-  gtag('config', GA_TRACKING_ID, {
-    page_title: document.title,
-    page_location: window.location.href,
-  });
+  console.log('📊 Analytics: DataLayer and gtag function initialized');
 
-  console.log('Google Analytics initialized with ID:', GA_TRACKING_ID);
+  // Load gtag script with proper loading handling
+  const script = document.createElement('script');
+  script.async = true;
+  script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`;
+  
+  script.onload = () => {
+    console.log('📜 Analytics: Google Analytics script loaded successfully');
+    
+    // Initialize GA after script loads
+    gtag('js', new Date());
+    gtag('config', GA_TRACKING_ID, {
+      page_title: document.title,
+      page_location: window.location.href,
+    });
+
+    console.log('🎯 Google Analytics initialized with ID:', GA_TRACKING_ID);
+    console.log('📊 Analytics: Ready to track events and page views');
+  };
+
+  script.onerror = () => {
+    console.error('❌ Analytics: Failed to load Google Analytics script');
+  };
+
+  document.head.appendChild(script);
+};
+
+// Utility function to wait for gtag to be available
+const waitForGtag = (callback: () => void, maxAttempts = 50, attempt = 0) => {
+  if (typeof window !== 'undefined' && window.gtag && typeof window.gtag === 'function') {
+    callback();
+  } else if (attempt < maxAttempts) {
+    setTimeout(() => waitForGtag(callback, maxAttempts, attempt + 1), 100);
+  } else {
+    console.warn('⏰ Analytics: Timeout waiting for gtag to become available');
+  }
 };
 
 // Debounced page view tracking
 export const trackPageView = (url: string, title?: string) => {
+  console.log('📄 Analytics: trackPageView called with:', { url, title });
+  
   if (pageViewTimeout) clearTimeout(pageViewTimeout);
   
   pageViewTimeout = setTimeout(() => {
-    if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('config', GA_TRACKING_ID, {
-        page_title: title || document.title,
-        page_location: url,
-      });
-      console.log('📊 Page view tracked:', {
-        title: title || document.title,
-        url: url,
-        timestamp: new Date().toISOString()
-      });
-    }
+    waitForGtag(() => {
+      if (typeof window !== 'undefined' && window.gtag && typeof window.gtag === 'function') {
+        window.gtag('config', GA_TRACKING_ID, {
+          page_title: title || document.title,
+          page_location: url,
+        });
+        console.log('🎯 Page view tracked successfully:', {
+          title: title || document.title,
+          url: url,
+          timestamp: new Date().toISOString()
+        });
+      }
+    });
     pageStartTime = Date.now();
   }, 100);
 };
@@ -71,30 +106,36 @@ export const trackEvent = (
   label?: string,
   value?: number
 ) => {
+  console.log('🎯 Analytics: trackEvent called with:', { action, category, label, value });
+  
   // Validate inputs
   if (!action || !category) {
-    console.warn('📊 Invalid event tracking: action and category are required');
+    console.warn('❌ Analytics: Invalid event tracking - action and category are required');
     return;
   }
 
-  if (typeof window !== 'undefined' && window.gtag) {
-    const eventData = {
-      event_category: category,
-      event_label: label,
-      value: value,
-    };
-    
-    window.gtag('event', action, eventData);
-    
-    console.log('📊 Event tracked:', {
-      action,
-      category,
-      label,
-      value,
-      timestamp: new Date().toISOString(),
-      ga_id: GA_TRACKING_ID
-    });
-  }
+  waitForGtag(() => {
+    if (typeof window !== 'undefined' && window.gtag && typeof window.gtag === 'function') {
+      const eventData = {
+        event_category: category,
+        event_label: label,
+        value: value,
+      };
+      
+      window.gtag('event', action, eventData);
+      
+      console.log('🚀 Event tracked successfully:', {
+        action,
+        category,
+        label,
+        value,
+        timestamp: new Date().toISOString(),
+        ga_id: GA_TRACKING_ID
+      });
+    } else {
+      console.log('⚠️ Analytics: gtag still not available for event tracking');
+    }
+  });
 };
 
 // Engagement tracking helper
