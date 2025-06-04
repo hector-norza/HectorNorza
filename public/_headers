@@ -1,145 +1,39 @@
-# Enhanced Security Headers for GitHub Pages
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Bars3Icon, XMarkIcon, SunIcon, MoonIcon } from '@heroicons/react/24/outline';
-import { useTheme } from '@/hooks/useTheme';
-import { useContrastColors } from '@/hooks/useContrastColors';
+# Enhanced Security Headers for GitHub Pages and Netlify
 
-const navigation = [
-  { name: 'About', href: '#about' },
-  { name: 'Experience', href: '#experience' },
-  { name: 'Contact', href: '#contact' },
-];
-
-export default function Header() {
-  const [isOpen, setIsOpen] = useState(false);
-  const { isDarkMode, toggleDarkMode } = useTheme();
-  const colors = useContrastColors();
-
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    element?.scrollIntoView({ behavior: 'smooth' });
-    setIsOpen(false);
-  };
-
-  return (
-    <header className={`fixed w-full top-0 z-50 transition-all duration-300 ${colors.background.primary} ${colors.border} border-b backdrop-blur-md bg-opacity-90`}>
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="flex-shrink-0"
-          >
-            <span className={`text-xl font-bold ${colors.text.heading}`}>
-              Hector Norzagaray
-            </span>
-          </motion.div>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:block">
-            <div className="ml-10 flex items-baseline space-x-4">
-              {navigation.map((item) => (
-                <button
-                  key={item.name}
-                  onClick={() => scrollToSection(item.href)}
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${colors.interactive}`}
-                >
-                  {item.name}
-                </button>
-              ))}
-              
-              {/* Theme Toggle */}
-              <button
-                onClick={toggleDarkMode}
-                className={`p-2 rounded-md ${colors.interactive}`}
-                aria-label="Toggle theme"
-              >
-                {isDarkMode ? (
-                  <SunIcon className="h-5 w-5" />
-                ) : (
-                  <MoonIcon className="h-5 w-5" />
-                )}
-              </button>
-            </div>
-          </div>
-
-          {/* Mobile menu button */}
-          <div className="md:hidden">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className={`p-2 rounded-md ${colors.interactive}`}
-            >
-              {isOpen ? (
-                <XMarkIcon className="h-6 w-6" />
-              ) : (
-                <Bars3Icon className="h-6 w-6" />
-              )}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Navigation */}
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="md:hidden"
-          >
-            <div className={`px-2 pt-2 pb-3 space-y-1 sm:px-3 ${colors.background.secondary} rounded-lg mt-2`}>
-              {navigation.map((item) => (
-                <button
-                  key={item.name}
-                  onClick={() => scrollToSection(item.href)}
-                  className={`block px-3 py-2 rounded-md text-base font-medium w-full text-left ${colors.interactive}`}
-                >
-                  {item.name}
-                </button>
-              ))}
-              <button
-                onClick={toggleDarkMode}
-                className={`flex items-center px-3 py-2 rounded-md text-base font-medium w-full ${colors.interactive}`}
-              >
-                {isDarkMode ? (
-                  <>
-                    <SunIcon className="h-5 w-5 mr-2" />
-                    Light Mode
-                  </>
-                ) : (
-                  <>
-                    <MoonIcon className="h-5 w-5 mr-2" />
-                    Dark Mode
-                  </>
-                )}
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </nav>
-    </header>
-  );
-}
+/*
+  # Security Headers
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  
+  # Content Security Policy
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://www.google-analytics.com; frame-ancestors 'none';
+  
+  # Performance Headers
   Cache-Control: public, max-age=31536000, immutable
 
-# Content Security Policy (GitHub Pages compatible)
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://www.google-analytics.com; frame-ancestors 'none'
+# Static Assets
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
 
-# Force correct MIME types for JavaScript modules
-/assets/*.js
-  Content-Type: application/javascript
+# HTML Files
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
 
-# Force correct MIME types for CSS
-/assets/*.css
-  Content-Type: text/css
+# Manifest and service worker
+/manifest.json
+  Cache-Control: public, max-age=86400
+  Content-Type: application/manifest+json
 
-# Force correct MIME types for common file types
-*.js
-  Content-Type: application/javascript
+# Sitemap and robots
+/sitemap.xml
+  Content-Type: application/xml
 
-*.mjs
-  Content-Type: application/javascript
+/robots.txt
+  Content-Type: text/plain
 
-*.css
-  Content-Type: text/css
+# RSS Feed
+/rss.xml
+  Content-Type: application/rss+xml; charset=utf-8
