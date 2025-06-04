@@ -39,7 +39,7 @@ export default function Footer() {
   const { scrollToSection } = useNavigation();
 
   const handleSocialClick = (platform: string) => {
-    trackSocialClick(`${platform}_footer`);
+    trackSocialClick(platform, `Social click: ${platform}`); // Add the second argument
   };
 
   return (

@@ -6,21 +6,40 @@ import { useTheme } from '../hooks/useTheme';
 import { trackPageView, trackEvent } from '../utils/analytics';
 import LoadingSpinner from './LoadingSpinner';
 import Markdown from 'react-markdown';
+// Rehype plugins
 import rehypeRaw from 'rehype-raw';
 import rehypeSanitize from 'rehype-sanitize';
 import rehypeHighlight from 'rehype-highlight';
 import 'highlight.js/styles/github-dark.css';
 
+// Define type for blog post
+interface BlogPost {
+  content: string;
+  title: string;
+  date: string;
+  slug: string;
+  readTime?: string;
+  tags?: string;
+  description?: string;
+  [key: string]: string | undefined;
+}
+
+// Using any for markdown components to avoid complex type issues
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type ComponentProps = any;
+
 export default function BlogPost() {
-  const { slug } = useParams();
+  const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const { isDarkMode } = useTheme();
-  const [post, setPost] = useState(null);
+  const [post, setPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchPost() {
+      if (!slug) return;
+      
       try {
         const response = await fetch(`/posts/${slug}.md`);
         if (!response.ok) {
@@ -29,7 +48,7 @@ export default function BlogPost() {
         
         const content = await response.text();
         
-        // Extract frontmatter
+        // Extract frontmatter metadata
         const frontmatterRegex = /---\n([\s\S]*?)\n---/;
         const match = content.match(frontmatterRegex);
         
@@ -38,7 +57,7 @@ export default function BlogPost() {
           const markdownContent = content.replace(frontmatterRegex, '').trim();
           
           // Parse frontmatter
-          const metadata = {};
+          const metadata: Record<string, string> = {};
           frontmatter.split('\n').forEach(line => {
             const [key, ...valueParts] = line.split(':');
             if (key && valueParts.length) {
@@ -49,8 +68,10 @@ export default function BlogPost() {
           
           setPost({
             content: markdownContent,
-            ...metadata,
-            slug
+            title: metadata.title || slug,
+            date: metadata.date || 'Unknown date',
+            slug,
+            ...metadata
           });
         } else {
           setPost({
@@ -66,14 +87,14 @@ export default function BlogPost() {
         setLoading(false);
       } catch (err) {
         console.error('Error fetching blog post:', err);
-        setError(err.message);
+        setError((err as Error).message || 'Unknown error');
         setLoading(false);
       }
     }
     
     fetchPost();
   }, [slug]);
-
+  
   const handleBackClick = () => {
     trackEvent('blog_navigation', 'Blog', 'back_to_blog_list');
     navigate('/blog');
@@ -86,7 +107,7 @@ export default function BlogPost() {
           ? 'bg-gradient-to-br from-gray-900 via-blue-900/20 to-purple-900/20'
           : 'bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/20'
       }`}>
-        <LoadingSpinner size="large" />
+        <LoadingSpinner />
       </div>
     );
   }
@@ -109,6 +130,10 @@ export default function BlogPost() {
         </button>
       </div>
     );
+  }
+
+  if (!post) {
+    return null;
   }
 
   return (
@@ -146,18 +171,20 @@ export default function BlogPost() {
             }`}>
               {post.title}
             </h1>
-            
+
             <div className="flex flex-wrap gap-4 mb-6">
               {post.date && (
                 <div className={`flex items-center text-sm transition-colors duration-300 ${
                   isDarkMode ? 'text-gray-400' : 'text-gray-600'
                 }`}>
                   <CalendarIcon className="w-4 h-4 mr-1" />
-                  <time dateTime={post.date}>{new Date(post.date).toLocaleDateString('en-US', { 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
-                  })}</time>
+                  <time dateTime={post.date}>
+                    {new Date(post.date).toLocaleDateString('en-US', { 
+                      year: 'numeric', 
+                      month: 'long', 
+                      day: 'numeric' 
+                    })}
+                  </time>
                 </div>
               )}
               
@@ -195,22 +222,25 @@ export default function BlogPost() {
             <Markdown
               rehypePlugins={[rehypeRaw, rehypeSanitize, rehypeHighlight]}
               components={{
-                a: ({ node, ...props }) => (
-                  <a 
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                a: ({ node, ...props }: ComponentProps) => (
+                  <a  
                     {...props} 
                     className="text-primary hover:text-primary-600 transition-colors duration-300"
-                    target={props.href.startsWith('http') ? '_blank' : undefined}
-                    rel={props.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                    target={props.href && String(props.href).startsWith('http') ? '_blank' : undefined}
+                    rel={props.href && String(props.href).startsWith('http') ? 'noopener noreferrer' : undefined}
                   />
                 ),
-                img: ({ node, ...props }) => (
-                  <img 
-                    {...props} 
-                    className="rounded-lg shadow-md my-8 max-w-full h-auto"
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                img: ({ node, ...props }: ComponentProps) => (
+                  <img  
+                    {...props}
                     loading="lazy"
+                    className="rounded-lg shadow-md my-8 max-w-full h-auto"
                   />
                 ),
-                pre: ({ node, ...props }) => (
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                pre: ({ node, ...props }: ComponentProps) => (
                   <pre
                     {...props}
                     className="rounded-lg overflow-auto p-4 my-6"
