@@ -3,7 +3,7 @@
 declare global {
   interface Window {
     gtag: (command: string, targetId: string, config?: object) => void;
-    dataLayer: any[];
+    dataLayer: unknown[];
   }
 }
 
@@ -24,7 +24,7 @@ export const initGA = () => {
 
   // Initialize gtag function and dataLayer first
   window.dataLayer = window.dataLayer || [];
-  function gtag(...args: any[]) {
+  function gtag(...args: unknown[]) {
     window.dataLayer.push(args);
   }
   window.gtag = gtag;
@@ -40,9 +40,20 @@ export const initGA = () => {
     gtag('config', GA_TRACKING_ID, {
       page_title: document.title,
       page_location: window.location.href,
+      send_page_view: false, // We'll send page views manually
     });
 
-    console.log('Google Analytics initialized');
+    console.log('Google Analytics initialized with ID:', GA_TRACKING_ID);
+    console.log('Script loaded from:', script.src);
+    
+    // Send initial page view
+    gtag('event', 'page_view', {
+      page_title: document.title,
+      page_location: window.location.href,
+      page_path: window.location.pathname,
+    });
+    
+    console.log('Initial page view sent');
   };
 
   script.onerror = () => {
@@ -68,10 +79,22 @@ export const trackPageView = (url: string, title?: string) => {
   pageViewTimeout = setTimeout(() => {
     waitForGtag(() => {
       if (typeof window !== 'undefined' && window.gtag && typeof window.gtag === 'function') {
-        window.gtag('config', GA_TRACKING_ID, {
+        // Send page_view event for GA4
+        window.gtag('event', 'page_view', {
           page_title: title || document.title,
           page_location: url,
+          page_path: new URL(url).pathname,
         });
+        
+        // Also send config update for proper tracking
+        window.gtag('config', GA_TRACKING_ID, {
+          page_path: new URL(url).pathname,
+          page_title: title || document.title,
+        });
+        
+        console.log('✅ Page view tracked:', title || document.title, url);
+      } else {
+        console.warn('❌ gtag not available for page view:', url);
       }
     });
     pageStartTime = Date.now();
@@ -92,15 +115,49 @@ export const trackEvent = (
 
   waitForGtag(() => {
     if (typeof window !== 'undefined' && window.gtag && typeof window.gtag === 'function') {
-      const eventData = {
-        event_category: category,
-        event_label: label,
-        value: value,
-      };
+      // GA4-compatible event structure
+      const eventData: Record<string, unknown> = {};
+      
+      if (label) eventData.custom_label = label;
+      if (value !== undefined) eventData.value = value;
+      if (category) eventData.event_category = category;
       
       window.gtag('event', action, eventData);
+      console.log('✅ Event tracked:', action, 'category:', category, 'label:', label);
+    } else {
+      console.warn('❌ gtag not available for event:', action);
     }
   });
+};
+
+// Debug function to check if GA is working
+export const debugGA = () => {
+  if (typeof window !== 'undefined') {
+    console.log('🔍 GA Debug Info:');
+    console.log('- gtag function exists:', typeof window.gtag === 'function');
+    console.log('- dataLayer exists:', Array.isArray(window.dataLayer));
+    console.log('- dataLayer length:', window.dataLayer?.length || 0);
+    console.log('- dataLayer contents:', window.dataLayer);
+    console.log('- Tracking ID:', GA_TRACKING_ID);
+    console.log('- Current URL:', window.location.href);
+    console.log('- Domain:', window.location.hostname);
+    
+    // Check if GA script is loaded
+    const gaScript = document.querySelector(`script[src*="${GA_TRACKING_ID}"]`);
+    console.log('- GA script loaded:', !!gaScript);
+    
+    // Send a test event
+    if (window.gtag && typeof window.gtag === 'function') {
+      window.gtag('event', 'debug_test', {
+        event_category: 'Debug',
+        event_label: 'Manual Test',
+        debug_mode: true,
+      });
+      console.log('✅ Test event sent');
+    } else {
+      console.error('❌ gtag function not available');
+    }
+  }
 };
 
 // Engagement tracking helper
@@ -246,15 +303,23 @@ export const testTracking = () => {
   console.log('🧪 Testing Google Analytics tracking...');
   console.log('🔗 GA Property ID:', GA_TRACKING_ID);
   
-  // Test basic events
-  trackEvent('test_event', 'Testing', 'manual_test', 1);
-  trackSectionView('test_section');
-  trackContactAction('test_contact');
-  trackThemeToggle('test_theme');
-  trackSocialClick('test_platform', 'test_action');
+  // First run debug to check setup
+  debugGA();
   
-  console.log('🧪 Test events sent! Check GA Real-time in 1-2 minutes');
-  console.log('📊 Check console for tracking confirmations');
+  // Wait a moment then test events
+  setTimeout(() => {
+    console.log('🧪 Sending test events...');
+    
+    // Test basic events
+    trackEvent('test_event', 'Testing', 'manual_test', 1);
+    trackSectionView('test_section');
+    trackContactAction('test_contact');
+    trackThemeToggle('test_theme');
+    trackSocialClick('test_platform', 'test_action');
+    
+    console.log('🧪 Test events sent! Check GA Real-time in 1-2 minutes');
+    console.log('📊 Check console for tracking confirmations');
+  }, 1000);
 };
 
 // Initialize everything when window is available
@@ -267,6 +332,11 @@ if (typeof window !== 'undefined') {
   
   // Initialize user engagement tracking
   trackUserEngagement();
+  
+  // Expose debug functions for browser console testing
+  (window as unknown as Record<string, unknown>).debugGA = debugGA;
+  (window as unknown as Record<string, unknown>).testTracking = testTracking;
+  console.log('🔍 Analytics debug tools available: window.debugGA() and window.testTracking()');
 }
 
 // Production-only optimizations
