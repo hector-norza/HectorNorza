@@ -5,6 +5,7 @@ export const useNavigation = () => {
   const scrollToSection = useCallback((href: string) => {
     if (href === '#blog') {
       trackSectionView('blog');
+      // Always use window.location.hash assignment for consistent behavior
       window.location.hash = 'blog';
       setTimeout(() => {
         window.scrollTo({
@@ -21,46 +22,78 @@ export const useNavigation = () => {
     const isOnBlogPage = window.location.hash === '#blog';
     
     if (isOnBlogPage) {
-      // Store the target section in sessionStorage so App.tsx can handle it
-      sessionStorage.setItem('pendingScroll', href);
-      window.location.hash = '';
-      // Do NOT set the target hash here. App.tsx will handle it after switching views.
-    } else {
-      // Direct scroll to section
-      const element = document.querySelector(href) as HTMLElement;
-      if (element) {
-        const headerHeight = 64;
-        const additionalPadding = 32;
-        const elementPosition = element.offsetTop;
-        const offsetPosition = elementPosition - headerHeight - additionalPadding;
+      // When coming from blog, first clear the hash to ensure we're back on main view
+      // Use history.replaceState to avoid creating extra history entries
+      history.replaceState(null, '', window.location.pathname);
+      
+      // Wait a moment for view to switch, then set the hash to navigate
+      setTimeout(() => {
+        window.location.hash = href.replace('#', '');
         
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth',
-        });
-      }
+        // After hash is set, scroll to ensure proper positioning
+        setTimeout(() => {
+          const element = document.querySelector(href) as HTMLElement;
+          if (element) {
+            const headerHeight = 64;
+            const additionalPadding = 32;
+            const elementPosition = element.offsetTop;
+            const offsetPosition = elementPosition - headerHeight - additionalPadding;
+            
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: 'smooth',
+            });
+          }
+        }, 100);
+      }, 50);
+    } else {
+      // Direct scroll to section (not coming from blog)
+      // Set the hash directly to ensure clean URL
+      window.location.hash = href.replace('#', '');
+      
+      // Scroll to the section
+      setTimeout(() => {
+        const element = document.querySelector(href) as HTMLElement;
+        if (element) {
+          const headerHeight = 64;
+          const additionalPadding = 32;
+          const elementPosition = element.offsetTop;
+          const offsetPosition = elementPosition - headerHeight - additionalPadding;
+          
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth',
+          });
+        }
+      }, 50);
     }
   }, []);
 
   const scrollToContact = useCallback(() => {
     trackSectionView('contact');
     
-    const contactSection = document.getElementById('contact') as HTMLElement;
-    if (contactSection) {
-      const headerHeight = 64;
-      const additionalPadding = 32;
-      const elementPosition = contactSection.offsetTop;
-      const offsetPosition = elementPosition - headerHeight - additionalPadding;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth',
-      });
-    }
+    // Use consistent approach with scrollToSection
+    window.location.hash = 'contact';
+    
+    setTimeout(() => {
+      const contactSection = document.getElementById('contact') as HTMLElement;
+      if (contactSection) {
+        const headerHeight = 64;
+        const additionalPadding = 32;
+        const elementPosition = contactSection.offsetTop;
+        const offsetPosition = elementPosition - headerHeight - additionalPadding;
+  
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth',
+        });
+      }
+    }, 50);
   }, []);
 
   const navigateToBlog = useCallback(() => {
     trackSectionView('blog');
+    // Always use window.location.hash assignment for consistent behavior
     window.location.hash = 'blog';
     // Ensure blog always starts at the top
     setTimeout(() => {
