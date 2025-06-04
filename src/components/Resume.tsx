@@ -5,7 +5,7 @@ import {
   TrophyIcon,
   ChartBarIcon,
   CalendarIcon,
-  DocumentArrowDownIcon, // ← ADD THIS ICON
+  // DocumentArrowDownIcon, // ← COMMENTED OUT - Not needed until resume download is ready
 } from '@heroicons/react/24/outline';
 import { useContrastColors } from '../hooks/useContrastColors';
 import { trackResumeAction } from '../utils/analytics'; // ← ADD THIS LINE
@@ -228,11 +228,11 @@ const skills = [
 export default function Resume() {
   const colors = useContrastColors();
 
-  // ← ADD THIS FUNCTION - Track resume downloads
-  const handleResumeDownload = () => {
-    // Track to GA ID: G-VPC78XB0H1
-    trackResumeAction('download', 'pdf');
-  };
+  // ← COMMENTED OUT - Track resume downloads (not needed until download is ready)
+  // const handleResumeDownload = () => {
+  //   // Track to GA ID: G-VPC78XB0H1
+  //   trackResumeAction('download', 'pdf');
+  // };
 
   // ← ADD THIS FUNCTION - Track section interactions
   const handleSectionView = (sectionName: string) => {
@@ -271,8 +271,8 @@ export default function Resume() {
             responsible AI development.
           </p>
           
-          {/* ← ADD THIS - Download Resume Button with tracking to G-VPC78XB0H1 */}
-          <motion.a
+          {/* ← COMMENTED OUT - Download Resume Button (not ready for sharing yet) */}
+          {/* <motion.a
             href="/resume.pdf" // Add your actual resume file
             download
             onClick={handleResumeDownload}
@@ -282,7 +282,7 @@ export default function Resume() {
           >
             <DocumentArrowDownIcon className="w-5 h-5 mr-2" />
             Download Resume
-          </motion.a>
+          </motion.a> */}
         </motion.div>
 
         <div className="space-y-16">
