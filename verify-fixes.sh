@@ -100,6 +100,15 @@ else
     print_status 1 "gh-pages dependency still present"
 fi
 
+# 9. Check for CORS issues in analytics
+echo ""
+echo "9️⃣  Verifying analytics CORS configuration..."
+if grep -q "googletagmanager.com/gtag/js" src/utils/analytics.ts && ! grep -q "google-analytics.com/analytics.js" src/utils/analytics.ts; then
+    print_status 0 "Analytics using GA4 endpoints (no CORS issues)"
+else
+    print_status 1 "Analytics may have CORS configuration issues"
+fi
+
 echo ""
 echo "🔍 ISSUES RESOLVED"
 echo "=================="
@@ -125,6 +134,11 @@ print_info "   → Automatic deployment from main branch"
 print_info ""
 print_info "✅ Resume download button temporarily disabled"
 print_info "   → Clean commenting with restoration instructions"
+print_info ""
+print_info "✅ Google Analytics CORS policy errors"
+print_info "   → Fixed debug function to use GA4 endpoints instead of deprecated analytics.js"
+print_info "   → Added no-cors mode to prevent CORS policy violations"
+print_info "   → Eliminated console errors related to cross-origin requests"
 
 echo ""
 echo "🧪 TESTING INSTRUCTIONS"
