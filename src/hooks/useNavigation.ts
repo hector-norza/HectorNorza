@@ -15,24 +15,38 @@ export const useNavigation = () => {
     const isOnBlogPage = window.location.hash === '#blog';
     
     if (isOnBlogPage) {
-      // If on blog page, navigate back to portfolio first
-      window.location.hash = '';
+      // If on blog page, navigate back to portfolio first, then scroll to section
+      window.location.hash = href; // Set the target section hash directly
+      
+      // Wait for view change, then scroll to the section
       setTimeout(() => {
-        const element = document.querySelector(href);
+        const element = document.querySelector(href) as HTMLElement;
         if (element) {
-          element.scrollIntoView({
+          // Calculate header offset
+          const headerHeight = 64; // 4rem = 64px
+          const additionalPadding = 32; // 2rem = 32px
+          const elementPosition = element.offsetTop;
+          const offsetPosition = elementPosition - headerHeight - additionalPadding;
+          
+          window.scrollTo({
+            top: offsetPosition,
             behavior: 'smooth',
-            block: 'start',
           });
         }
-      }, 100);
+      }, 300); // Increased timeout to allow for view transition
     } else {
       // Direct scroll to section
-      const element = document.querySelector(href);
+      const element = document.querySelector(href) as HTMLElement;
       if (element) {
-        element.scrollIntoView({
+        // Calculate header offset for consistency
+        const headerHeight = 64;
+        const additionalPadding = 32;
+        const elementPosition = element.offsetTop;
+        const offsetPosition = elementPosition - headerHeight - additionalPadding;
+        
+        window.scrollTo({
+          top: offsetPosition,
           behavior: 'smooth',
-          block: 'start',
         });
       }
     }
@@ -41,7 +55,7 @@ export const useNavigation = () => {
   const scrollToContact = useCallback(() => {
     trackSectionView('contact');
     
-    const contactSection = document.getElementById('contact');
+    const contactSection = document.getElementById('contact') as HTMLElement;
     if (contactSection) {
       const headerHeight = 64;
       const additionalPadding = 32;

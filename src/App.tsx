@@ -51,6 +51,22 @@ function AppContent() {
         if (hash) {
           const sectionName = hash.replace('#', '');
           trackPageView(window.location.href, `Section: ${sectionName}`);
+          
+          // If switching from blog to portfolio with a specific section, scroll to it
+          setTimeout(() => {
+            const element = document.querySelector(hash) as HTMLElement;
+            if (element) {
+              const headerHeight = 64; // 4rem = 64px
+              const additionalPadding = 32; // 2rem = 32px
+              const elementPosition = element.offsetTop;
+              const offsetPosition = elementPosition - headerHeight - additionalPadding;
+              
+              window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth',
+              });
+            }
+          }, 100); // Short delay to ensure DOM is ready
         } else {
           trackPageView(window.location.href, 'Portfolio Home');
         }
