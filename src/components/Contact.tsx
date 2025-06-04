@@ -127,7 +127,9 @@ export default function Contact() {
       setSubmitStatus('success');
       setFormData({ name: '', email: '', subject: '', message: '' });
     } catch (error) {
-      console.error('Contact form error:', error);
+      if (import.meta.env.DEV) {
+        console.error('Contact form error:', error);
+      }
       setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);

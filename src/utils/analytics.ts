@@ -34,25 +34,33 @@ export const initGA = () => {
   script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`;
   
   script.onload = () => {
-    console.log('🚀 GA script loaded successfully');
+    // Only log in development
+    if (import.meta.env.DEV) {
+      console.log('🚀 GA script loaded successfully');
+    }
     
     // Initialize GA after script loads using window.gtag
     window.gtag('js', new Date());
     
-    console.log('📊 Configuring GA with ID:', GA_TRACKING_ID);
+    if (import.meta.env.DEV) {
+      console.log('📊 Configuring GA with ID:', GA_TRACKING_ID);
+    }
+    
     window.gtag('config', GA_TRACKING_ID, {
       page_title: document.title,
       page_location: window.location.href,
       send_page_view: true, // Let GA send automatic page views
-      debug_mode: true, // Enable debug mode for troubleshooting
+      debug_mode: import.meta.env.DEV, // Enable debug mode only in development
       // Add domain configuration for proper tracking
       cookie_domain: 'hectornorza.com',
       cookie_flags: 'SameSite=None;Secure',
     });
 
-    console.log('✅ Google Analytics configured with ID:', GA_TRACKING_ID);
-    console.log('🌍 Domain:', window.location.hostname);
-    console.log('📄 Page:', window.location.pathname);
+    if (import.meta.env.DEV) {
+      console.log('✅ Google Analytics configured with ID:', GA_TRACKING_ID);
+      console.log('🌍 Domain:', window.location.hostname);
+      console.log('📄 Page:', window.location.pathname);
+    }
     
     // Send initial page view using proper GA4 format
     window.gtag('event', 'page_view', {
@@ -61,22 +69,26 @@ export const initGA = () => {
       page_path: window.location.pathname,
     });
     
-    console.log('✅ Initial page view event sent');
+    if (import.meta.env.DEV) {
+      console.log('✅ Initial page view event sent');
+    }
     
-    // Send a simplified test event with minimal parameters
-    window.gtag('event', 'analytics_test', {
-      event_category: 'engagement',
-      value: 1,
-    });
-    
-    console.log('🧪 Simplified test event sent');
-    
-    // Also try sending a completely standard GA4 event
-    window.gtag('event', 'login', {
-      method: 'analytics_test'
-    });
-    
-    console.log('🧪 Standard GA4 event sent');
+    // Send a simplified test event with minimal parameters (development only)
+    if (import.meta.env.DEV) {
+      window.gtag('event', 'analytics_test', {
+        event_category: 'engagement',
+        value: 1,
+      });
+      
+      console.log('🧪 Simplified test event sent');
+      
+      // Also try sending a completely standard GA4 event
+      window.gtag('event', 'login', {
+        method: 'analytics_test'
+      });
+      
+      console.log('🧪 Standard GA4 event sent');
+    }
   };
 
   script.onerror = () => {
@@ -115,7 +127,9 @@ export const trackPageView = (url: string, title?: string) => {
           page_title: title || document.title,
         });
         
-        console.log('✅ Page view tracked:', title || document.title, url);
+        if (import.meta.env.DEV) {
+          console.log('✅ Page view tracked:', title || document.title, url);
+        }
       } else {
         console.warn('❌ gtag not available for page view:', url);
       }
@@ -147,7 +161,9 @@ export const trackEvent = (
       if (category) eventData.content_group2 = category;
       
       window.gtag('event', action, eventData);
-      console.log('✅ Event tracked:', action, 'category:', category, 'label:', label);
+      if (import.meta.env.DEV) {
+        console.log('✅ Event tracked:', action, 'category:', category, 'label:', label);
+      }
     } else {
       console.warn('❌ gtag not available for event:', action);
     }

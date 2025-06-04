@@ -65,7 +65,9 @@ export const markdownToBlogPost = (filename: string, fileContent: string): BlogP
 
   // Validate required fields
   if (!data.title || !data.excerpt || !data.publishedAt || !data.category) {
-    console.warn(`Blog post ${filename} missing required frontmatter fields`);
+    if (import.meta.env.DEV) {
+      console.warn(`Blog post ${filename} missing required frontmatter fields`);
+    }
     return null;
   }
 
@@ -156,7 +158,9 @@ export const getBlogPostFiles = async (): Promise<{ filename: string; content: s
     
     return files;
   } catch (error) {
-    console.error('Error loading blog post files:', error);
+    if (import.meta.env.DEV) {
+      console.error('Error loading blog post files:', error);
+    }
     return [];
   }
 };

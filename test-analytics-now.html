@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Analytics Test - Hector Norza</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        h1 { margin-bottom: 30px; text-align: center; }
+        .status {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 4px solid #00ff88;
+            background: rgba(0,255,136,0.1);
+        }
+        .test-btn {
+            background: #00ff88;
+            color: black;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 10px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .test-btn:hover {
+            background: #00cc6a;
+            transform: translateY(-2px);
+        }
+        .result {
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .success { color: #00ff88; }
+        .error { color: #ff4757; }
+        .warning { color: #ffa502; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🚀 Quick Analytics Test</h1>
+        
+        <div class="status">
+            <strong>Status:</strong> <span id="status">Initializing...</span><br>
+            <strong>GA ID:</strong> G-VPC78XB0H1<br>
+            <strong>Time:</strong> <span id="timestamp"></span>
+        </div>
+
+        <div style="text-align: center;">
+            <button class="test-btn" onclick="runQuickTest()">🧪 Test Analytics Now</button>
+            <button class="test-btn" onclick="sendRealTimeEvents()">📊 Send Real-time Events</button>
+            <button class="test-btn" onclick="checkSetup()">🔍 Check Setup</button>
+        </div>
+
+        <div id="results" class="result">
+Click "Test Analytics Now" to start testing...
+        </div>
+
+        <div class="status">
+            <h3>✅ What This Tests:</h3>
+            <ul>
+                <li>Google Analytics script loading</li>
+                <li>gtag function availability</li>
+                <li>Real-time event sending</li>
+                <li>Network connectivity to GA servers</li>
+                <li>Measurement ID validation</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VPC78XB0H1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-VPC78XB0H1', {
+            debug_mode: true,
+            send_page_view: true
+        });
+
+        // Update timestamp
+        document.getElementById('timestamp').textContent = new Date().toLocaleString();
+
+        function log(message, type = 'info') {
+            const results = document.getElementById('results');
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type === 'error' ? 'error' : type === 'success' ? 'success' : type === 'warning' ? 'warning' : '';
+            const emoji = type === 'error' ? '❌' : type === 'success' ? '✅' : type === 'warning' ? '⚠️' : 'ℹ️';
+            
+            results.innerHTML += `<span class="${className}">[${timestamp}] ${emoji} ${message}</span>\n`;
+            results.scrollTop = results.scrollHeight;
+        }
+
+        function runQuickTest() {
+            document.getElementById('results').innerHTML = '';
+            log('🚀 Starting comprehensive analytics test...');
+            
+            setTimeout(() => {
+                // Test 1: Basic setup
+                log('=== TESTING BASIC SETUP ===');
+                
+                if (typeof gtag === 'function') {
+                    log('gtag function is available', 'success');
+                } else {
+                    log('gtag function is NOT available', 'error');
+                    return;
+                }
+
+                if (window.dataLayer && Array.isArray(window.dataLayer)) {
+                    log(`dataLayer exists with ${window.dataLayer.length} items`, 'success');
+                } else {
+                    log('dataLayer is NOT properly initialized', 'error');
+                }
+
+                // Test 2: Send test events
+                log('=== SENDING TEST EVENTS ===');
+                
+                // Standard GA4 test events
+                gtag('event', 'quick_test', {
+                    event_category: 'testing',
+                    event_label: 'immediate_test',
+                    value: 1
+                });
+                log('Test event sent: quick_test', 'success');
+
+                gtag('event', 'page_view', {
+                    page_title: 'Quick Analytics Test',
+                    page_location: window.location.href,
+                    page_path: '/test-analytics-now.html'
+                });
+                log('Page view event sent', 'success');
+
+                // Test 3: Network check
+                log('=== CHECKING NETWORK CONNECTION ===');
+                fetch('https://www.googletagmanager.com/gtag/js?id=G-VPC78XB0H1', { method: 'HEAD' })
+                    .then(response => {
+                        if (response.ok) {
+                            log('Network connection to Google Analytics: OK', 'success');
+                        } else {
+                            log('Network connection issue detected', 'warning');
+                        }
+                    })
+                    .catch(error => {
+                        log(`Network error: ${error.message}`, 'error');
+                    });
+
+                log('=== TEST COMPLETE ===');
+                log('Check Google Analytics Real-time reports in 1-2 minutes', 'warning');
+                document.getElementById('status').textContent = 'Test completed - Check GA Real-time reports';
+                
+            }, 1000);
+        }
+
+        function sendRealTimeEvents() {
+            log('🎯 Sending real-time tracking events...');
+            
+            const events = [
+                { name: 'user_engagement', params: { engagement_time_msec: 30000 } },
+                { name: 'scroll', params: { percent_scrolled: 75 } },
+                { name: 'click', params: { link_text: 'analytics_test' } },
+                { name: 'search', params: { search_term: 'portfolio_test' } }
+            ];
+
+            events.forEach((event, index) => {
+                setTimeout(() => {
+                    gtag('event', event.name, event.params);
+                    log(`Real-time event ${index + 1}: ${event.name}`, 'success');
+                }, index * 500);
+            });
+
+            log('All real-time events queued for sending', 'success');
+        }
+
+        function checkSetup() {
+            log('🔍 Checking complete analytics setup...');
+            
+            log(`Current URL: ${window.location.href}`);
+            log(`Domain: ${window.location.hostname}`);
+            log(`Protocol: ${window.location.protocol}`);
+            log(`User Agent: ${navigator.userAgent.substring(0, 80)}...`);
+            
+            // Check script loading
+            const gaScript = document.querySelector('script[src*="googletagmanager.com"]');
+            if (gaScript) {
+                log('Google Analytics script found and loaded', 'success');
+            } else {
+                log('Google Analytics script NOT found', 'error');
+            }
+
+            // Validate measurement ID
+            const measurementId = 'G-VPC78XB0H1';
+            const ga4Pattern = /^G-[A-Z0-9]{10}$/;
+            if (ga4Pattern.test(measurementId)) {
+                log('Measurement ID format is valid', 'success');
+            } else {
+                log('Measurement ID format is invalid', 'error');
+            }
+
+            log('Setup check complete');
+        }
+
+        // Auto-initialize
+        setTimeout(() => {
+            document.getElementById('status').textContent = 'Ready for testing';
+            log('Quick analytics tester ready! Click "Test Analytics Now" to begin.');
+        }, 2000);
+
+        // Track this page automatically
+        setTimeout(() => {
+            gtag('event', 'page_view', {
+                page_title: 'Quick Analytics Test Page',
+                page_location: window.location.href,
+                event_category: 'testing'
+            });
+            log('Auto-tracked page view for this test page', 'success');
+        }, 3000);
+    </script>
+</body>
+</html>

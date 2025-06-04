@@ -4,7 +4,7 @@
  */
 
 interface FrontmatterResult {
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   content: string;
 }
 
@@ -22,7 +22,7 @@ export function parseFrontmatter(fileContent: string): FrontmatterResult {
   const [, frontmatterString, content] = match;
   
   // Parse YAML-like frontmatter safely
-  const data: Record<string, any> = {};
+  const data: Record<string, unknown> = {};
   
   frontmatterString.split('\n').forEach(line => {
     const trimmedLine = line.trim();
@@ -66,7 +66,7 @@ export function parseFrontmatter(fileContent: string): FrontmatterResult {
 }
 
 // Utility function to generate frontmatter
-export function stringifyFrontmatter(data: Record<string, any>, content: string): string {
+export function stringifyFrontmatter(data: Record<string, unknown>, content: string): string {
   const frontmatterLines = Object.entries(data).map(([key, value]) => {
     if (Array.isArray(value)) {
       return `${key}: [${value.map(v => `"${v}"`).join(', ')}]`;

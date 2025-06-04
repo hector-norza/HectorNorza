@@ -46,7 +46,7 @@ export const usePerformanceMonitoring = () => {
           // Largest Contentful Paint
           const lcpObserver = new PerformanceObserver((entryList) => {
             const entries = entryList.getEntries();
-            const lastEntry = entries[entries.length - 1] as any;
+            const lastEntry = entries[entries.length - 1] as PerformanceEntry & { startTime: number };
             if (lastEntry) {
               metricsRef.current.largestContentfulPaint = lastEntry.startTime;
               trackEvent('performance_lcp', 'Performance', 'largest_contentful_paint', Math.round(lastEntry.startTime));
@@ -58,8 +58,9 @@ export const usePerformanceMonitoring = () => {
           const clsObserver = new PerformanceObserver((entryList) => {
             let clsValue = 0;
             for (const entry of entryList.getEntries()) {
-              if (!(entry as any).hadRecentInput) {
-                clsValue += (entry as any).value;
+              const layoutShiftEntry = entry as PerformanceEntry & { hadRecentInput?: boolean; value?: number };
+              if (!layoutShiftEntry.hadRecentInput) {
+                clsValue += layoutShiftEntry.value || 0;
               }
             }
             metricsRef.current.cumulativeLayoutShift = clsValue;
@@ -74,7 +75,9 @@ export const usePerformanceMonitoring = () => {
           }, 30000);
 
         } catch (error) {
-          console.warn('Performance monitoring not fully supported:', error);
+          if (import.meta.env.DEV) {
+            console.warn('Performance monitoring not fully supported:', error);
+          }
         }
       }
     };

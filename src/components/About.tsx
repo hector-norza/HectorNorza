@@ -97,12 +97,22 @@ export default function About() {
               transition={{ duration: 0.7 }}
               viewport={{ once: true }}
             >
-              <h2
+              <motion.h2
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7 }}
+                viewport={{ once: true }}
                 className={`text-3xl md:text-5xl font-bold mb-6 transition-colors duration-300 ${colors.heading}`}
               >
                 About Me
-              </h2>
-              <div className="w-20 h-1.5 bg-gradient-to-r from-primary to-secondary rounded-full mb-8"></div>
+              </motion.h2>
+              <motion.div
+                initial={{ width: 0 }}
+                whileInView={{ width: 80 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                viewport={{ once: true }}
+                className="h-1.5 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full mb-8"
+              ></motion.div>
 
               <div
                 className={`space-y-6 text-lg transition-colors duration-300 ${colors.body}`}

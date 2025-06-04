@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Analytics Test - Hector Norza Portfolio</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 { color: #333; }
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-size: 16px;
+        }
+        .test-button:hover { background: #0056b3; }
+        .status { 
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #007bff;
+            background: #f8f9fa;
+        }
+        .console-output {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 6px;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            margin: 20px 0;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .success { border-left-color: #28a745; }
+        .warning { border-left-color: #ffc107; }
+        .error { border-left-color: #dc3545; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Google Analytics Testing Dashboard</h1>
+        
+        <div class="status">
+            <strong>Analytics Status:</strong> <span id="status">Checking...</span><br>
+            <strong>Measurement ID:</strong> G-VPC78XB0H1<br>
+            <strong>Domain:</strong> <span id="domain"></span><br>
+            <strong>Real-time Test:</strong> <span id="realtime-status">Ready</span>
+        </div>
+
+        <h2>🧪 Testing Tools</h2>
+        <button class="test-button" onclick="testBasicSetup()">1. Test Basic Setup</button>
+        <button class="test-button" onclick="testRealTimeTracking()">2. Test Real-time Tracking</button>
+        <button class="test-button" onclick="sendTestEvents()">3. Send Test Events</button>
+        <button class="test-button" onclick="checkGAStatus()">4. Check GA Status</button>
+        <button class="test-button" onclick="clearOutput()">Clear Output</button>
+
+        <h2>📊 Console Output</h2>
+        <div id="console-output" class="console-output">
+Click a test button to start testing...
+        </div>
+
+        <h2>📈 How to Verify in Google Analytics</h2>
+        <div class="status">
+            <ol>
+                <li><strong>Real-time Reports (immediate):</strong> Go to GA4 → Reports → Real-time</li>
+                <li><strong>Debug View (immediate):</strong> Enable Debug mode and see events instantly</li>
+                <li><strong>Standard Reports (24-48 hours):</strong> Regular reports take time to process</li>
+                <li><strong>Measurement Protocol Test:</strong> Use GA's measurement protocol validator</li>
+            </ol>
+        </div>
+
+        <h2>⏱️ Analytics Data Timeline</h2>
+        <div class="status warning">
+            <ul>
+                <li><strong>Real-time data:</strong> 0-5 minutes</li>
+                <li><strong>Exploration reports:</strong> 24-48 hours</li>
+                <li><strong>Standard reports:</strong> 24-48 hours</li>
+                <li><strong>Attribution reports:</strong> 24-72 hours</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Google Analytics Setup -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VPC78XB0H1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-VPC78XB0H1', {
+            debug_mode: true, // Enable debug mode for testing
+            send_page_view: true
+        });
+
+        // Display current domain
+        document.getElementById('domain').textContent = window.location.hostname;
+        
+        // Console output handler
+        function logToOutput(message, type = 'info') {
+            const output = document.getElementById('console-output');
+            const timestamp = new Date().toLocaleTimeString();
+            const prefix = type === 'error' ? '❌' : type === 'success' ? '✅' : type === 'warning' ? '⚠️' : 'ℹ️';
+            output.textContent += `[${timestamp}] ${prefix} ${message}\n`;
+            output.scrollTop = output.scrollHeight;
+        }
+
+        function clearOutput() {
+            document.getElementById('console-output').textContent = 'Output cleared...\n';
+        }
+
+        // Test 1: Basic Setup
+        function testBasicSetup() {
+            logToOutput('=== TESTING BASIC SETUP ===');
+            
+            // Check if gtag is loaded
+            if (typeof gtag === 'function') {
+                logToOutput('gtag function is available', 'success');
+            } else {
+                logToOutput('gtag function is NOT available', 'error');
+                return;
+            }
+
+            // Check dataLayer
+            if (window.dataLayer && Array.isArray(window.dataLayer)) {
+                logToOutput(`dataLayer exists with ${window.dataLayer.length} items`, 'success');
+            } else {
+                logToOutput('dataLayer is NOT available', 'error');
+            }
+
+            // Check GA script
+            const gaScript = document.querySelector('script[src*="googletagmanager.com"]');
+            if (gaScript) {
+                logToOutput('Google Analytics script is loaded', 'success');
+            } else {
+                logToOutput('Google Analytics script is NOT loaded', 'error');
+            }
+
+            // Verify measurement ID format
+            const measurementId = 'G-VPC78XB0H1';
+            const ga4Pattern = /^G-[A-Z0-9]{10}$/;
+            if (ga4Pattern.test(measurementId)) {
+                logToOutput('Measurement ID format is valid', 'success');
+            } else {
+                logToOutput('Measurement ID format is INVALID', 'error');
+            }
+
+            logToOutput('Basic setup test complete!');
+        }
+
+        // Test 2: Real-time Tracking
+        function testRealTimeTracking() {
+            logToOutput('=== TESTING REAL-TIME TRACKING ===');
+            
+            if (typeof gtag !== 'function') {
+                logToOutput('gtag not available - run basic setup test first', 'error');
+                return;
+            }
+
+            // Send page view
+            gtag('event', 'page_view', {
+                page_title: 'Analytics Test Page',
+                page_location: window.location.href,
+                page_path: window.location.pathname,
+            });
+            logToOutput('Page view event sent', 'success');
+
+            // Send custom test event
+            gtag('event', 'analytics_test', {
+                event_category: 'testing',
+                event_label: 'manual_test',
+                value: 1,
+                debug_mode: true
+            });
+            logToOutput('Custom test event sent', 'success');
+
+            document.getElementById('realtime-status').textContent = 'Events sent! Check GA Real-time reports';
+            logToOutput('Check GA4 Real-time reports in 1-2 minutes', 'warning');
+        }
+
+        // Test 3: Send Multiple Test Events
+        function sendTestEvents() {
+            logToOutput('=== SENDING MULTIPLE TEST EVENTS ===');
+            
+            if (typeof gtag !== 'function') {
+                logToOutput('gtag not available', 'error');
+                return;
+            }
+
+            // Standard GA4 events
+            const events = [
+                { name: 'login', params: { method: 'test' } },
+                { name: 'search', params: { search_term: 'portfolio test' } },
+                { name: 'share', params: { method: 'test', content_type: 'page', item_id: 'analytics_test' } },
+                { name: 'page_view', params: { page_title: 'Test Page', page_location: window.location.href } }
+            ];
+
+            events.forEach((event, index) => {
+                setTimeout(() => {
+                    gtag('event', event.name, event.params);
+                    logToOutput(`Event ${index + 1}/${events.length}: ${event.name} sent`, 'success');
+                }, index * 500); // 500ms delay between events
+            });
+
+            logToOutput('Sending 4 test events with delays...');
+        }
+
+        // Test 4: Check GA Status
+        function checkGAStatus() {
+            logToOutput('=== CHECKING GOOGLE ANALYTICS STATUS ===');
+            
+            // Check all components
+            logToOutput(`URL: ${window.location.href}`);
+            logToOutput(`Domain: ${window.location.hostname}`);
+            logToOutput(`User Agent: ${navigator.userAgent.substring(0, 50)}...`);
+            
+            if (window.dataLayer) {
+                logToOutput(`DataLayer contents (${window.dataLayer.length} items):`);
+                window.dataLayer.slice(-5).forEach((item, index) => {
+                    logToOutput(`  ${index}: ${JSON.stringify(item).substring(0, 100)}...`);
+                });
+            }
+
+            // Test network connectivity to GA
+            fetch('https://www.googletagmanager.com/gtag/js?id=G-VPC78XB0H1', { method: 'HEAD' })
+                .then(response => {
+                    if (response.ok) {
+                        logToOutput('Network connection to Google Analytics: OK', 'success');
+                    } else {
+                        logToOutput('Network connection to Google Analytics: FAILED', 'error');
+                    }
+                })
+                .catch(error => {
+                    logToOutput(`Network error: ${error.message}`, 'error');
+                });
+
+            logToOutput('Status check complete!');
+        }
+
+        // Auto-run basic setup on load
+        setTimeout(() => {
+            document.getElementById('status').textContent = 'Loaded - Ready for testing';
+            logToOutput('Analytics testing dashboard ready!');
+            logToOutput('Click "Test Basic Setup" to start...');
+        }, 1000);
+
+        // Track this page load
+        setTimeout(() => {
+            if (typeof gtag === 'function') {
+                gtag('event', 'page_view', {
+                    page_title: 'Analytics Test Dashboard',
+                    page_location: window.location.href,
+                    page_path: '/analytics-test.html',
+                    event_category: 'testing'
+                });
+                logToOutput('Dashboard page view tracked automatically', 'success');
+            }
+        }, 2000);
+    </script>
+</body>
+</html>

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bars3Icon, XMarkIcon, SunIcon, MoonIcon } from '@heroicons/react/24/outline';
 import { useContrastColors } from '../hooks/useContrastColors';
-import { useTheme } from '../contexts/ThemeContext';
+import { useTheme } from '../hooks/useTheme';
 import { useNavigation } from '../hooks/useNavigation'; // ← ADD THIS
 import { NAVIGATION } from '../utils/constants'; // ← ADD THIS
 import { trackThemeToggle } from '../utils/analytics';

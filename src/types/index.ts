@@ -42,7 +42,7 @@ export interface AppError {
   message: string;
   timestamp: Date;
   userId?: string;
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
 }
 
 // Enhanced navigation with analytics

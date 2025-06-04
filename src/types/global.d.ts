@@ -2,12 +2,9 @@
 
 declare global {
   interface Window {
-    gtag: (...args: any[]) => void;
-    dataLayer: any[];
+    gtag: (...args: unknown[]) => void;
+    dataLayer: unknown[];
   }
 }
-
-// Google Analytics gtag function
-declare function gtag(...args: any[]): void;
 
 export {};

@@ -26,7 +26,9 @@ const loadBlogPosts = async (): Promise<BlogPost[]> => {
     cachedPosts = posts;
     return posts;
   } catch (error) {
-    console.error('Error loading blog posts:', error);
+    if (import.meta.env.DEV) {
+      console.error('Error loading blog posts:', error);
+    }
     return [];
   }
 };

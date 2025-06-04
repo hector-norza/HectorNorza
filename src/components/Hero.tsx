@@ -42,7 +42,6 @@ export default function Hero() {
 
   // Direct blog navigation function with analytics
   const navigateToBlog = () => {
-    console.log('🔗 Navigate to blog from Hero');
     // Track blog navigation from Hero
     trackEvent('blog_navigate', 'Hero CTA', 'read_my_blog_button');
     window.location.hash = 'blog';
