@@ -20,14 +20,7 @@ let pageViewTimeout: NodeJS.Timeout;
 
 // Initialize Google Analytics
 export const initGA = () => {
-  console.log('🚀 Analytics: Starting Google Analytics initialization...');
-  
-  if (typeof window === 'undefined') {
-    console.log('❌ Analytics: Window is undefined, skipping initialization');
-    return;
-  }
-
-  console.log('✅ Analytics: Window detected, proceeding with GA setup');
+  if (typeof window === 'undefined') return;
 
   // Initialize gtag function and dataLayer first
   window.dataLayer = window.dataLayer || [];
@@ -36,16 +29,12 @@ export const initGA = () => {
   }
   window.gtag = gtag;
 
-  console.log('📊 Analytics: DataLayer and gtag function initialized');
-
   // Load gtag script with proper loading handling
   const script = document.createElement('script');
   script.async = true;
   script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`;
   
   script.onload = () => {
-    console.log('📜 Analytics: Google Analytics script loaded successfully');
-    
     // Initialize GA after script loads
     gtag('js', new Date());
     gtag('config', GA_TRACKING_ID, {
@@ -53,12 +42,11 @@ export const initGA = () => {
       page_location: window.location.href,
     });
 
-    console.log('🎯 Google Analytics initialized with ID:', GA_TRACKING_ID);
-    console.log('📊 Analytics: Ready to track events and page views');
+    console.log('Google Analytics initialized');
   };
 
   script.onerror = () => {
-    console.error('❌ Analytics: Failed to load Google Analytics script');
+    console.warn('Failed to load Google Analytics');
   };
 
   document.head.appendChild(script);
@@ -70,15 +58,11 @@ const waitForGtag = (callback: () => void, maxAttempts = 50, attempt = 0) => {
     callback();
   } else if (attempt < maxAttempts) {
     setTimeout(() => waitForGtag(callback, maxAttempts, attempt + 1), 100);
-  } else {
-    console.warn('⏰ Analytics: Timeout waiting for gtag to become available');
   }
 };
 
 // Debounced page view tracking
 export const trackPageView = (url: string, title?: string) => {
-  console.log('📄 Analytics: trackPageView called with:', { url, title });
-  
   if (pageViewTimeout) clearTimeout(pageViewTimeout);
   
   pageViewTimeout = setTimeout(() => {
@@ -87,11 +71,6 @@ export const trackPageView = (url: string, title?: string) => {
         window.gtag('config', GA_TRACKING_ID, {
           page_title: title || document.title,
           page_location: url,
-        });
-        console.log('🎯 Page view tracked successfully:', {
-          title: title || document.title,
-          url: url,
-          timestamp: new Date().toISOString()
         });
       }
     });
@@ -106,11 +85,8 @@ export const trackEvent = (
   label?: string,
   value?: number
 ) => {
-  console.log('🎯 Analytics: trackEvent called with:', { action, category, label, value });
-  
   // Validate inputs
   if (!action || !category) {
-    console.warn('❌ Analytics: Invalid event tracking - action and category are required');
     return;
   }
 
@@ -123,17 +99,6 @@ export const trackEvent = (
       };
       
       window.gtag('event', action, eventData);
-      
-      console.log('🚀 Event tracked successfully:', {
-        action,
-        category,
-        label,
-        value,
-        timestamp: new Date().toISOString(),
-        ga_id: GA_TRACKING_ID
-      });
-    } else {
-      console.log('⚠️ Analytics: gtag still not available for event tracking');
     }
   });
 };
