@@ -1,243 +1,285 @@
-/**
- * Enhanced Google Analytics implementation for hash-based SPA
- */
+// Google Analytics tracking utility with performance optimizations
 
+declare global {
+  interface Window {
+    gtag: (command: string, targetId: string, config?: object) => void;
+    dataLayer: any[];
+  }
+}
+
+// Google Analytics 4 Configuration
 const GA_TRACKING_ID = 'G-VPC78XB0H1';
+
+// Performance tracking variables
+let pageStartTime = Date.now();
+let maxScrollDepth = 0;
+
+// Debouncing timers
+let scrollTimeout: NodeJS.Timeout;
+let pageViewTimeout: NodeJS.Timeout;
 
 // Initialize Google Analytics
 export const initGA = () => {
-  // Check if GA is already initialized
-  if (typeof window.gtag === 'function') {
-    return;
+  if (typeof window === 'undefined') return;
+
+  // Load gtag script
+  const script = document.createElement('script');
+  script.async = true;
+  script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`;
+  document.head.appendChild(script);
+
+  // Initialize gtag
+  window.dataLayer = window.dataLayer || [];
+  function gtag(...args: any[]) {
+    window.dataLayer.push(args);
   }
+  window.gtag = gtag;
+
+  gtag('js', new Date());
+  gtag('config', GA_TRACKING_ID, {
+    page_title: document.title,
+    page_location: window.location.href,
+  });
+
+  console.log('Google Analytics initialized with ID:', GA_TRACKING_ID);
+};
+
+// Debounced page view tracking
+export const trackPageView = (url: string, title?: string) => {
+  if (pageViewTimeout) clearTimeout(pageViewTimeout);
   
-  if (!GA_TRACKING_ID) {
-    console.warn('Google Analytics ID is not set.');
+  pageViewTimeout = setTimeout(() => {
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('config', GA_TRACKING_ID, {
+        page_title: title || document.title,
+        page_location: url,
+      });
+      console.log('📊 Page view tracked:', {
+        title: title || document.title,
+        url: url,
+        timestamp: new Date().toISOString()
+      });
+    }
+    pageStartTime = Date.now();
+  }, 100);
+};
+
+// Track custom events with validation
+export const trackEvent = (
+  action: string,
+  category: string,
+  label?: string,
+  value?: number
+) => {
+  // Validate inputs
+  if (!action || !category) {
+    console.warn('📊 Invalid event tracking: action and category are required');
     return;
   }
 
-  // Validate tracking ID format
-  const ga4Pattern = /^G-[A-Z0-9]{10}$/;
-  if (!ga4Pattern.test(GA_TRACKING_ID)) {
-    console.error('❌ Invalid GA4 Measurement ID format! Should be G-XXXXXXXXXX');
-    return;
-  }
-
-  // Assume gtag is already available from the script in index.html
-  // If for some reason it's not, this is a fallback
-  if (typeof window.gtag !== 'function') {
-    console.log('Initializing GA via JS API');
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function() {
-      window.dataLayer.push(arguments);
+  if (typeof window !== 'undefined' && window.gtag) {
+    const eventData = {
+      event_category: category,
+      event_label: label,
+      value: value,
     };
-    // Fix TS error by converting Date to string
-    window.gtag('js', new Date().toString());
-    window.gtag('config', GA_TRACKING_ID, {
-      send_page_view: false
+    
+    window.gtag('event', action, eventData);
+    
+    console.log('📊 Event tracked:', {
+      action,
+      category,
+      label,
+      value,
+      timestamp: new Date().toISOString(),
+      ga_id: GA_TRACKING_ID
     });
   }
 };
 
-// Track page views (works with hash navigation)
-export const trackPageView = (url?: string, title?: string) => {
-  if (typeof window.gtag !== 'function') {
-    console.warn('Google Analytics not initialized. Cannot track page view.');
-    return;
-  }
-  
-  const pageUrl = url || window.location.href;
-  const pageTitle = title || getPageTitle();
-  
-  window.gtag('event', 'page_view', {
-    page_title: pageTitle,
-    page_path: window.location.pathname + window.location.hash,
-    page_location: pageUrl,
-    send_to: GA_TRACKING_ID
+// Engagement tracking helper
+const trackEngagement = (action: string, timeValue?: number) => {
+  trackEvent(action, 'Engagement', undefined, timeValue);
+};
+
+// Modern engagement tracking setup
+const setupEngagementTracking = () => {
+  // Track page visibility changes
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      const timeOnPage = Math.round((Date.now() - pageStartTime) / 1000);
+      trackEngagement('page_hidden', timeOnPage);
+    } else {
+      pageStartTime = Date.now();
+      trackEngagement('page_visible');
+    }
   });
+
+  // Track when user is about to leave
+  window.addEventListener('beforeunload', () => {
+    const timeOnPage = Math.round((Date.now() - pageStartTime) / 1000);
+    trackEngagement('page_exit', timeOnPage);
+  });
+
+  // Debounced scroll depth tracking
+  const trackScrollDepth = () => {
+    if (scrollTimeout) clearTimeout(scrollTimeout);
+    
+    scrollTimeout = setTimeout(() => {
+      const scrollDepth = Math.round(
+        (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100
+      );
+      
+      if (scrollDepth > maxScrollDepth && scrollDepth % 25 === 0) {
+        maxScrollDepth = scrollDepth;
+        trackEvent('scroll_depth', 'Engagement', `${scrollDepth}%`, scrollDepth);
+      }
+    }, 300); // Debounce by 300ms
+  };
+
+  window.addEventListener('scroll', trackScrollDepth, { passive: true });
+};
+
+// Specific tracking functions
+export const trackSectionView = (sectionName: string) => {
+  trackEvent('view_section', 'Navigation', sectionName);
+};
+
+export const trackSocialClick = (platform: string, action: string) => {
+  trackEvent('social_click', 'Social Media', `${platform}_${action}`);
+};
+
+export const trackContactAction = (action: string) => {
+  trackEvent('contact_action', 'Contact', action);
+};
+
+export const trackThemeToggle = (theme: string) => {
+  trackEvent('theme_toggle', 'UI', theme);
+};
+
+export const trackResumeAction = (action: string, section?: string) => {
+  trackEvent('resume_action', 'Resume', section ? `${action}_${section}` : action);
+};
+
+export const trackFormSubmission = (formType: string, success: boolean = true) => {
+  trackEvent('form_submission', 'Contact', `${formType}_${success ? 'success' : 'error'}`);
+};
+
+// Blog-specific tracking functions
+export const trackBlogView = (slug: string, title: string) => {
+  trackPageView(window.location.href, title);
+  trackEvent('view_blog_post', 'Blog', slug);
+};
+
+export const trackBlogInteraction = (action: string, slug: string, title: string) => {
+  trackEvent('blog_interaction', action, slug, 1);
   
-  if (process.env.NODE_ENV === 'development') {
-    console.log(`📊 [GA] Tracked page view: ${pageTitle} (${pageUrl})`);
+  // Also track with more context
+  if (typeof window !== 'undefined' && window.gtag) {
+    window.gtag('event', action, {
+      event_category: 'blog',
+      event_label: title,
+      custom_parameter_1: slug,
+    });
   }
 };
 
-// Get the page title based on the current hash
-function getPageTitle() {
-  const hash = window.location.hash.replace('#', '');
+export const trackBlogSearch = (query: string, resultsCount: number) => {
+  trackEvent('blog_search', 'search', query, resultsCount);
+};
+
+export const trackBlogCategory = (category: string) => {
+  trackEvent('blog_category', 'filter', category, 1);
+};
+
+// Performance tracking
+export const trackPerformance = () => {
+  if ('performance' in window) {
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const timing = performance.timing;
+        const loadTime = timing.loadEventEnd - timing.navigationStart;
+        trackEvent('page_load_time', 'Performance', 'load_complete', Math.round(loadTime));
+      }, 100);
+    });
+  }
+};
+
+// Enhanced user engagement tracking
+export const trackUserEngagement = () => {
+  let engagementTime = 0;
+  let isEngaged = true;
   
-  if (!hash) return 'Home';
+  const startTime = Date.now();
   
-  const sectionMapping: Record<string, string> = {
-    'about': 'About Me',
-    'resume': 'Resume',
-    'contact': 'Contact',
-    'blog': 'Blog'
+  // Track engagement every 15 seconds
+  const engagementInterval = setInterval(() => {
+    if (isEngaged && !document.hidden) {
+      engagementTime += 15;
+      trackEvent('engagement_time', 'Engagement', '15_second_intervals', engagementTime);
+    }
+  }, 15000);
+  
+  // Stop engagement tracking on page unload
+  const cleanup = () => {
+    clearInterval(engagementInterval);
+    const totalTime = Math.round((Date.now() - startTime) / 1000);
+    trackEvent('session_duration', 'Engagement', 'total_time', totalTime);
   };
   
-  // Fix TS error by using type guard
-  return hash in sectionMapping ? sectionMapping[hash] : 'Hector Norza | Portfolio';
+  window.addEventListener('beforeunload', cleanup);
+  document.addEventListener('visibilitychange', () => {
+    isEngaged = !document.hidden;
+  });
+  
+  return cleanup;
+};
+
+// Debug function for testing
+export const testTracking = () => {
+  console.log('🧪 Testing Google Analytics tracking...');
+  console.log('🔗 GA Property ID:', GA_TRACKING_ID);
+  
+  // Test basic events
+  trackEvent('test_event', 'Testing', 'manual_test', 1);
+  trackSectionView('test_section');
+  trackContactAction('test_contact');
+  trackThemeToggle('test_theme');
+  trackSocialClick('test_platform', 'test_action');
+  
+  console.log('🧪 Test events sent! Check GA Real-time in 1-2 minutes');
+  console.log('📊 Check console for tracking confirmations');
+};
+
+// Initialize everything when window is available
+if (typeof window !== 'undefined') {
+  // Initialize performance tracking
+  trackPerformance();
+  
+  // Setup engagement tracking
+  setupEngagementTracking();
+  
+  // Initialize user engagement tracking
+  trackUserEngagement();
 }
 
-// Track events
-export const trackEvent = (action: string, category: string, label?: string, value?: number) => {
-  if (typeof window.gtag !== 'function') {
-    console.warn('Google Analytics not initialized. Cannot track event.');
-    return;
-  }
-  
-  window.gtag('event', action, {
-    event_category: category,
-    event_label: label,
-    value: value,
-    send_to: GA_TRACKING_ID
+// Production-only optimizations
+if (import.meta.env.PROD && typeof window !== 'undefined') {
+  // Track unhandled errors in production
+  window.addEventListener('error', (event) => {
+    trackEvent('javascript_error', 'Error', event.error?.name || 'Unknown', 1);
   });
-  
-  if (process.env.NODE_ENV === 'development') {
-    console.log(`📊 [GA] Tracked event: ${action} (${category}${label ? ` - ${label}` : ''})`);
-  }
-};
 
-// Track section views for specific sections
-export const trackSectionView = (sectionId: string) => {
-  if (typeof window.gtag !== 'function') {
-    console.warn('Google Analytics not initialized. Cannot track section view.');
-    return;
-  }
-  
-  window.gtag('event', 'section_view', {
-    event_category: 'engagement',
-    event_label: sectionId,
-    send_to: GA_TRACKING_ID
+  // Track unhandled promise rejections
+  window.addEventListener('unhandledrejection', () => {
+    trackEvent('promise_rejection', 'Error', 'Unhandled Promise', 1);
   });
-  
-  if (process.env.NODE_ENV === 'development') {
-    console.log(`📊 [GA] Tracked section view: ${sectionId}`);
-  }
-};
 
-// Add missing function: trackBlogInteraction
-export const trackBlogInteraction = (action: string, postSlug?: string, postTitle?: string) => {
-  if (typeof window.gtag !== 'function') {
-    console.warn('Google Analytics not initialized. Cannot track blog interaction.');
-    return;
-  }
-  
-  window.gtag('event', action, {
-    event_category: 'blog',
-    event_label: postTitle || 'Blog Post',
-    post_slug: postSlug,
-    send_to: GA_TRACKING_ID
-  });
-  
-  if (process.env.NODE_ENV === 'development') {
-    console.log(`📊 [GA] Tracked blog interaction: ${action}${postSlug ? ` - ${postSlug}` : ''}`);
-  }
-};
-
-// Add missing function: trackBlogView - for backward compatibility
-export const trackBlogView = (postSlug: string, postTitle: string) => {
-  trackBlogInteraction('blog_view', postSlug, postTitle);
-};
-
-// Add missing function: trackFormSubmission
-export const trackFormSubmission = (formName: string) => {
-  if (typeof window.gtag !== 'function') {
-    console.warn('Google Analytics not initialized. Cannot track form submission.');
-    return;
-  }
-  
-  window.gtag('event', 'form_submit', {
-    event_category: 'conversion',
-    event_label: formName,
-    send_to: GA_TRACKING_ID
-  });
-  
-  if (process.env.NODE_ENV === 'development') {
-    console.log(`📊 [GA] Tracked form submission: ${formName}`);
-  }
-};
-
-// Add missing function: trackContactAction
-export const trackContactAction = (action: string, label?: string) => {
-  if (typeof window.gtag !== 'function') {
-    console.warn('Google Analytics not initialized. Cannot track contact action.');
-    return;
-  }
-  
-  window.gtag('event', action, {
-    event_category: 'contact',
-    event_label: label,
-    send_to: GA_TRACKING_ID
-  });
-  
-  if (process.env.NODE_ENV === 'development') {
-    console.log(`📊 [GA] Tracked contact action: ${action}${label ? ` - ${label}` : ''}`);
-  }
-};
-
-// Update the trackSocialClick function to accept an optional source parameter
-export const trackSocialClick = (platform: string, source?: string) => {
-  if (typeof window.gtag !== 'function') {
-    console.warn('Google Analytics not initialized. Cannot track social click.');
-    return;
-  }
-  
-  window.gtag('event', 'social_click', {
-    event_category: 'engagement',
-    event_label: platform,
-    source: source, // Add the source parameter
-    send_to: GA_TRACKING_ID
-  });
-  
-  if (process.env.NODE_ENV === 'development') {
-    console.log(`📊 [GA] Tracked social click: ${platform}${source ? ` from ${source}` : ''}`);
-  }
-};
-
-// Add missing function: trackThemeToggle
-export const trackThemeToggle = (theme: string) => {
-  if (typeof window.gtag !== 'function') {
-    console.warn('Google Analytics not initialized. Cannot track theme toggle.');
-    return;
-  }
-  
-  window.gtag('event', 'theme_toggle', {
-    event_category: 'ui_interaction',
-    event_label: theme,
-    send_to: GA_TRACKING_ID
-  });
-  
-  if (process.env.NODE_ENV === 'development') {
-    console.log(`📊 [GA] Tracked theme toggle: ${theme}`);
-  }
-};
-
-// Add missing function: trackResumeAction
-export const trackResumeAction = (action: string, label?: string) => {
-  if (typeof window.gtag !== 'function') {
-    console.warn('Google Analytics not initialized. Cannot track resume action.');
-    return;
-  }
-  
-  window.gtag('event', action, {
-    event_category: 'resume',
-    event_label: label,
-    send_to: GA_TRACKING_ID
-  });
-  
-  if (process.env.NODE_ENV === 'development') {
-    console.log(`📊 [GA] Tracked resume action: ${action}${label ? ` - ${label}` : ''}`);
-  }
-};
-
-// Type declaration for global gtag
-declare global {
-  interface Window {
-    gtag: (
-      command: string,
-      action: string,
-      params?: Record<string, any>
-    ) => void;
-    dataLayer: any[];
-  }
+  // Track resource loading errors
+  window.addEventListener('error', (event) => {
+    if (event.target !== window) {
+      const target = event.target as HTMLElement;
+      trackEvent('resource_error', 'Error', target.tagName?.toLowerCase() || 'unknown', 1);
+    }
+  }, true);
 }

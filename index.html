@@ -2,7 +2,6 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
     <!-- Security Headers (X-Frame-Options moved to _headers file for proper HTTP header implementation) -->
@@ -34,23 +33,23 @@
     <meta property="twitter:image" content="https://hectornorza.com/og-image.jpg">
     <meta property="twitter:creator" content="@hectorOnCloud">
     
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VPC78XB0H1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-VPC78XB0H1', {
-        send_page_view: false // We'll handle pageviews manually for hash-based navigation
-      });
-    </script>
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Preconnect to external domains for performance -->
+    <link rel="preconnect" href="https://www.googletagmanager.com">
+    <link rel="preconnect" href="https://www.google-analytics.com">
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
     
     <!-- Title -->
-    <title>Hector Norza | Frontend Engineer</title>
+    <title>Hector Norzagaray - Product Manager & Community Builder | Azure AI & Developer Experience</title>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-
