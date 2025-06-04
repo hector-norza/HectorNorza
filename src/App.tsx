@@ -41,45 +41,57 @@ function AppContent() {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash;
-      
       if (hash === '#blog') {
         setCurrentView('blog');
         trackPageView(window.location.href, 'Blog');
+        setTimeout(() => {
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+          });
+        }, 100);
+      } else if (hash === '') {
+        setCurrentView('portfolio');
+        // If we just switched from blog and have a pending scroll, set the hash to the target section
+        const pendingScroll = sessionStorage.getItem('pendingScroll');
+        if (pendingScroll) {
+          setTimeout(() => {
+            window.location.hash = pendingScroll;
+            // Remove the flag immediately to avoid loops
+            sessionStorage.removeItem('pendingScroll');
+          }, 100); // Give React time to render portfolio view
+        }
+        trackPageView(window.location.href, 'Portfolio Home');
       } else {
         setCurrentView('portfolio');
-        
         if (hash) {
           const sectionName = hash.replace('#', '');
           trackPageView(window.location.href, `Section: ${sectionName}`);
-          
-          // If switching from blog to portfolio with a specific section, scroll to it
-          setTimeout(() => {
-            const element = document.querySelector(hash) as HTMLElement;
-            if (element) {
-              const headerHeight = 64; // 4rem = 64px
-              const additionalPadding = 32; // 2rem = 32px
-              const elementPosition = element.offsetTop;
-              const offsetPosition = elementPosition - headerHeight - additionalPadding;
-              
-              window.scrollTo({
-                top: offsetPosition,
-                behavior: 'smooth',
-              });
-            }
-          }, 100); // Short delay to ensure DOM is ready
+          // If this is a navigation from blog to section, scroll and clear flag
+          const pendingScroll = sessionStorage.getItem('pendingScroll');
+          if (pendingScroll === hash) {
+            sessionStorage.removeItem('pendingScroll');
+            setTimeout(() => {
+              const element = document.querySelector(hash) as HTMLElement;
+              if (element) {
+                const headerHeight = 64;
+                const additionalPadding = 32;
+                const elementPosition = element.offsetTop;
+                const offsetPosition = elementPosition - headerHeight - additionalPadding;
+                window.scrollTo({
+                  top: offsetPosition,
+                  behavior: 'smooth',
+                });
+              }
+            }, 200);
+          }
         } else {
           trackPageView(window.location.href, 'Portfolio Home');
         }
       }
     };
-
-    // Listen for hash changes
     window.addEventListener('hashchange', handleHashChange);
-    
-    // Check initial hash
     handleHashChange();
-    
-    // Cleanup
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 

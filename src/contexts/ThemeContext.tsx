@@ -12,17 +12,19 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export { ThemeContext };
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  // Set dark mode as the default
+  const [isDarkMode, setIsDarkMode] = useState(true);
 
   useEffect(() => {
     // Check localStorage or system preference
     const savedTheme = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
-    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+    // Default to dark mode if no theme is set
+    if (savedTheme === 'dark' || (!savedTheme && prefersDark) || (!savedTheme && !prefersDark)) {
       setIsDarkMode(true);
       document.documentElement.classList.add('dark');
     } else {
+      setIsDarkMode(false);
       document.documentElement.classList.remove('dark');
     }
   }, []);

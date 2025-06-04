@@ -6,6 +6,12 @@ export const useNavigation = () => {
     if (href === '#blog') {
       trackSectionView('blog');
       window.location.hash = 'blog';
+      setTimeout(() => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        });
+      }, 100);
       return;
     }
 
@@ -15,30 +21,14 @@ export const useNavigation = () => {
     const isOnBlogPage = window.location.hash === '#blog';
     
     if (isOnBlogPage) {
-      // If on blog page, navigate back to portfolio first, then scroll to section
-      window.location.hash = href; // Set the target section hash directly
-      
-      // Wait for view change, then scroll to the section
-      setTimeout(() => {
-        const element = document.querySelector(href) as HTMLElement;
-        if (element) {
-          // Calculate header offset
-          const headerHeight = 64; // 4rem = 64px
-          const additionalPadding = 32; // 2rem = 32px
-          const elementPosition = element.offsetTop;
-          const offsetPosition = elementPosition - headerHeight - additionalPadding;
-          
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth',
-          });
-        }
-      }, 300); // Increased timeout to allow for view transition
+      // Store the target section in sessionStorage so App.tsx can handle it
+      sessionStorage.setItem('pendingScroll', href);
+      window.location.hash = '';
+      // Do NOT set the target hash here. App.tsx will handle it after switching views.
     } else {
       // Direct scroll to section
       const element = document.querySelector(href) as HTMLElement;
       if (element) {
-        // Calculate header offset for consistency
         const headerHeight = 64;
         const additionalPadding = 32;
         const elementPosition = element.offsetTop;
@@ -72,6 +62,13 @@ export const useNavigation = () => {
   const navigateToBlog = useCallback(() => {
     trackSectionView('blog');
     window.location.hash = 'blog';
+    // Ensure blog always starts at the top
+    setTimeout(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    }, 100);
   }, []);
 
   return {
@@ -80,3 +77,5 @@ export const useNavigation = () => {
     navigateToBlog,
   };
 };
+
+// No changes needed for dark mode in this file.
